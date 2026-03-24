@@ -1,5 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
+// Replace mongoose (MongoDB) with Prisma (Postgres)
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
@@ -8,6 +10,8 @@ const unzipper = require('unzipper');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 dotenv.config();
 
@@ -59,37 +63,20 @@ const upload = multer({
     limits: { fileSize: 500 * 1024 * 1024 }
 });
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/game-hub')
-    .then(() => console.log('✅ MongoDB Connected'))
-    .catch(err => console.log('❌ MongoDB Error:', err.message));
+// Connect Prisma (Postgres) using DATABASE_URL from .env
+(async () => {
+    try {
+        await prisma.$connect();
+        console.log('✅ Prisma connected (Postgres)');
+    } catch (e) {
+        console.warn('⚠️ Prisma connect warning:', e.message || e);
+    }
+})();
 
 // ==================== SCHEMAS ====================
 
-const UserSchema = new mongoose.Schema({
-    username: { type: String, unique: true, required: true },
-    email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
-    fullName: String,
-    profilePicture: String,
-    bio: String,
-    createdAt: { type: Date, default: Date.now }
-});
-
-const GameSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    shortDesc: String,
-    fullDesc: String,
-    gameType: String,
-    tags: [String],
-    coverImage: String,
-    gameFile: String,
-    creatorId: mongoose.Schema.Types.ObjectId,
-    createdAt: { type: Date, default: Date.now }
-});
-
-const User = mongoose.model('User', UserSchema);
-const Game = mongoose.model('Game', GameSchema);
+// Using Prisma models (`User`, `Game`) defined in prisma/schema.prisma
+// Access via `prisma.user` and `prisma.game` throughout this file.
 
 // ==================== HELPER FUNCTIONS ====================
 
@@ -140,14 +127,28 @@ async function unzipGameFile(zipPath, gameTitle) {
 
 // ==================== ROUTES ====================
 
+const crypto = require('crypto');
+
 // Test route
-app.get('/test', (req, res) => {
-    res.json({ 
+app.get('/test', async (req, res) => {
+    let dbStatus = 'unknown';
+    try {
+        // lightweight check
+        await prisma.$queryRaw`SELECT 1`;
+        dbStatus = 'Connected (Postgres via Prisma)';
+    } catch (e) {
+        dbStatus = `Disconnected (${e.message || 'error'})`;
+    }
+
+    res.json({
         message: 'Server is running',
         port: PORT,
-        mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
+        database: dbStatus
     });
 });
+
+// Serve Swagger UI
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Register
 app.post('/register', async (req, res) => {
@@ -158,29 +159,40 @@ app.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-        if (existingUser) {
-            return res.status(400).json({ error: 'Username or email already exists' });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({
-            username,
-            email,
-            password: hashedPassword,
-            fullName: fullName || username
+        // Check existing user
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { username },
+                    { email }
+                ]
+            }
         });
 
-        await user.save();
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
+        if (existingUser) return res.status(400).json({ error: 'Username or email already exists' });
 
-        res.json({ 
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const id = crypto.randomUUID();
+
+        const created = await prisma.user.create({
+            data: {
+                id,
+                username,
+                email,
+                password: hashedPassword,
+                fullName: fullName || username
+            }
+        });
+
+        const token = jwt.sign({ userId: created.id }, JWT_SECRET, { expiresIn: '7d' });
+
+        res.json({
             message: 'User registered successfully',
             token,
-            userId: user._id,
-            username: user.username,
-            fullName: user.fullName,
-            email: user.email
+            userId: created.id,
+            username: created.username,
+            fullName: created.fullName,
+            email: created.email
         });
     } catch (err) {
         console.error(err);
@@ -198,29 +210,27 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ error: 'Email/Username and password required' });
         }
 
-        // Find user by email OR username
-        const user = await User.findOne({ 
-            $or: [
-                { email: loginIdentifier },
-                { username: loginIdentifier }
-            ]
+        // Find user by email OR username using Prisma
+        const user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { email: loginIdentifier },
+                    { username: loginIdentifier }
+                ]
+            }
         });
 
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
+        if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
+        if (!isPasswordValid) return res.status(401).json({ error: 'Invalid credentials' });
 
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });
 
         res.json({
             message: 'Login successful',
             token,
-            userId: user._id,
+            userId: user.id,
             username: user.username,
             fullName: user.fullName,
             email: user.email
@@ -234,11 +244,11 @@ app.post('/login', async (req, res) => {
 // Get profile
 app.get('/profile/:userId', async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId).select('-password');
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        res.json(user);
+        const user = await prisma.user.findUnique({ where: { id: req.params.userId } });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const { password: _pw, ...rest } = user;
+        res.json(rest);
     } catch (err) {
         res.status(500).json({ error: 'Error fetching profile', details: err.message });
     }
@@ -248,12 +258,13 @@ app.get('/profile/:userId', async (req, res) => {
 app.put('/profile/:userId', async (req, res) => {
     try {
         const { fullName, bio } = req.body;
-        const user = await User.findByIdAndUpdate(
-            req.params.userId,
-            { fullName, bio },
-            { new: true }
-        ).select('-password');
-        res.json({ message: 'Profile updated', user });
+        const updated = await prisma.user.update({
+            where: { id: req.params.userId },
+            data: { fullName, bio }
+        });
+
+        const { password: _pw2, ...restUpdated } = updated;
+        res.json({ message: 'Profile updated', user: restUpdated });
     } catch (err) {
         res.status(500).json({ error: 'Error updating profile', details: err.message });
     }
@@ -305,25 +316,31 @@ app.post('/addGame', upload.fields([
             });
         }
 
-        // Create game document
-        const game = new Game({
-            title: req.body.title.trim(),
-            shortDesc: req.body.shortDesc?.trim() || '',
-            fullDesc: req.body.fullDesc?.trim() || '',
-            gameType: req.body.gameType?.trim() || 'Other',
-            tags: req.body.tags ? req.body.tags.split(',').map(t => t.trim()).filter(t => t) : [],
-            coverImage: req.files.coverImage[0].path.replace(/\\/g, '/'), // Fix Windows path
-            gameFile: gameFilePath,
-            creatorId: req.body.creatorId || null
+        // Create game record via Prisma
+        const id = crypto.randomUUID();
+        const tagsArray = req.body.tags ? req.body.tags.split(',').map(t => t.trim()).filter(t => t) : [];
+        const coverPath = req.files.coverImage[0].path.replace(/\\/g, '/');
+
+        const createdGame = await prisma.game.create({
+            data: {
+                id,
+                title: req.body.title.trim(),
+                shortDesc: req.body.shortDesc?.trim() || '',
+                fullDesc: req.body.fullDesc?.trim() || '',
+                gameType: req.body.gameType?.trim() || 'Other',
+                tags: tagsArray.length ? tagsArray : null,
+                coverImage: coverPath,
+                gameFile: gameFilePath,
+                creatorId: req.body.creatorId || null
+            }
         });
 
-        const savedGame = await game.save();
-        console.log('✅ Game saved to database:', savedGame._id);
+        console.log('✅ Game saved to database:', createdGame.id);
         console.log('========== END ADD GAME ==========\n');
 
-        res.json({ 
-            message: 'Game uploaded successfully', 
-            game: savedGame 
+        res.json({
+            message: 'Game uploaded successfully',
+            game: createdGame
         });
     } catch (err) {
         console.error('❌ Add game error:', err);
@@ -337,7 +354,7 @@ app.post('/addGame', upload.fields([
 // Get all games
 app.get('/games', async (req, res) => {
     try {
-        const games = await Game.find().sort({ createdAt: -1 });
+        const games = await prisma.game.findMany({ orderBy: { createdAt: 'desc' } });
         res.json(games);
     } catch (err) {
         res.status(500).json({ error: 'Error fetching games', details: err.message });
@@ -347,10 +364,8 @@ app.get('/games', async (req, res) => {
 // Get game by ID
 app.get('/games/:gameId', async (req, res) => {
     try {
-        const game = await Game.findById(req.params.gameId);
-        if (!game) {
-            return res.status(404).json({ error: 'Game not found' });
-        }
+        const game = await prisma.game.findUnique({ where: { id: req.params.gameId } });
+        if (!game) return res.status(404).json({ error: 'Game not found' });
         res.json(game);
     } catch (err) {
         res.status(500).json({ error: 'Error fetching game', details: err.message });
@@ -360,15 +375,13 @@ app.get('/games/:gameId', async (req, res) => {
 // Serve individual game pages
 app.get('/play/:gameId', async (req, res) => {
     try {
-        const game = await Game.findById(req.params.gameId);
-        
-        if (!game) {
-            return res.status(404).send('Game not found');
-        }
+        const game = await prisma.game.findUnique({ where: { id: req.params.gameId } });
+
+        if (!game) return res.status(404).send('Game not found');
 
         // Serve the game's index.html
         const gamePath = path.join(__dirname, '../../uploads', game.gameFile, 'index.html');
-        
+
         if (fs.existsSync(gamePath)) {
             res.sendFile(gamePath);
         } else {
@@ -380,8 +393,31 @@ app.get('/play/:gameId', async (req, res) => {
     }
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`\n✅ Server running on http://localhost:${PORT}`);
-    console.log(`✅ API available at http://localhost:${PORT}/test\n`);
-});
+// Start server with port fallback if in use
+function startServer(port, attemptsLeft = 5) {
+    const numericPort = Number(port) || 3001;
+    const server = app.listen(numericPort, () => {
+        console.log(`\n✅ Server running on http://localhost:${numericPort}`);
+        console.log(`✅ API available at http://localhost:${numericPort}/test`);
+        console.log(`✅ Swagger UI available at http://localhost:${numericPort}/docs\n`);
+    });
+
+    server.on('error', (err) => {
+        if (err && err.code === 'EADDRINUSE') {
+            console.error(`❌ Port ${numericPort} is already in use.`);
+            if (attemptsLeft > 0) {
+                const nextPort = numericPort + 1;
+                console.log(`➡️ Trying next port: ${nextPort} (attempts left: ${attemptsLeft - 1})`);
+                setTimeout(() => startServer(nextPort, attemptsLeft - 1), 500);
+            } else {
+                console.error('❌ No available ports found. Exiting.');
+                process.exit(1);
+            }
+        } else {
+            console.error('❌ Server error:', err);
+            process.exit(1);
+        }
+    });
+}
+
+startServer(PORT);

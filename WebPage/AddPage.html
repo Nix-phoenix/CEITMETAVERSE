@@ -14,7 +14,7 @@
     <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
         <div class="flex items-center space-x-10">
             <div class="text-3xl font-bold">
-                <img src="/Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
+                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
             </div>
             <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Home</a>
             <a href="Catagory.html" class="text-2xl font-semibold hover:text-blue-400">Catalog</a>
@@ -90,7 +90,7 @@
 
     <script>
         // FIXED FORM SUBMISSION SCRIPT
-const API_URL = 'http://localhost:3000';
+    const API_URL = 'http://localhost:3001';
 
 // Check if user is logged in
 function checkAuth() {
@@ -299,7 +299,7 @@ document.getElementById("gameForm").addEventListener("submit", async (e) => {
         }
     } catch (err) {
         console.error("Fetch error:", err);
-        alert(`❌ Connection Error!\n\n${err.message}\n\nMake sure the server is running on http://localhost:3000`);
+        alert(`❌ Connection Error!\n\n${err.message}\n\nMake sure the server is running on http://localhost:3001`);
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;

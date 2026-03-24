@@ -12,7 +12,7 @@
     <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
         <div class="flex items-center space-x-4">
             <div class="text-3xl font-bold">
-                <img src="/Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
+                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
             </div>
             <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Game Hub</a>
         </div>
@@ -184,7 +184,7 @@
 
             try {
                 // Send login request to server
-                const res = await fetch('http://localhost:3000/login', {
+                const res = await fetch('http://localhost:3001/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

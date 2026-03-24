@@ -1,0 +1,166 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Game Hub API",
+    "version": "1.0.0",
+    "description": "API documentation for the Game Hub backend (DataBase service)."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/test": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "Server status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User created" },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login with email or username",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login successful" },
+          "401": { "description": "Invalid credentials" }
+        }
+      }
+    },
+    "/profile/{userId}": {
+      "get": {
+        "summary": "Get user profile",
+        "parameters": [
+          { "name": "userId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "User profile" } }
+      },
+      "put": {
+        "summary": "Update user profile",
+        "parameters": [
+          { "name": "userId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateProfileRequest" } }
+          }
+        },
+        "responses": { "200": { "description": "Profile updated" } }
+      }
+    },
+    "/games": {
+      "get": {
+        "summary": "List games",
+        "responses": { "200": { "description": "List of games" } }
+      }
+    },
+    "/games/{gameId}": {
+      "get": {
+        "summary": "Get single game",
+        "parameters": [ { "name": "gameId", "in": "path", "required": true, "schema": { "type": "string" } } ],
+        "responses": { "200": { "description": "Game data" }, "404": { "description": "Not found" } }
+      }
+    },
+    "/addGame": {
+      "post": {
+        "summary": "Upload a new game (zip + cover image)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "shortDesc": { "type": "string" },
+                  "fullDesc": { "type": "string" },
+                  "gameFile": { "type": "string", "format": "binary" },
+                  "coverImage": { "type": "string", "format": "binary" }
+                },
+                "required": ["title", "gameFile", "coverImage"]
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Uploaded" }, "400": { "description": "Bad request" } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TestResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "port": { "type": "integer" },
+          "database": { "type": "string" }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "fullName": { "type": "string" }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "username": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "UpdateProfileRequest": {
+        "type": "object",
+        "properties": {
+          "fullName": { "type": "string" },
+          "bio": { "type": "string" }
+        }
+      }
+    }
+  }
+}
