@@ -1,5 +1,6 @@
 #!/bin/bash
+set -e
 cd Script/DataBase
 npm install
-npx prisma generate --schema=./prisma/schema.prisma
-npx prisma migrate deploy --schema=./prisma/schema.prisma
+./node_modules/.bin/prisma generate --schema=./prisma/schema.prisma
+./node_modules/.bin/prisma migrate deploy --schema=./prisma/schema.prisma
