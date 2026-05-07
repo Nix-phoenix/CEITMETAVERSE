@@ -19,14 +19,22 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'a3f8d9c2e1b4f6a9c8d7e3f1a9b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0';
 
 const app = express();
-// Allow requests from localhost (any port) and file:// (origin is null)
+// Allow localhost, file://, and production origins (set ALLOWED_ORIGIN env var)
+const allowedOrigins = [
+    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
+    /\.onrender\.com$/,
+    /\.vercel\.app$/,
+    /\.netlify\.app$/,
+];
+if (process.env.ALLOWED_ORIGIN) {
+    allowedOrigins.push(new RegExp('^' + process.env.ALLOWED_ORIGIN.replace(/[.+?^${}()|[\]\\]/g, '\\$&') + '$'));
+}
+
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || origin === 'null' || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-            callback(null, true);
-        } else {
-            callback(null, false);
-        }
+        if (!origin || origin === 'null') return callback(null, true);
+        if (allowedOrigins.some(pattern => pattern.test(origin))) return callback(null, true);
+        callback(null, false);
     },
     credentials: true
 }));
