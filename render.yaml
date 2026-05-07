@@ -2,9 +2,8 @@ services:
   - type: web
     name: ceit-metaverse-backend
     runtime: node
-    rootDir: Script/DataBase
-    buildCommand: npm install && npx prisma generate
-    startCommand: node sever.js
+    buildCommand: cd Script/DataBase && npm install && npx prisma generate --schema=./prisma/schema.prisma && npx prisma migrate deploy --schema=./prisma/schema.prisma
+    startCommand: cd Script/DataBase && node sever.js
     envVars:
       - key: NODE_ENV
         value: production
