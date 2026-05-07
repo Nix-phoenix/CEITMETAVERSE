@@ -19,38 +19,55 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'a3f8d9c2e1b4f6a9c8d7e3f1a9b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+// Allow requests from localhost (any port) and file:// (origin is null)
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || origin === 'null' || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, false);
+        }
+    },
+    credentials: true
+}));
+app.use(express.json({ limit: '50mb' }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../../')));
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
-app.use('/games', express.static(path.join(__dirname, '../../uploads/games')));
+app.use('/game-files', express.static(path.join(__dirname, '../../uploads/games')));
 
-// Better static file serving for game assets
-app.use('/uploads/games/:gameName', express.static(path.join(__dirname, '../../uploads/games'), {
+// Unity WebGL: proper MIME types + COOP/COEP headers so SharedArrayBuffer works
+app.use('/uploads/games', express.static(path.join(__dirname, '../../uploads/games'), {
     setHeaders: (res, filePath) => {
-        // Set proper MIME types for common game files
-        if (filePath.endsWith('.js')) {
-            res.setHeader('Content-Type', 'application/javascript');
-        } else if (filePath.endsWith('.wasm')) {
-            res.setHeader('Content-Type', 'application/wasm');
-        } else if (filePath.endsWith('.data')) {
-            res.setHeader('Content-Type', 'application/octet-stream');
-        } else if (filePath.endsWith('.json')) {
-            res.setHeader('Content-Type', 'application/json');
-        }
+        // COOP/COEP required for Unity threading / SharedArrayBuffer
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+
+        if (filePath.endsWith('.wasm'))           res.setHeader('Content-Type', 'application/wasm');
+        else if (filePath.endsWith('.js'))        res.setHeader('Content-Type', 'application/javascript');
+        else if (filePath.endsWith('.data'))      res.setHeader('Content-Type', 'application/octet-stream');
+        else if (filePath.endsWith('.data.gz'))  { res.setHeader('Content-Type', 'application/octet-stream'); res.setHeader('Content-Encoding', 'gzip'); }
+        else if (filePath.endsWith('.wasm.gz'))  { res.setHeader('Content-Type', 'application/wasm');         res.setHeader('Content-Encoding', 'gzip'); }
+        else if (filePath.endsWith('.js.gz'))    { res.setHeader('Content-Type', 'application/javascript');  res.setHeader('Content-Encoding', 'gzip'); }
+        else if (filePath.endsWith('.data.br'))  { res.setHeader('Content-Type', 'application/octet-stream'); res.setHeader('Content-Encoding', 'br'); }
+        else if (filePath.endsWith('.wasm.br'))  { res.setHeader('Content-Type', 'application/wasm');         res.setHeader('Content-Encoding', 'br'); }
+        else if (filePath.endsWith('.js.br'))    { res.setHeader('Content-Type', 'application/javascript');  res.setHeader('Content-Encoding', 'br'); }
+        else if (filePath.endsWith('.json'))      res.setHeader('Content-Type', 'application/json');
     }
 }));
 
-// Create uploads directories
-if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
-if (!fs.existsSync('uploads/games')) fs.mkdirSync('uploads/games', { recursive: true });
+// Create uploads directories (always relative to repo root, not cwd)
+const uploadsBase = path.join(__dirname, '../../uploads');
+const gamesBase  = path.join(__dirname, '../../uploads/games');
+if (!fs.existsSync(uploadsBase)) fs.mkdirSync(uploadsBase, { recursive: true });
+if (!fs.existsSync(gamesBase))   fs.mkdirSync(gamesBase,  { recursive: true });
 
 // Configure multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, uploadsBase);
     },
     filename: (req, file, cb) => {
         const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(7)}${path.extname(file.originalname)}`;
@@ -60,7 +77,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 500 * 1024 * 1024 }
+    limits: {}
 });
 
 // Connect Prisma (Postgres) using DATABASE_URL from .env
@@ -103,13 +120,34 @@ async function unzipGameFile(zipPath, gameTitle) {
 
             stream.on('close', () => {
                 console.log('✅ Unzip completed');
-                
-                // Verify index.html exists
-                const indexPath = path.join(extractPath, 'index.html');
-                if (!fs.existsSync(indexPath)) {
-                    console.warn('⚠️  Warning: index.html not found in root of extracted files');
+
+                // --- Auto-flatten: if index.html is not at root but IS inside
+                //     a single subdirectory (user zipped the folder), move everything up.
+                const indexAtRoot = path.join(extractPath, 'index.html');
+                if (!fs.existsSync(indexAtRoot)) {
+                    const entries = fs.readdirSync(extractPath);
+                    if (entries.length === 1) {
+                        const subdir = path.join(extractPath, entries[0]);
+                        if (fs.statSync(subdir).isDirectory()) {
+                            const subIndex = path.join(subdir, 'index.html');
+                            if (fs.existsSync(subIndex)) {
+                                console.log(`📂 Flattening nested folder: ${entries[0]}`);
+                                // Move all contents of subdir up to extractPath
+                                const subEntries = fs.readdirSync(subdir);
+                                for (const item of subEntries) {
+                                    fs.renameSync(path.join(subdir, item), path.join(extractPath, item));
+                                }
+                                fs.rmdirSync(subdir);
+                                console.log('✅ Flatten complete');
+                            } else {
+                                console.warn('⚠️  Warning: index.html not found in root or immediate subfolder');
+                            }
+                        }
+                    } else {
+                        console.warn('⚠️  Warning: index.html not found in root of extracted files');
+                    }
                 }
-                
+
                 resolve(`games/${sanitizedTitle}`);
             });
 
@@ -319,7 +357,8 @@ app.post('/addGame', upload.fields([
         // Create game record via Prisma
         const id = crypto.randomUUID();
         const tagsArray = req.body.tags ? req.body.tags.split(',').map(t => t.trim()).filter(t => t) : [];
-        const coverPath = req.files.coverImage[0].path.replace(/\\/g, '/');
+        const gameHubRoot = path.join(__dirname, '../..');
+        const coverPath = path.relative(gameHubRoot, req.files.coverImage[0].path).replace(/\\/g, '/');
 
         const createdGame = await prisma.game.create({
             data: {
@@ -372,24 +411,89 @@ app.get('/games/:gameId', async (req, res) => {
     }
 });
 
-// Serve individual game pages
+// Serve individual game pages — redirect to the real static URL so relative
+// asset paths (Build/*.wasm, Build/*.data …) resolve correctly in the browser.
 app.get('/play/:gameId', async (req, res) => {
     try {
         const game = await prisma.game.findUnique({ where: { id: req.params.gameId } });
-
         if (!game) return res.status(404).send('Game not found');
 
-        // Serve the game's index.html
-        const gamePath = path.join(__dirname, '../../uploads', game.gameFile, 'index.html');
+        const gameFolder = game.gameFile.replace(/\\/g, '/');
+        const baseDir = path.join(__dirname, '../../uploads', game.gameFile);
 
-        if (fs.existsSync(gamePath)) {
-            res.sendFile(gamePath);
-        } else {
-            res.status(404).send('Game files not found. index.html is missing.');
+        // Try root first, then search one level deep (handles ZIPs that had a root folder)
+        let indexRelative = null;
+        const rootIndex = path.join(baseDir, 'index.html');
+        if (fs.existsSync(rootIndex)) {
+            indexRelative = `${gameFolder}/index.html`;
+        } else if (fs.existsSync(baseDir)) {
+            // scan one level deep
+            for (const entry of fs.readdirSync(baseDir)) {
+                const nested = path.join(baseDir, entry, 'index.html');
+                if (fs.existsSync(nested)) {
+                    indexRelative = `${gameFolder}/${entry}/index.html`;
+                    break;
+                }
+            }
         }
+
+        if (!indexRelative) {
+            return res.status(404).send('Game files not found. index.html is missing.');
+        }
+
+        res.redirect(`/uploads/${indexRelative}`);
     } catch (err) {
         console.error('Error loading game:', err);
         res.status(500).send('Error loading game');
+    }
+});
+
+// Update profile picture
+app.put('/profile/:userId/picture', upload.single('picture'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: 'No picture file provided' });
+
+        const gameHubRoot2 = path.join(__dirname, '../..');
+        const picturePath = path.relative(gameHubRoot2, req.file.path).replace(/\\/g, '/');
+        await prisma.user.update({
+            where: { id: req.params.userId },
+            data: { profilePicture: picturePath }
+        });
+        res.json({ message: 'Profile picture updated', picturePath });
+    } catch (err) {
+        res.status(500).json({ error: 'Error updating picture', details: err.message });
+    }
+});
+
+// Update password
+app.put('/profile/:userId/password', async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ error: 'currentPassword and newPassword are required' });
+        }
+
+        const user = await prisma.user.findUnique({ where: { id: req.params.userId } });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const match = await bcrypt.compare(currentPassword, user.password);
+        if (!match) return res.status(401).json({ error: 'Current password is incorrect' });
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        await prisma.user.update({ where: { id: req.params.userId }, data: { password: hashed } });
+        res.json({ message: 'Password updated successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Error updating password', details: err.message });
+    }
+});
+
+// Delete account
+app.delete('/profile/:userId', async (req, res) => {
+    try {
+        await prisma.user.delete({ where: { id: req.params.userId } });
+        res.json({ message: 'Account deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Error deleting account', details: err.message });
     }
 });
 

@@ -1,13 +1,13 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Game Hub API",
+    "title": "CEIT METAVERSE AND GAME API",
     "version": "1.0.0",
-    "description": "API documentation for the Game Hub backend (DataBase service)."
+    "description": "API documentation for the CEIT METAVERSE AND GAME backend (DataBase service)."
   },
   "servers": [
     {
-      "url": "http://localhost:3001",
+      "url": "http://localhost:5000",
       "description": "Local development server"
     }
   ],

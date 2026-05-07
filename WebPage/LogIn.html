@@ -4,229 +4,258 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Login - Game Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Sign In — CEIT METAVERSE AND GAME</title>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+        .btn-primary { background: #0071e3; transition: background 0.2s ease, transform 0.1s ease; }
+        .btn-primary:hover { background: #0077ed; }
+        .btn-primary:active { transform: scale(0.98); }
+        input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px #2c2c2e inset; -webkit-text-fill-color: #f5f5f7; }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
+<body class="bg-black text-[#f5f5f7] min-h-screen flex flex-col">
     
-    <!-- Navigation Bar -->
-    <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-            <div class="text-3xl font-bold">
-                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
-            </div>
-            <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Game Hub</a>
+    <!-- Navigation -->
+    <nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
+        <div class="max-w-7xl w-full mx-auto flex items-center justify-between">
+            <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
+                <div class="hidden sm:block">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                </div>
+                <span class="text-sm font-semibold sm:hidden">CMG</span>
+            </a>
+            <a href="HomePage.html" class="text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors">← Back to Home</a>
         </div>
-    </div>
+    </nav>
 
     <!-- Login Container -->
-    <div class="min-h-screen flex items-center justify-center px-4 py-12">
-        <div class="w-full max-w-md">
-            
-            <!-- Login Box -->
-            <div class="bg-gray-800 border border-gray-700 rounded-lg p-8 shadow-xl">
-                
-                <!-- Header -->
-                <div class="text-center mb-8">
-                    <h1 class="text-4xl font-bold mb-2">Welcome Back</h1>
-                    <p class="text-gray-400">Sign in to your account</p>
+    <div class="flex-1 flex items-center justify-center px-4 py-16">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-8">
+                <div class="bg-white inline-block rounded-2xl px-4 py-2 mb-5">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-8 w-auto" />
                 </div>
+                <h1 class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-1">Welcome back</h1>
+                <p class="text-sm text-[#86868b]">Sign in to your account</p>
+            </div>
 
-                <!-- Login Form -->
-                <form id="loginForm" class="space-y-6">
-                    
-                    <!-- Email Input -->
+            <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-3xl p-7 shadow-2xl shadow-black">
+                <form id="loginForm" class="space-y-4">
                     <div>
-                        <label for="email" class="block text-sm font-semibold mb-2">Email Address</label>
-                        <input 
-                            id="email" 
-                            type="email" 
-                            placeholder="Enter your email" 
-                            required
-                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                        />
+                        <label for="email" class="block text-xs font-medium text-[#86868b] mb-1.5">Email</label>
+                        <input id="email" type="email" placeholder="you@example.com" required
+                            class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-[#f5f5f7] outline-none focus:ring-1 focus:ring-[#0071e3] focus:border-[#0071e3] transition placeholder-[#86868b]" />
                     </div>
-
-                    <!-- Password Input -->
                     <div>
-                        <label for="password" class="block text-sm font-semibold mb-2">Password</label>
+                        <label for="password" class="block text-xs font-medium text-[#86868b] mb-1.5">Password</label>
                         <div class="relative">
-                            <input 
-                                id="password" 
-                                type="password" 
-                                placeholder="Enter your password" 
-                                required
-                                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                            />
-                            <button 
-                                type="button" 
-                                onclick="togglePasswordVisibility()"
-                                class="absolute right-3 top-3 text-gray-400 hover:text-gray-200"
-                            >
-                                <span id="eyeIcon">👁️</span>
+                            <input id="password" type="password" placeholder="••••••••" required
+                                class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-[#f5f5f7] outline-none focus:ring-1 focus:ring-[#0071e3] focus:border-[#0071e3] transition placeholder-[#86868b]" />
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-2.5 text-[#86868b] hover:text-[#f5f5f7] transition-colors">
+                                <svg id="eyeIconOpen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <svg id="eyeIconClosed" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                             </button>
                         </div>
                     </div>
-
-                    <!-- Remember Me & Forgot Password -->
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" id="rememberMe" class="w-4 h-4 bg-gray-700 border border-gray-600 rounded cursor-pointer" />
-                            <span class="text-sm text-gray-400">Remember me</span>
+                    <div class="flex items-center justify-between pt-1">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="rememberMe" class="w-3.5 h-3.5 rounded accent-[#0071e3]" />
+                            <span class="text-xs text-[#86868b]">Remember me</span>
                         </label>
-                        <a href="#" class="text-sm text-blue-400 hover:text-blue-300">Forgot password?</a>
+                        <a href="#" class="text-xs text-[#0071e3] hover:opacity-80 transition-opacity">Forgot password?</a>
                     </div>
 
-                    <!-- Error Message -->
-                    <div id="errorMessage" class="hidden bg-red-900 border border-red-600 text-red-200 px-4 py-3 rounded-lg text-sm"></div>
+                    <div id="errorMessage" class="hidden bg-[#ff453a]/10 border border-[#ff453a]/20 text-[#ff453a] px-4 py-3 rounded-xl text-xs">
+                        <span id="errorText"></span>
+                    </div>
+                    <div id="successMessage" class="hidden bg-[#32d74b]/10 border border-[#32d74b]/20 text-[#32d74b] px-4 py-3 rounded-xl text-xs">
+                        <span id="successText">Login successful! Redirecting...</span>
+                    </div>
 
-                    <!-- Success Message -->
-                    <div id="successMessage" class="hidden bg-green-900 border border-green-600 text-green-200 px-4 py-3 rounded-lg text-sm"></div>
-
-                    <!-- Login Button -->
-                    <button 
-                        type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105"
-                    >
-                        Sign In
+                    <button type="submit" id="loginBtn"
+                        class="w-full btn-primary text-white py-2.5 rounded-full font-medium text-sm mt-1 flex items-center justify-center gap-2">
+                        <span id="btnText">Sign In</span>
                     </button>
                 </form>
 
-                <!-- Divider -->
-                <div class="relative my-8">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-600"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-gray-800 text-gray-400">Or continue with</span>
-                    </div>
+                <div class="relative my-5">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/[0.06]"></div></div>
+                    <div class="relative flex justify-center"><span class="px-3 bg-[#1c1c1e] text-[#86868b] text-xs">or</span></div>
                 </div>
 
-                <!-- Social Login -->
-                <div class="space-y-3">
-                    <button type="button" class="w-full bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg px-4 py-3 font-semibold transition flex items-center justify-center space-x-2">
-                        <span>🔵</span>
-                        <span>Facebook</span>
-                    </button>
-                    <button type="button" class="w-full bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg px-4 py-3 font-semibold transition flex items-center justify-center space-x-2">
-                        <span>🔴</span>
-                        <span>Google</span>
-                    </button>
+                <div class="space-y-2">
+                    <button type="button" disabled class="w-full bg-[#2c2c2e] border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-[#86868b] opacity-50 cursor-not-allowed">Continue with Facebook</button>
+                    <button type="button" disabled class="w-full bg-[#2c2c2e] border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-[#86868b] opacity-50 cursor-not-allowed">Continue with Google</button>
                 </div>
 
-                <!-- Sign Up Link -->
-                <div class="text-center mt-8">
-                    <p class="text-gray-400">Don't have an account? 
-                        <a href="SignInPage.html" class="text-blue-400 hover:text-blue-300 font-semibold">Sign up here</a>
-                    </p>
-                </div>
-
-            </div>
-
-            <!-- Footer Info -->
-            <div class="text-center mt-8 text-gray-500 text-sm">
-                <p>Protected by reCAPTCHA and subject to the</p>
-                <p>
-                    <a href="#" class="text-blue-400 hover:text-blue-300">Privacy Policy</a> and 
-                    <a href="#" class="text-blue-400 hover:text-blue-300">Terms of Service</a>
+                <p class="text-center text-xs text-[#86868b] mt-5">
+                    Don't have an account? <a href="SignInPage.html" class="text-[#0071e3] hover:opacity-80 transition-opacity font-medium">Create one</a>
                 </p>
             </div>
 
+            <p class="text-center mt-6 text-[#86868b] text-xs leading-relaxed">
+                Protected by reCAPTCHA &middot;
+                <a href="#" class="hover:text-[#f5f5f7] transition-colors">Privacy</a> &middot;
+                <a href="#" class="hover:text-[#f5f5f7] transition-colors">Terms</a>
+            </p>
         </div>
     </div>
 
+    <script src="api-config.js"></script>
+    <script src="ui-utils.js"></script>
     <script>
-        // Toggle password visibility
+        // ============================================
+        // Configuration - Using centralized API configuration from api-config.js
+        // Using UI utilities from ui-utils.js
+        // ============================================
+
+        // ============================================
+        // Password Visibility Toggle
+        // ============================================
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eyeIcon');
             
+            const passwordInput = document.getElementById('password');
+            const eyeOpen = document.getElementById('eyeIconOpen');
+            const eyeClosed = document.getElementById('eyeIconClosed');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                eyeIcon.textContent = '🙈';
+                eyeOpen.classList.add('hidden');
+                eyeClosed.classList.remove('hidden');
             } else {
                 passwordInput.type = 'password';
-                eyeIcon.textContent = '👁️';
+                eyeOpen.classList.remove('hidden');
+                eyeClosed.classList.add('hidden');
             }
         }
 
-        // Handle login form submission
+        // ============================================
+        // Show Messages (using ui-utils)
+        // ============================================
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            if (errorDiv && errorText) {
+                errorText.textContent = message;
+                errorDiv.classList.remove('hidden');
+                
+                const successDiv = document.getElementById('successMessage');
+                if (successDiv) successDiv.classList.add('hidden');
+            }
+            showToast(message, 'error');
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            const successText = document.getElementById('successText');
+            if (successDiv && successText) {
+                successText.textContent = message;
+                successDiv.classList.remove('hidden');
+                
+                const errorDiv = document.getElementById('errorMessage');
+                if (errorDiv) errorDiv.classList.add('hidden');
+            }
+            showToast(message, 'success');
+        }
+
+        // ============================================
+        // Handle Login Form Submission
+        // ============================================
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const rememberMe = document.getElementById('rememberMe').checked;
-            const errorMessage = document.getElementById('errorMessage');
-            const successMessage = document.getElementById('successMessage');
+            const loginBtn = document.getElementById('loginBtn');
+            const emailField = document.getElementById('email');
+            const passwordField = document.getElementById('password');
 
-            // Clear previous messages
-            errorMessage.classList.add('hidden');
-            successMessage.classList.add('hidden');
+            // Clear previous errors
+            clearFieldError(emailField);
+            clearFieldError(passwordField);
 
-            // Basic validation
+            // Validate form
             if (!email || !password) {
-                errorMessage.textContent = '❌ Please fill in all fields';
-                errorMessage.classList.remove('hidden');
+                showError('Please fill in all fields');
+                if (!email) showFieldError(emailField, 'Email is required');
+                if (!password) showFieldError(passwordField, 'Password is required');
                 return;
             }
 
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                errorMessage.textContent = '❌ Please enter a valid email address';
-                errorMessage.classList.remove('hidden');
+            if (!validateEmail(email)) {
+                showError('Please enter a valid email address');
+                showFieldError(emailField, 'Invalid email format');
                 return;
             }
 
             if (password.length < 6) {
-                errorMessage.textContent = '❌ Password must be at least 6 characters';
-                errorMessage.classList.remove('hidden');
+                showError('Password must be at least 6 characters');
+                showFieldError(passwordField, 'Password too short');
                 return;
             }
 
+            // Show loading state
+            setButtonLoading(loginBtn, 'Signing in...');
+
             try {
-                // Send login request to server
-                const res = await fetch('http://localhost:3001/login', {
+                console.log('Login attempt:', email);
+
+                const result = await apiCall(API_ENDPOINTS.login, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
+                    body: { email, password }
                 });
 
-                if (res.ok) {
-                    const data = await res.json();
-                    successMessage.textContent = '✅ Login successful! Redirecting...';
-                    successMessage.classList.remove('hidden');
+                if (result.token) {
+                    showSuccess('Login successful! Redirecting...');
 
                     // Store user data in sessionStorage
-                    sessionStorage.setItem('authToken', data.token);
-                    sessionStorage.setItem('userId', data.userId);
-                    sessionStorage.setItem('username', data.username);
-                    sessionStorage.setItem('fullName', data.fullName);
-                    sessionStorage.setItem('userEmail', email);
+                    sessionStorage.setItem('authToken', result.token);
+                    sessionStorage.setItem('userId', result.userId);
+                    sessionStorage.setItem('username', result.username || 'User');
+                    sessionStorage.setItem('fullName', result.fullName || result.username || 'User');
+                    sessionStorage.setItem('email', email);
+                    sessionStorage.setItem('justLoggedIn', 'true'); // Flag for welcome message
 
                     // Store in localStorage if remember me is checked
                     if (rememberMe) {
                         localStorage.setItem('rememberedEmail', email);
+                    } else {
+                        localStorage.removeItem('rememberedEmail');
                     }
 
-                    // Redirect to profile page after 1.5 seconds
-                    setTimeout(() => {
-                        window.location.href = 'Profile.html';
-                    }, 1500);
+                    // Redirect after 1 second
+                    navigateTo('HomePage.html', 1000);
                 } else {
-                    const error = await res.json();
-                    errorMessage.textContent = `❌ ${error.message || 'Invalid email or password'}`;
-                    errorMessage.classList.remove('hidden');
+                    showError(result.error || 'Invalid email or password');
+                    resetButton(loginBtn);
                 }
             } catch (err) {
-                console.error(err);
-                errorMessage.textContent = '❌ Connection error. Please check if the server is running.';
-                errorMessage.classList.remove('hidden');
+                console.error('Login error:', err);
+                showError(err.data?.error || 'Invalid email or password');
+                resetButton(loginBtn);
             }
         });
 
-        // Load remembered email
+        // ============================================
+        // Load Remembered Email
+        // ============================================
         window.addEventListener('load', () => {
+            // Check if already logged in
+            if (sessionStorage.getItem('authToken')) {
+                showToast('You are already logged in', 'info');
+                navigateTo('HomePage.html', 1500);
+                return;
+            }
+
             const rememberedEmail = localStorage.getItem('rememberedEmail');
             if (rememberedEmail) {
                 document.getElementById('email').value = rememberedEmail;

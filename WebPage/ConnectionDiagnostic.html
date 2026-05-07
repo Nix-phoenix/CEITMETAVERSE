@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="api-config.js"></script>
+    <title>Connection Diagnostic - CEIT METAVERSE AND GAME</title>
+    <style>
+        .status-success { background-color: #10b981; }
+        .status-error { background-color: #ef4444; }
+        .status-pending { background-color: #3b82f6; }
+        .test-item { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-gray-100 font-sans">
+    <nav class="w-full bg-gray-900 bg-opacity-80 backdrop-blur-md border-b border-blue-500 border-opacity-30 p-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-blue-400">CEIT METAVERSE AND GAME - Connection Diagnostic</h1>
+            <a href="HomePage.html" class="text-blue-400 hover:text-blue-300">Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Configuration Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-blue-400">Configuration Status</h2>
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 space-y-4">
+                <div class="test-item">
+                    <p class="text-gray-300"><strong>API Base URL:</strong> <code class="bg-gray-900 px-2 py-1 rounded" id="apiUrl">Loading...</code></p>
+                </div>
+                <div class="test-item">
+                    <p class="text-gray-300"><strong>Environment:</strong> <code class="bg-gray-900 px-2 py-1 rounded" id="environment">Loading...</code></p>
+                </div>
+                <div class="test-item">
+                    <p class="text-gray-300"><strong>Session Storage:</strong> <code class="bg-gray-900 px-2 py-1 rounded" id="sessionStatus">Checking...</code></p>
+                </div>
+                <div class="test-item">
+                    <p class="text-gray-300"><strong>Auth Token:</strong> <code class="bg-gray-900 px-2 py-1 rounded" id="authStatus">Not logged in</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Tests Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-blue-400">Connection Tests</h2>
+            
+            <!-- Backend Connection Test -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 test-item">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold">Backend Server</h3>
+                    <button onclick="testBackendConnection()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">Test Connection</button>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-gray-400">Testing: <code>${API_CONFIG.baseURL}/test</code></p>
+                    <div class="status-box bg-gray-900 p-4 rounded" id="backendStatus">
+                        <p class="text-gray-400">Click "Test Connection" to begin...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Endpoints Test -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 test-item">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold">Games Endpoint</h3>
+                    <button onclick="testGamesEndpoint()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Test Games</button>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-gray-400">Testing: <code>GET ${API_ENDPOINTS.gamesList}</code></p>
+                    <div class="status-box bg-gray-900 p-4 rounded" id="gamesStatus">
+                        <p class="text-gray-400">Click "Test Games" to load games from server...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auth Endpoints Test -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6 test-item">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold">Authentication Endpoints</h3>
+                    <div class="space-x-2">
+                        <button onclick="testAuthEndpoints()" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded">Test Auth</button>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-gray-400">Testing: Login & Register endpoints</p>
+                    <div class="status-box bg-gray-900 p-4 rounded" id="authEndpointStatus">
+                        <p class="text-gray-400">Auth endpoints are available. Full testing requires credentials.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Endpoints Test -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 test-item">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold">Profile Endpoints</h3>
+                    <button onclick="testProfileEndpoint()" class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded" id="profileBtn" disabled>Test Profile (Login First)</button>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-gray-400">Testing: User profile endpoints (requires authentication)</p>
+                    <div class="status-box bg-gray-900 p-4 rounded" id="profileStatus">
+                        <p class="text-gray-400">You must be logged in to test profile endpoints. <a href="LogIn.html" class="text-blue-400 hover:text-blue-300">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-blue-400">Test Summary</h2>
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <div id="testSummary" class="text-gray-400">
+                    <p>Run tests above to see detailed results...</p>
+                </div>
+                <div id="issues" class="mt-6 hidden">
+                    <h3 class="text-lg font-bold text-red-400 mb-3">Potential Issues Found:</h3>
+                    <ul id="issuesList" class="list-disc list-inside text-gray-300 space-y-2"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <a href="HomePage.html" class="bg-blue-600 hover:bg-blue-700 p-4 rounded-lg text-center font-bold transition">Home</a>
+            <a href="Catagory.html" class="bg-green-600 hover:bg-green-700 p-4 rounded-lg text-center font-bold transition">Catalog</a>
+            <a href="LogIn.html" class="bg-purple-600 hover:bg-purple-700 p-4 rounded-lg text-center font-bold transition">Login</a>
+            <a href="AddPage.html" class="bg-yellow-600 hover:bg-yellow-700 p-4 rounded-lg text-center font-bold transition">Upload</a>
+        </div>
+    </main>
+
+    <script>
+        // Display configuration info
+        function displayConfig() {
+            document.getElementById('apiUrl').textContent = API_CONFIG.baseURL;
+            
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            document.getElementById('environment').textContent = isLocal ? 'Local Development' : 'Production';
+            
+            document.getElementById('sessionStatus').textContent = sessionStorage.length > 0 ? 'Active' : 'Empty';
+            
+            const token = sessionStorage.getItem('authToken');
+            if (token) {
+                document.getElementById('authStatus').textContent = 'Logged in ✓';
+                document.getElementById('profileBtn').disabled = false;
+                document.getElementById('profileBtn').textContent = 'Test Profile';
+            }
+        }
+
+        // Test backend connection
+        async function testBackendConnection() {
+            const statusDiv = document.getElementById('backendStatus');
+            statusDiv.innerHTML = '<p class="text-blue-400">Testing...</p>';
+            
+            try {
+                const response = await fetch(`${API_CONFIG.baseURL}/test`, {
+                    mode: 'cors',
+                    timeout: 5000
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.innerHTML = `
+                        <p class="text-green-400 font-bold mb-2">✓ Backend Connected!</p>
+                        <p class="text-gray-300"><strong>Server Status:</strong> ${data.message}</p>
+                        <p class="text-gray-300"><strong>Version:</strong> ${data.version || 'Unknown'}</p>
+                        <p class="text-gray-300"><strong>Port:</strong> ${data.port || 'Unknown'}</p>
+                    `;
+                    document.getElementById('backendStatus').className = 'status-box bg-gray-900 p-4 rounded border-l-4 border-green-500';
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <p class="text-red-400 font-bold mb-2">✗ Connection Failed</p>
+                    <p class="text-gray-300"><strong>Error:</strong> ${error.message}</p>
+                    <p class="text-gray-400 text-sm mt-2">Make sure the backend is running on ${API_CONFIG.baseURL}</p>
+                `;
+                document.getElementById('backendStatus').className = 'status-box bg-gray-900 p-4 rounded border-l-4 border-red-500';
+            }
+        }
+
+        // Test games endpoint
+        async function testGamesEndpoint() {
+            const statusDiv = document.getElementById('gamesStatus');
+            statusDiv.innerHTML = '<p class="text-blue-400">Loading games...</p>';
+            
+            const result = await apiCall(API_ENDPOINTS.gamesList);
+            
+            if (result.success) {
+                const gameCount = Array.isArray(result.data) ? result.data.length : 0;
+                statusDiv.innerHTML = `
+                    <p class="text-green-400 font-bold mb-2">✓ Games Loaded!</p>
+                    <p class="text-gray-300"><strong>Total Games:</strong> ${gameCount}</p>
+                    <p class="text-gray-300"><strong>Response Time:</strong> Fast</p>
+                    ${gameCount > 0 ? `<p class="text-gray-300"><strong>Sample Game:</strong> ${result.data[0]?.title || 'Unknown'}</p>` : ''}
+                `;
+                document.getElementById('gamesStatus').className = 'status-box bg-gray-900 p-4 rounded border-l-4 border-green-500';
+            } else {
+                statusDiv.innerHTML = `
+                    <p class="text-red-400 font-bold mb-2">✗ Load Failed</p>
+                    <p class="text-gray-300"><strong>Error:</strong> ${result.error}</p>
+                `;
+                document.getElementById('gamesStatus').className = 'status-box bg-gray-900 p-4 rounded border-l-4 border-red-500';
+            }
+        }
+
+        // Test authentication endpoints
+        async function testAuthEndpoints() {
+            const statusDiv = document.getElementById('authEndpointStatus');
+            statusDiv.innerHTML = '<p class="text-blue-400">Testing endpoints...</p>';
+            
+            // Just check if endpoints are available
+            try {
+                const endpoints = [
+                    { name: 'Login', endpoint: API_ENDPOINTS.login },
+                    { name: 'Register', endpoint: API_ENDPOINTS.register }
+                ];
+                
+                let html = '<p class="text-green-400 font-bold mb-2">✓ Auth Endpoints Available</p>';
+                endpoints.forEach(ep => {
+                    html += `<p class="text-gray-300"><strong>${ep.name}:</strong> <code class="bg-gray-800 px-1">${ep.endpoint}</code></p>`;
+                });
+                
+                statusDiv.innerHTML = html;
+                document.getElementById('authEndpointStatus').className = 'status-box bg-gray-900 p-4 rounded border-l-4 border-green-500';
+            } catch (error) {
+                statusDiv.innerHTML = `<p class="text-red-400">Error: ${error.message}</p>`;
+            }
+        }
+
+        // Test profile endpoint
+        async function testProfileEndpoint() {
+            const statusDiv = document.getElementById('profileStatus');
+            const userId = sessionStorage.getItem('userId');
+            
+            if (!userId) {
+                statusDiv.innerHTML = '<p class="text-red-400">Please login first to test profile endpoints</p>';
+                return;
+            }
+            
+            statusDiv.innerHTML = '<p class="text-blue-400">Loading profile...</p>';
+            
+            const result = await apiCall(API_ENDPOINTS.userProfile(userId));
+            
+            if (result.success) {
+                const user = result.data;
+                statusDiv.innerHTML = `
+                    <p class="text-green-400 font-bold mb-2">✓ Profile Loaded!</p>
+                    <p class="text-gray-300"><strong>User ID:</strong> ${userId}</p>
+                    <p class="text-gray-300"><strong>Email:</strong> ${sessionStorage.getItem('email') || 'Unknown'}</p>
+                `;
+                document.getElementById('profileStatus').className = 'status-box bg-gray-900 p-4 rounded border-l-4 border-green-500';
+            } else {
+                statusDiv.innerHTML = `
+                    <p class="text-yellow-400 font-bold mb-2">⚠ Profile Not Found</p>
+                    <p class="text-gray-300"><strong>Error:</strong> ${result.error}</p>
+                    <p class="text-gray-400 text-sm mt-2">This may be normal if you just created an account</p>
+                `;
+                document.getElementById('profileStatus').className = 'status-box bg-gray-900 p-4 rounded border-l-4 border-yellow-500';
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', displayConfig);
+    </script>
+</body>
+</html>

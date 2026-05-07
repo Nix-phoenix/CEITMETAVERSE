@@ -1,316 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <title>Add Game</title>
+    <script src="api-config.js"></script>
+    <script src="ui-utils.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Upload Game — CEIT METAVERSE AND GAME</title>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+        .btn-primary { background: #0071e3; transition: background 0.2s ease; }
+        .btn-primary:hover { background: #0077ed; }
+        .apple-input { background: #2c2c2e; border: 1px solid rgba(255,255,255,0.08); color: #f5f5f7; border-radius: 12px; padding: 10px 14px; font-size: 14px; outline: none; width: 100%; transition: box-shadow 0.2s; }
+        .apple-input:focus { box-shadow: 0 0 0 3px rgba(0,113,227,0.4); }
+        .apple-input::placeholder { color: #86868b; }
+    </style>
 </head>
+<body class="bg-black text-[#f5f5f7]">
 
-<body class="bg-gray-900 text-gray-100 font-sans">
-    <!-- Navigation Bar -->
-    <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-10">
-            <div class="text-3xl font-bold">
-                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
+    <!-- Upload Progress Overlay -->
+    <div id="uploadOverlay" class="hidden fixed inset-0 bg-black/90 backdrop-blur-sm z-[200] flex items-center justify-center">
+        <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-3xl p-10 w-full max-w-md text-center shadow-2xl">
+            <div class="w-12 h-12 border-2 border-white/[0.08] border-t-[#0071e3] rounded-full animate-spin mx-auto mb-5"></div>
+            <h2 class="text-xl font-bold mb-1 text-[#f5f5f7]">Uploading Game...</h2>
+            <p class="text-[#86868b] mb-6 text-sm">Please wait, do not close this page</p>
+            <div class="w-full bg-[#2c2c2e] rounded-full h-1.5 overflow-hidden mb-3">
+                <div id="uploadProgressBar" class="h-1.5 bg-[#0071e3] rounded-full transition-all duration-300" style="width:0%"></div>
             </div>
-            <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Home</a>
-            <a href="Catagory.html" class="text-2xl font-semibold hover:text-blue-400">Catalog</a>
-            <a href="#" class="text-2xl font-semibold hover:text-blue-400">Developer Logs</a>
-        </div>
-        <div class="flex items-center space-x-4">
-            <input type="text" placeholder="Search"
-                class="w-64 bg-gray-700 p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-600" />
-            <a href="Profile.html" class="w-12 h-12 rounded-full bg-gray-600 hover:bg-gray-500"></a>
+            <div class="flex justify-between text-xs text-[#86868b] mb-4">
+                <span id="uploadPercent">0%</span>
+                <span id="uploadSpeed">--</span>
+                <span id="uploadSizeInfo">--</span>
+            </div>
+            <p id="uploadStatus" class="text-[#0071e3] text-sm font-medium">Preparing upload...</p>
         </div>
     </div>
-
-    <!-- Main Section -->
-    <div
-        class="flex gap-8 bg-gray-800 justify-center items-start w-full max-w-6xl mx-auto mt-10 p-8 rounded-lg shadow-lg">
-
-        <!-- Form Section -->
-        <form id="gameForm" enctype="multipart/form-data"
-            class="w-2/3 p-8 bg-gray-700 rounded-lg border border-gray-600">
-            <h2 class="text-3xl font-bold mb-8 text-left">Create New Project</h2>
-
-            <div class="mb-4">
-                <label class="block mb-2 font-semibold">Title *</label>
-                <input id="title" type="text" required class="w-full p-3 rounded bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Enter game title" />
+    
+    <!-- Navigation -->
+    <nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center gap-8">
+            <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
+                <div class="hidden sm:block">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                </div>
+                <span class="text-sm font-semibold sm:hidden">CMG</span>
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="HomePage.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Home</a>
+                <a href="Catagory.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Catalog</a>
             </div>
+        </div>
+        <a href="Profile.html" class="flex items-center gap-2 text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors">
+            Profile
+        </a>
+    </nav>
 
-            <div class="mb-4">
-                <label class="block mb-2 font-semibold">Short Description</label>
-                <input id="shortDesc" type="text" class="w-full p-3 rounded bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Brief description" />
-            </div>
+    <!-- Upload Container -->
+    <div class="max-w-5xl mx-auto px-4 py-10">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-1">Upload Your Game</h1>
+            <p class="text-[#86868b] text-sm">Share your creation with the CEIT METAVERSE AND GAME community</p>
+        </div>
 
-            <div class="mb-4">
-                <label class="block mb-2 font-semibold">Full Description</label>
-                <textarea id="fullDesc" class="w-full p-3 rounded bg-gray-600 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Detailed description..."></textarea>
-            </div>
-
-            <div class="mb-4">
-                <label class="block mb-2 font-semibold">Genre</label>
-                <input id="gameType" type="text" class="w-full p-3 rounded bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. RPG, Action, Puzzle" />
-            </div>
-
-            <div class="mb-4">
-                <label class="block mb-2 font-semibold">Tags (comma separated)</label>
-                <input id="tags" type="text" class="w-full p-3 rounded bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. action, fun, 2d" />
-            </div>
-
-            <div class="mb-6">
-                <label class="block mb-2 font-semibold">Upload Game File *</label>
-                <input id="gameFile" type="file" name="gameFile" accept=".zip" required class="w-full p-3 rounded bg-gray-600 file:bg-blue-600 file:text-white file:border-0 file:rounded file:px-4 file:py-2 file:cursor-pointer file:hover:bg-blue-700" />
-                <p class="text-xs text-gray-400 mt-2">Only .zip files are allowed (Max 500MB)</p>
-                <div id="zipCheckMessage" class="mt-2"></div>
-            </div>
-
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-bold text-lg transition">Upload Game</button>
-        </form>
-
-
-        <!-- Image Upload Section -->
-        <div class="w-1/3 bg-gray-700 p-8 rounded-lg border border-gray-600 h-fit">
-            <label class="block text-lg font-semibold mb-4">Upload Game Cover *</label>
-            <div id="imagePreview"
-                class="w-full aspect-square bg-gray-600 rounded-lg border-2 border-dashed border-gray-500 flex items-center justify-center mb-4 cursor-pointer hover:border-blue-400 transition">
-                <div id="CoverImage" class="text-center">
-                    <span class="text-4xl mb-2 block">🖼️</span>
-                    <span class="text-gray-300">Click to upload image</span>
+        <!-- Upload Form -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <!-- Image Upload Section (Left) -->
+            <div class="lg:col-span-1">
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-5 sticky top-20">
+                    <p class="text-xs font-semibold text-[#86868b] uppercase tracking-widest mb-4">Game Cover</p>
+                    <div id="imagePreview" class="w-full aspect-square bg-[#2c2c2e] border-2 border-dashed border-white/[0.08] hover:border-[#0071e3]/50 rounded-2xl flex items-center justify-center mb-4 cursor-pointer transition-colors overflow-hidden">
+                        <div id="CoverImage" class="text-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" class="mx-auto mb-2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <span class="text-[#86868b] text-xs">Click to upload cover</span>
+                        </div>
+                    </div>
+                    <input type="file" id="UpLoadImage" accept="image/*" class="hidden" />
+                    <button type="button" onclick="document.getElementById('UpLoadImage').click()" class="w-full bg-[#2c2c2e] border border-white/[0.08] hover:bg-[#3a3a3c] text-[#f5f5f7] px-4 py-2.5 rounded-full text-sm font-medium transition-colors">
+                        Choose Image
+                    </button>
+                    <p class="text-xs text-[#86868b] mt-3 text-center">PNG, JPG, GIF<br>Recommended: 300x400px</p>
                 </div>
             </div>
-            <input type="file" id="UpLoadImage" accept="image/*"
-                class="w-full p-2 text-gray-100 file:bg-blue-600 file:text-white file:border-0 file:rounded file:px-4 file:py-2 file:cursor-pointer file:hover:bg-blue-700" />
-            <p class="text-xs text-gray-400 mt-2">PNG, JPG, GIF (Recommended: 300x400px)</p>
+
+            <!-- Form Section (Right) -->
+            <form id="gameForm" enctype="multipart/form-data" class="lg:col-span-2">
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Game Title *</label>
+                        <input id="title" type="text" required placeholder="Enter an awesome game title" class="apple-input" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Short Description</label>
+                        <input id="shortDesc" type="text" placeholder="One-line summary of your game" class="apple-input" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Full Description</label>
+                        <textarea id="fullDesc" placeholder="Detailed description of your game, features, gameplay..." rows="4" class="apple-input resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Genre</label>
+                        <input id="gameType" type="text" placeholder="e.g. RPG, Action, Puzzle, Adventure" class="apple-input" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Tags (comma separated)</label>
+                        <input id="tags" type="text" placeholder="e.g. 2D, multiplayer, indie, fun" class="apple-input" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Game File (.ZIP) *</label>
+                        <input id="gameFile" type="file" name="gameFile" accept=".zip" required class="hidden" />
+                        <button type="button" onclick="document.getElementById('gameFile').click()" class="w-full bg-[#2c2c2e] border-2 border-dashed border-white/[0.08] hover:border-[#0071e3]/50 rounded-2xl px-6 py-5 transition-colors text-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" class="mx-auto mb-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span id="gameFileName" class="text-[#86868b] text-sm">Click to select .zip file</span>
+                        </button>
+                        <p class="text-xs text-[#86868b] mt-1.5">Only .ZIP files</p>
+                        <div id="zipCheckMessage" class="mt-3 text-sm"></div>
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-white font-semibold py-3 px-6 rounded-full transition">
+                        <span id="submitText">Upload Game</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
-        // FIXED FORM SUBMISSION SCRIPT
-    const API_URL = 'http://localhost:3001';
+        // ============================================
+        // Configuration - Using centralized API configuration
+        // ============================================
+        const MAX_FILE_SIZE = Infinity; // No limit
 
-// Check if user is logged in
-function checkAuth() {
-    const authToken = sessionStorage.getItem('authToken');
-    if (!authToken) {
-        alert('❌ You must be logged in to upload a game');
-        window.location.href = 'LogIn.html';
-        return false;
-    }
-    return true;
-}
+        // ============================================
+        // Authentication
+        // ============================================
+        function checkAuth() {
+            const authToken = sessionStorage.getItem('authToken');
+            if (!authToken) {
+                alert('❌ You must be logged in to upload a game');
+                window.location.href = 'LogIn.html';
+                return false;
+            }
+            return true;
+        }
 
-// Image preview
-const coverImageDiv = document.getElementById("imagePreview");
-const fileInput = document.getElementById('UpLoadImage');
+        // ============================================
+        // Image Preview
+        // ============================================
+        const coverImageDiv = document.getElementById("imagePreview");
+        const fileInput = document.getElementById('UpLoadImage');
 
-coverImageDiv.addEventListener('click', () => {
-    fileInput.click();
-});
+        coverImageDiv.addEventListener('click', () => {
+            fileInput.click();
+        });
 
-fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            coverImageDiv.innerHTML = `<img src="${e.target.result}" alt="Game Cover" class="w-full h-full object-cover rounded-lg" />`;
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// Improved ZIP validation
-async function validateZipStructure(zipFile) {
-    try {
-        const zip = new JSZip();
-        await zip.loadAsync(zipFile);
-
-        const zipContents = Object.keys(zip.files);
-        console.log("Zip contents:", zipContents);
-
-        // Check if ANY index.html exists
-        const hasIndexHtml = zipContents.some(file => 
-            file.endsWith('index.html') && !file.startsWith('__MACOSX')
-        );
-
-        const hasBuild = zipContents.some(file => file.startsWith('Build/'));
-        const hasTemplateData = zipContents.some(file => file.startsWith('TemplateData/'));
-        const hasJs = zipContents.some(file => file.endsWith('.js'));
-        const hasHtml = zipContents.some(file => file.endsWith('.html'));
-
-        return {
-            isValid: hasIndexHtml || (hasHtml && hasJs),
-            hasIndexHtml,
-            hasBuild,
-            hasTemplateData,
-            hasJs,
-            hasHtml,
-            fileCount: zipContents.length
-        };
-    } catch (err) {
-        console.error("Error reading zip file:", err);
-        return {
-            isValid: false,
-            error: "Could not read zip file: " + err.message
-        };
-    }
-}
-
-// File input change event
-document.getElementById("gameFile").addEventListener("change", async (e) => {
-    const gameFileInput = e.target;
-    const zipCheckMessage = document.getElementById("zipCheckMessage");
-
-    if (!gameFileInput.files[0]) {
-        zipCheckMessage.innerHTML = '';
-        return;
-    }
-
-    const gameFile = gameFileInput.files[0];
-
-    if (!gameFile.name.endsWith('.zip')) {
-        zipCheckMessage.innerHTML = '<p class="text-red-500">❌ Only .zip files are allowed</p>';
-        return;
-    }
-
-    zipCheckMessage.innerHTML = '<p class="text-blue-500">⏳ Validating zip file...</p>';
-
-    const validation = await validateZipStructure(gameFile);
-
-    if (validation.isValid) {
-        zipCheckMessage.innerHTML = `
-            <p class="text-green-500">✅ Zip file is valid!</p>
-            <p class="text-xs text-green-400">Files: ${validation.fileCount} items</p>
-            <p class="text-xs text-green-400">Contains index.html: ${validation.hasIndexHtml ? '✅' : '❌'}</p>
-        `;
-    } else {
-        zipCheckMessage.innerHTML = `
-            <p class="text-yellow-500">⚠️ Warning: Validation incomplete</p>
-            <p class="text-xs text-yellow-400">Make sure your zip contains index.html</p>
-            <p class="text-xs text-yellow-400">${validation.fileCount} files found</p>
-        `;
-    }
-});
-
-// Form submission - FIXED
-document.getElementById("gameForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (!checkAuth()) return;
-
-    const titleInput = document.getElementById("title");
-    const gameFileInput = document.getElementById("gameFile");
-    const coverImageInput = document.getElementById("UpLoadImage");
-
-    // Validation
-    if (!titleInput.value.trim()) {
-        alert("❌ Please enter a game title");
-        return;
-    }
-
-    if (!gameFileInput.files[0]) {
-        alert("❌ Please select a game file (.zip)");
-        return;
-    }
-
-    if (!coverImageInput.files[0]) {
-        alert("❌ Please upload a game cover image");
-        return;
-    }
-
-    const gameFile = gameFileInput.files[0];
-
-    if (!gameFile.name.endsWith('.zip')) {
-        alert("❌ Only .zip files are allowed!");
-        return;
-    }
-
-    // Check file size (500MB)
-    const maxSize = 500 * 1024 * 1024;
-    if (gameFile.size > maxSize) {
-        alert("❌ File size exceeds 500MB");
-        return;
-    }
-
-    // Loading state
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = '⏳ Uploading...';
-
-    // Build FormData
-    const formData = new FormData();
-    formData.append("title", titleInput.value.trim());
-    formData.append("shortDesc", document.getElementById("shortDesc").value.trim());
-    formData.append("fullDesc", document.getElementById("fullDesc").value.trim());
-    formData.append("gameType", document.getElementById("gameType").value.trim());
-    formData.append("tags", document.getElementById("tags").value.trim());
-    formData.append("coverImage", coverImageInput.files[0]);
-    formData.append("gameFile", gameFile);
-    
-    // Optional: Add creator ID if you want to track who uploaded the game
-    const userId = sessionStorage.getItem('userId');
-    if (userId) {
-        formData.append("creatorId", userId);
-    }
-
-    // Debug logging
-    console.log("=== UPLOAD DEBUG ===");
-    console.log("Title:", titleInput.value);
-    console.log("Game file:", gameFile.name, gameFile.size, "bytes");
-    console.log("Cover image:", coverImageInput.files[0].name);
-    console.log("User ID:", userId);
-    console.log("Auth token exists:", !!sessionStorage.getItem('authToken'));
-
-    try {
-        const res = await fetch(`${API_URL}/addGame`, {
-            method: "POST",
-            body: formData,
-            // Note: Don't set Content-Type header - browser will set it with boundary
-            headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('authToken')}`
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    coverImageDiv.innerHTML = `<img src="${e.target.result}" alt="Game Cover" class="w-full h-full object-cover rounded-xl" />`;
+                };
+                reader.readAsDataURL(file);
             }
         });
 
-        console.log("Response status:", res.status);
+        // ============================================
+        // ZIP File Validation
+        // ============================================
+        async function validateZipStructure(zipFile) {
+            try {
+                const zip = new JSZip();
+                await zip.loadAsync(zipFile);
+                const zipContents = Object.keys(zip.files);
 
-        const data = await res.json();
-        console.log("Response data:", data);
+                const hasIndexHtml = zipContents.some(file => 
+                    file.endsWith('index.html') && !file.startsWith('__MACOSX')
+                );
+                const hasJs = zipContents.some(file => file.endsWith('.js'));
+                const hasHtml = zipContents.some(file => file.endsWith('.html'));
 
-        if (res.ok) {
-            alert("✅ Game uploaded successfully!");
-            
-            // Reset form
-            document.getElementById("gameForm").reset();
-            document.getElementById("imagePreview").innerHTML = 
-                '<div id="CoverImage" class="text-center"><span class="text-4xl mb-2 block">🖼️</span><span class="text-gray-300">Click to upload image</span></div>';
-            document.getElementById("zipCheckMessage").innerHTML = '';
-            
-            // Redirect
-            setTimeout(() => {
-                window.location.href = 'Catagory.html';
-            }, 1500);
-        } else {
-            console.error("Upload failed:", data);
-            alert(`❌ Error: ${data.error || 'Upload failed'}\n\nDetails: ${data.details || 'Unknown error'}`);
+                return {
+                    isValid: hasIndexHtml || (hasHtml && hasJs),
+                    hasIndexHtml,
+                    fileCount: zipContents.length
+                };
+            } catch (err) {
+                console.error("Error reading zip file:", err);
+                return { isValid: false, error: err.message };
+            }
         }
-    } catch (err) {
-        console.error("Fetch error:", err);
-        alert(`❌ Connection Error!\n\n${err.message}\n\nMake sure the server is running on http://localhost:3001`);
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-    }
-});
 
-// Check auth on load
-window.addEventListener('load', () => {
-    checkAuth();
-});
+        // ============================================
+        // Game File Selection
+        // ============================================
+        document.getElementById("gameFile").addEventListener("change", async (e) => {
+            const gameFile = e.target.files[0];
+            const zipCheckMessage = document.getElementById("zipCheckMessage");
+            const gameFileName = document.getElementById("gameFileName");
+
+            if (!gameFile) {
+                zipCheckMessage.innerHTML = '';
+                gameFileName.textContent = 'Click to select .zip file';
+                return;
+            }
+
+            gameFileName.textContent = `📦 ${gameFile.name}`;
+
+            if (!gameFile.name.endsWith('.zip')) {
+                zipCheckMessage.innerHTML = '<div class="bg-[#ff453a]/10 text-[#ff453a] p-3 rounded-xl text-xs">Only .zip files are allowed</div>';
+                return;
+            }
+
+            if (gameFile.size > MAX_FILE_SIZE) {
+                zipCheckMessage.innerHTML = `<div class="bg-[#ff453a]/10 text-[#ff453a] p-3 rounded-xl text-xs">File size exceeds limit (${(gameFile.size / 1024 / 1024).toFixed(2)}MB)</div>`;
+                return;
+            }
+
+            zipCheckMessage.innerHTML = '<div class="bg-[#0071e3]/10 text-[#0071e3] p-3 rounded-xl text-xs">Validating...</div>';
+            const validation = await validateZipStructure(gameFile);
+
+            if (validation.isValid) {
+                zipCheckMessage.innerHTML = `
+                    <div class="bg-[#32d74b]/10 text-[#32d74b] p-3 rounded-xl text-xs">
+                        Valid ZIP file — ${validation.fileCount} files | index.html ${validation.hasIndexHtml ? 'found' : 'not found'}
+                    </div>
+                `;
+            } else {
+                zipCheckMessage.innerHTML = `
+                    <div class="bg-[#ffd60a]/10 text-[#ffd60a] p-3 rounded-xl text-xs">
+                        ZIP may not be valid — Make sure it contains index.html (${validation.fileCount} files found)
+                    </div>
+                `;
+            }
+        });
+
+        // ============================================
+        // Form Submission
+        // ============================================
+        document.getElementById("gameForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            if (!checkAuth()) return;
+
+            const titleInput = document.getElementById("title");
+            const gameFileInput = document.getElementById("gameFile");
+            const coverImageInput = document.getElementById("UpLoadImage");
+
+            // Validation
+            if (!titleInput.value.trim()) {
+                alert("❌ Please enter a game title");
+                return;
+            }
+
+            if (!gameFileInput.files[0]) {
+                alert("❌ Please select a game file (.zip)");
+                return;
+            }
+
+            if (!coverImageInput.files[0]) {
+                alert("❌ Please upload a game cover image");
+                return;
+            }
+
+            const gameFile = gameFileInput.files[0];
+
+            if (!gameFile.name.endsWith('.zip')) {
+                alert("❌ Only .zip files are allowed!");
+                return;
+            }
+
+            if (gameFile.size > MAX_FILE_SIZE) {
+                alert(`❌ File size exceeds 2000MB (${(gameFile.size / 1024 / 1024).toFixed(2)}MB)`);
+                return;
+            }
+
+            // Loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitText = document.getElementById('submitText');
+            submitBtn.disabled = true;
+            submitText.textContent = 'Uploading...';
+
+            // Build FormData
+            const formData = new FormData();
+            formData.append("title", titleInput.value.trim());
+            formData.append("shortDesc", document.getElementById("shortDesc").value.trim());
+            formData.append("fullDesc", document.getElementById("fullDesc").value.trim());
+            formData.append("gameType", document.getElementById("gameType").value.trim() || "Other");
+            formData.append("tags", document.getElementById("tags").value.trim());
+            formData.append("coverImage", coverImageInput.files[0]);
+            formData.append("gameFile", gameFile);
+
+            const userId = sessionStorage.getItem('userId');
+            if (userId) formData.append("creatorId", userId);
+
+            // Show overlay
+            const overlay    = document.getElementById('uploadOverlay');
+            const bar        = document.getElementById('uploadProgressBar');
+            const pct        = document.getElementById('uploadPercent');
+            const speedEl    = document.getElementById('uploadSpeed');
+            const sizeEl     = document.getElementById('uploadSizeInfo');
+            const statusEl   = document.getElementById('uploadStatus');
+            overlay.classList.remove('hidden');
+
+            const startTime = Date.now();
+
+            try {
+                await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', API_ENDPOINTS.addGame);
+
+                    const token = sessionStorage.getItem('authToken');
+                    if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+                    xhr.upload.addEventListener('progress', (e) => {
+                        if (!e.lengthComputable) {
+                            statusEl.textContent = 'Uploading... (size unknown)';
+                            return;
+                        }
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        bar.style.width = percent + '%';
+                        pct.textContent = percent + '%';
+
+                        const elapsed  = (Date.now() - startTime) / 1000;
+                        const speedMBs = (e.loaded / 1024 / 1024 / elapsed).toFixed(2);
+                        const loadedMB = (e.loaded / 1024 / 1024).toFixed(1);
+                        const totalMB  = (e.total  / 1024 / 1024).toFixed(1);
+
+                        speedEl.textContent  = speedMBs + ' MB/s';
+                        sizeEl.textContent   = `${loadedMB} / ${totalMB} MB`;
+                        statusEl.textContent = percent < 100 ? 'Uploading file...' : 'Processing on server...';
+                    });
+
+                    xhr.addEventListener('load', () => {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            const result = JSON.parse(xhr.responseText);
+                            if (result.game || result.id || result.message) {
+                                bar.style.width = '100%';
+                                pct.textContent = '100%';
+                                statusEl.textContent = '✅ Upload complete!';
+                                statusEl.className = 'text-green-400 text-sm font-semibold';
+                                setTimeout(() => {
+                                    overlay.classList.add('hidden');
+                                    document.getElementById('gameForm').reset();
+                                    document.getElementById('imagePreview').innerHTML = '<div id="CoverImage" class="text-center"><span class="text-6xl mb-4 block">🖼️</span><span class="text-gray-300 text-sm">Click to upload</span></div>';
+                                    window.location.href = 'HomePage.html';
+                                }, 1200);
+                                resolve(result);
+                            } else {
+                                reject(new Error(result.error || 'Upload failed'));
+                            }
+                        } else {
+                            let errMsg = 'Server error';
+                            try { errMsg = JSON.parse(xhr.responseText).error || errMsg; } catch(_) {}
+                            reject(new Error(`(${xhr.status}) ${errMsg}`));
+                        }
+                    });
+
+                    xhr.addEventListener('error', () => reject(new Error('Network error')));
+                    xhr.addEventListener('timeout', () => reject(new Error('Upload timed out')));
+
+                    xhr.send(formData);
+                });
+
+            } catch (err) {
+                console.error('Upload error:', err);
+                overlay.classList.add('hidden');
+                alert(`❌ Upload failed: ${err.message || 'Unknown error'}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = 'Upload Game';
+            }
+        });
+
+        // ============================================
+        // Initialize
+        // ============================================
+        window.addEventListener('load', () => {
+            checkAuth();
+        });
     </script>
-</body>
 
+</body>
 </html>

@@ -4,414 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Settings - Game Hub</title>
+    <script src="api-config.js"></script>
+    <script src="ui-utils.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Settings — CEIT METAVERSE AND GAME</title>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+        .btn-primary { background: #0071e3; transition: background 0.2s ease; }
+        .btn-primary:hover { background: #0077ed; }
+        .apple-input { background: #2c2c2e; border: 1px solid rgba(255,255,255,0.08); color: #f5f5f7; border-radius: 12px; padding: 10px 14px; font-size: 14px; outline: none; width: 100%; transition: box-shadow 0.2s; }
+        .apple-input:focus { box-shadow: 0 0 0 3px rgba(0,113,227,0.4); }
+        .apple-input:disabled { opacity: 0.4; cursor: not-allowed; }
+        .apple-input::placeholder { color: #86868b; }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
+<body class="bg-black text-[#f5f5f7] min-h-screen">
     
-    <!-- Navigation Bar -->
-    <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-10">
-            <div class="text-3xl font-bold">
-                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
+    <!-- Navigation -->
+    <nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center gap-8">
+            <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
+                <div class="hidden sm:block">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                </div>
+                <span class="text-sm font-semibold sm:hidden">CMG</span>
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="HomePage.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Home</a>
+                <a href="Catagory.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Catalog</a>
+                <a href="Profile.html" class="text-sm font-medium text-[#f5f5f7]">Profile</a>
             </div>
-            <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Home</a>
-            <a href="Catagory.html" class="text-2xl font-semibold hover:text-blue-400">Catalog</a>
-            <a href="#" class="text-2xl font-semibold hover:text-blue-400">Developer Logs</a>
         </div>
-        <div class="flex items-center space-x-4">
-            <input type="text" placeholder="Search"
-                class="w-64 bg-gray-700 p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-600" />
-            <button onclick="window.location.href='Profile.html'" class="w-12 h-12 rounded-full bg-gray-600 hover:bg-gray-500 flex items-center justify-center text-xl">
-                👤
-            </button>
-        </div>
-    </div>
+        <a href="Profile.html" class="flex items-center gap-1.5 text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors">
+            ← Back to Profile
+        </a>
+    </nav>
 
     <!-- Main Content -->
-    <div class="max-w-4xl mx-auto px-4 py-12">
-        
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold mb-2">Profile Settings</h1>
-            <p class="text-gray-400">Manage your account information</p>
+    <div class="max-w-5xl mx-auto px-4 py-10">
+        <div class="mb-7">
+            <h1 class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-1">Profile Settings</h1>
+            <p class="text-[#86868b] text-sm">Manage your account information and preferences</p>
         </div>
 
-        <!-- Settings Container -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
             <!-- Sidebar Tabs -->
             <div class="md:col-span-1">
-                <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
-                    <button onclick="switchTab('profile')" class="tab-btn w-full text-left px-4 py-3 bg-blue-600 hover:bg-blue-700 border-b border-gray-700 font-semibold" data-tab="profile">
-                        👤 Profile
-                    </button>
-                    <button onclick="switchTab('picture')" class="tab-btn w-full text-left px-4 py-3 hover:bg-gray-700 border-b border-gray-700 font-semibold" data-tab="picture">
-                        🖼️ Picture
-                    </button>
-                    <button onclick="switchTab('password')" class="tab-btn w-full text-left px-4 py-3 hover:bg-gray-700 border-b border-gray-700 font-semibold" data-tab="password">
-                        🔐 Password
-                    </button>
-                    <button onclick="switchTab('privacy')" class="tab-btn w-full text-left px-4 py-3 hover:bg-gray-700 border-b border-gray-700 font-semibold" data-tab="privacy">
-                        🔒 Privacy
-                    </button>
-                    <button onclick="switchTab('notifications')" class="tab-btn w-full text-left px-4 py-3 hover:bg-gray-700 font-semibold" data-tab="notifications">
-                        🔔 Notifications
-                    </button>
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl overflow-hidden p-1.5">
+                    <button onclick="switchTab('profile')" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl font-medium text-sm bg-[#0071e3] text-white mb-0.5" data-tab="profile">Profile</button>
+                    <button onclick="switchTab('picture')" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl font-medium text-sm text-[#86868b] hover:bg-[#2c2c2e] hover:text-[#f5f5f7] transition-colors mb-0.5" data-tab="picture">Picture</button>
+                    <button onclick="switchTab('password')" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl font-medium text-sm text-[#86868b] hover:bg-[#2c2c2e] hover:text-[#f5f5f7] transition-colors mb-0.5" data-tab="password">Password</button>
+                    <button onclick="switchTab('privacy')" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl font-medium text-sm text-[#86868b] hover:bg-[#2c2c2e] hover:text-[#f5f5f7] transition-colors mb-0.5" data-tab="privacy">Privacy</button>
+                    <button onclick="switchTab('notifications')" class="tab-btn w-full text-left px-3 py-2.5 rounded-xl font-medium text-sm text-[#86868b] hover:bg-[#2c2c2e] hover:text-[#f5f5f7] transition-colors" data-tab="notifications">Notifications</button>
                 </div>
             </div>
 
             <!-- Content Area -->
             <div class="md:col-span-3">
-                
+
                 <!-- Profile Tab -->
-                <div id="profile-tab" class="tab-content bg-gray-800 border border-gray-700 rounded-lg p-6">
-                    <h2 class="text-2xl font-bold mb-6">Edit Profile</h2>
-                    
-                    <form id="profileForm" class="space-y-6">
-                        
-                        <!-- Full Name -->
+                <div id="profile-tab" class="tab-content bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+                    <h2 class="text-base font-semibold text-[#f5f5f7] mb-5">Edit Profile</h2>
+                    <form id="profileForm" class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Full Name</label>
-                            <input 
-                                id="fullName" 
-                                type="text" 
-                                placeholder="Enter your full name"
-                                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                            />
+                            <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Full Name</label>
+                            <input id="fullName" type="text" placeholder="Enter your full name" class="apple-input" />
                         </div>
-
-                        <!-- Username -->
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Username</label>
-                            <input 
-                                id="username" 
-                                type="text" 
-                                placeholder="Enter your username"
-                                disabled
-                                class="w-full bg-gray-600 border border-gray-600 rounded-lg px-4 py-3 cursor-not-allowed opacity-70"
-                            />
-                            <p class="text-xs text-gray-400 mt-1">Username cannot be changed</p>
+                            <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Username</label>
+                            <input id="username" type="text" placeholder="Enter your username" disabled class="apple-input" />
+                            <p class="text-xs text-[#86868b] mt-1">Username cannot be changed</p>
                         </div>
-
-                        <!-- Email -->
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Email Address</label>
-                            <input 
-                                id="email" 
-                                type="email" 
-                                placeholder="Enter your email"
-                                disabled
-                                class="w-full bg-gray-600 border border-gray-600 rounded-lg px-4 py-3 cursor-not-allowed opacity-70"
-                            />
-                            <p class="text-xs text-gray-400 mt-1">Email cannot be changed</p>
+                            <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Email Address</label>
+                            <input id="email" type="email" placeholder="Enter your email" disabled class="apple-input" />
+                            <p class="text-xs text-[#86868b] mt-1">Email cannot be changed</p>
                         </div>
-
-                        <!-- Bio -->
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Bio</label>
-                            <textarea 
-                                id="bio" 
-                                placeholder="Tell us about yourself..."
-                                rows="4"
-                                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
-                            ></textarea>
-                            <p class="text-xs text-gray-400 mt-1">Max 200 characters</p>
+                            <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Bio</label>
+                            <textarea id="bio" placeholder="Tell us about yourself..." rows="4" class="apple-input resize-none"></textarea>
+                            <p class="text-xs text-[#86868b] mt-1">Max 200 characters</p>
                         </div>
-
-                        <!-- Buttons -->
-                        <div class="flex gap-4">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold">
-                                Save Changes
-                            </button>
-                            <button type="button" onclick="window.location.href='Profile.html'" class="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg font-bold">
-                                Cancel
-                            </button>
+                        <div class="flex gap-3 pt-1">
+                            <button type="submit" class="btn-primary text-white px-6 py-2.5 rounded-full font-medium text-sm transition">Save Changes</button>
+                            <button type="button" onclick="window.location.href='Profile.html'" class="bg-[#2c2c2e] border border-white/[0.08] hover:bg-[#3a3a3c] text-[#f5f5f7] px-6 py-2.5 rounded-full font-medium text-sm transition-colors">Cancel</button>
                         </div>
-
-                        <!-- Message -->
-                        <div id="profileMessage" class="hidden rounded-lg px-4 py-3"></div>
+                        <div id="profileMessage" class="hidden rounded-xl px-4 py-3 text-sm"></div>
                     </form>
                 </div>
 
                 <!-- Picture Tab -->
-                <div id="picture-tab" class="tab-content hidden bg-gray-800 border border-gray-700 rounded-lg p-6">
-                    <h2 class="text-2xl font-bold mb-6">Profile Picture</h2>
-                    
-                    <form id="pictureForm" class="space-y-6">
-                        
-                        <!-- Current Picture Preview -->
+                <div id="picture-tab" class="tab-content hidden bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+                    <h2 class="text-base font-semibold text-[#f5f5f7] mb-5">Profile Picture</h2>
+                    <form id="pictureForm" class="space-y-5">
                         <div class="text-center">
-                            <div id="picturePreview" class="w-48 h-48 mx-auto rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-6xl mb-4 overflow-hidden shadow-lg">
-                                👤
+                            <div id="picturePreview" class="w-32 h-32 mx-auto rounded-full bg-[#2c2c2e] border border-white/[0.08] flex items-center justify-center text-5xl mb-3 overflow-hidden">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                             </div>
-                            <p class="text-gray-400 text-sm mb-4">Current profile picture</p>
-                            <div id="previewStatus" class="text-sm text-gray-300">
-                                <span id="previewLabel" class="text-gray-400">No image selected</span>
-                            </div>
+                            <div id="previewStatus" class="text-sm text-[#86868b]"><span id="previewLabel">No image selected</span></div>
                         </div>
-
-                        <!-- File Upload -->
-                        <div class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-blue-600 transition cursor-pointer" id="dropZone">
-                            <input 
-                                type="file" 
-                                id="pictureInput" 
-                                accept="image/*"
-                                class="hidden"
-                            />
-                            <div class="text-5xl mb-2">📸</div>
-                            <p class="text-gray-300 font-semibold mb-1">Click to upload or drag and drop</p>
-                            <p class="text-gray-400 text-sm">PNG, JPG, GIF up to 10MB</p>
+                        <div class="border-2 border-dashed border-white/[0.08] hover:border-[#0071e3]/50 rounded-2xl p-8 text-center transition-colors cursor-pointer" id="dropZone">
+                            <input type="file" id="pictureInput" accept="image/*" class="hidden" />
+                            <p class="text-[#f5f5f7] font-medium text-sm mb-1">Click to upload or drag and drop</p>
+                            <p class="text-[#86868b] text-xs">PNG, JPG, GIF up to 10MB</p>
                         </div>
-
-                        <!-- File Info -->
-                        <div id="fileInfo" class="hidden bg-gray-700 p-4 rounded-lg border border-gray-600">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-xs text-gray-400 mb-1">File name</p>
-                                    <p class="text-sm font-semibold" id="fileName">N/A</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-400 mb-1">File size</p>
-                                    <p class="text-sm font-semibold" id="fileSize">N/A</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-400 mb-1">Dimensions</p>
-                                    <p class="text-sm font-semibold" id="fileDimensions">N/A</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-400 mb-1">Type</p>
-                                    <p class="text-sm font-semibold" id="fileType">N/A</p>
-                                </div>
+                        <div id="fileInfo" class="hidden bg-[#2c2c2e] border border-white/[0.06] p-4 rounded-xl">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><p class="text-xs text-[#86868b] mb-1">File name</p><p class="text-sm font-medium" id="fileName">N/A</p></div>
+                                <div><p class="text-xs text-[#86868b] mb-1">File size</p><p class="text-sm font-medium" id="fileSize">N/A</p></div>
+                                <div><p class="text-xs text-[#86868b] mb-1">Dimensions</p><p class="text-sm font-medium" id="fileDimensions">N/A</p></div>
+                                <div><p class="text-xs text-[#86868b] mb-1">Type</p><p class="text-sm font-medium" id="fileType">N/A</p></div>
                             </div>
                         </div>
-
-                        <!-- Buttons -->
-                        <div class="flex gap-4">
-                            <button type="submit" id="uploadBtn" disabled class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold">
-                                Upload Picture
-                            </button>
-                            <button type="button" onclick="resetPicture()" class="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg font-bold">
-                                Clear
-                            </button>
+                        <div class="flex gap-3">
+                            <button type="submit" id="uploadBtn" disabled class="btn-primary text-white disabled:opacity-40 disabled:cursor-not-allowed px-6 py-2.5 rounded-full font-medium text-sm transition">Upload Picture</button>
+                            <button type="button" onclick="resetPicture()" class="bg-[#2c2c2e] border border-white/[0.08] hover:bg-[#3a3a3c] text-[#f5f5f7] px-6 py-2.5 rounded-full font-medium text-sm transition-colors">Clear</button>
                         </div>
-
-                        <!-- Message -->
-                        <div id="pictureMessage" class="hidden rounded-lg px-4 py-3"></div>
+                        <div id="pictureMessage" class="hidden rounded-xl px-4 py-3 text-sm"></div>
                     </form>
                 </div>
 
                 <!-- Password Tab -->
-                <div id="password-tab" class="tab-content hidden bg-gray-800 border border-gray-700 rounded-lg p-6">
-                    <h2 class="text-2xl font-bold mb-6">Change Password</h2>
-                    
-                    <form id="passwordForm" class="space-y-6">
-                        
-                        <!-- Current Password -->
+                <div id="password-tab" class="tab-content hidden bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+                    <h2 class="text-base font-semibold text-[#f5f5f7] mb-5">Change Password</h2>
+                    <form id="passwordForm" class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Current Password</label>
+                            <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Current Password</label>
                             <div class="relative">
-                                <input 
-                                    id="currentPassword" 
-                                    type="password" 
-                                    placeholder="Enter your current password"
-                                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                />
-                                <button type="button" onclick="togglePasswordField('currentPassword')" class="absolute right-3 top-3 text-gray-400 hover:text-gray-200">
-                                    👁️
-                                </button>
+                                <input id="currentPassword" type="password" placeholder="Enter your current password" class="apple-input pr-16" />
+                                <button type="button" onclick="togglePasswordField('currentPassword')" class="absolute right-4 top-2.5 text-xs text-[#0071e3] hover:opacity-80 transition">Show</button>
                             </div>
                         </div>
-
-                        <!-- New Password -->
                         <div>
-                            <label class="block text-sm font-semibold mb-2">New Password</label>
+                            <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">New Password</label>
                             <div class="relative">
-                                <input 
-                                    id="newPassword" 
-                                    type="password" 
-                                    placeholder="Enter new password"
-                                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                />
-                                <button type="button" onclick="togglePasswordField('newPassword')" class="absolute right-3 top-3 text-gray-400 hover:text-gray-200">
-                                    👁️
-                                </button>
+                                <input id="newPassword" type="password" placeholder="Enter new password" class="apple-input pr-16" />
+                                <button type="button" onclick="togglePasswordField('newPassword')" class="absolute right-4 top-2.5 text-xs text-[#0071e3] hover:opacity-80 transition">Show</button>
                             </div>
                         </div>
-
-                        <!-- Confirm New Password -->
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Confirm New Password</label>
+                            <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Confirm New Password</label>
                             <div class="relative">
-                                <input 
-                                    id="confirmPassword" 
-                                    type="password" 
-                                    placeholder="Confirm new password"
-                                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                />
-                                <button type="button" onclick="togglePasswordField('confirmPassword')" class="absolute right-3 top-3 text-gray-400 hover:text-gray-200">
-                                    👁️
-                                </button>
+                                <input id="confirmPassword" type="password" placeholder="Confirm new password" class="apple-input pr-16" />
+                                <button type="button" onclick="togglePasswordField('confirmPassword')" class="absolute right-4 top-2.5 text-xs text-[#0071e3] hover:opacity-80 transition">Show</button>
                             </div>
                         </div>
-
-                        <!-- Buttons -->
-                        <div class="flex gap-4">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold">
-                                Update Password
-                            </button>
-                            <button type="button" onclick="document.getElementById('passwordForm').reset()" class="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg font-bold">
-                                Clear
-                            </button>
+                        <div class="flex gap-3 pt-1">
+                            <button type="submit" class="btn-primary text-white px-6 py-2.5 rounded-full font-medium text-sm transition">Update Password</button>
+                            <button type="button" onclick="document.getElementById('passwordForm').reset()" class="bg-[#2c2c2e] border border-white/[0.08] hover:bg-[#3a3a3c] text-[#f5f5f7] px-6 py-2.5 rounded-full font-medium text-sm transition-colors">Clear</button>
                         </div>
-
-                        <!-- Message -->
-                        <div id="passwordMessage" class="hidden rounded-lg px-4 py-3"></div>
+                        <div id="passwordMessage" class="hidden rounded-xl px-4 py-3 text-sm"></div>
                     </form>
                 </div>
 
                 <!-- Privacy Tab -->
-                <div id="privacy-tab" class="tab-content hidden bg-gray-800 border border-gray-700 rounded-lg p-6">
-                    <h2 class="text-2xl font-bold mb-6">Privacy Settings</h2>
-                    
-                    <form id="privacyForm" class="space-y-6">
-                        
-                        <!-- Profile Visibility -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Public Profile</h3>
-                                <p class="text-sm text-gray-400">Allow others to see your profile</p>
-                            </div>
-                            <input type="checkbox" id="publicProfile" class="w-6 h-6 cursor-pointer" checked />
+                <div id="privacy-tab" class="tab-content hidden bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+                    <h2 class="text-base font-semibold text-[#f5f5f7] mb-5">Privacy Settings</h2>
+                    <form id="privacyForm" class="space-y-3">
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Public Profile</h3><p class="text-xs text-[#86868b]">Allow others to see your profile</p></div>
+                            <input type="checkbox" id="publicProfile" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Show Games -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Show My Games</h3>
-                                <p class="text-sm text-gray-400">Display your uploaded games publicly</p>
-                            </div>
-                            <input type="checkbox" id="showGames" class="w-6 h-6 cursor-pointer" checked />
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Show My Games</h3><p class="text-xs text-[#86868b]">Display your uploaded games publicly</p></div>
+                            <input type="checkbox" id="showGames" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Show Activity -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Show Activity</h3>
-                                <p class="text-sm text-gray-400">Let others see your gaming activity</p>
-                            </div>
-                            <input type="checkbox" id="showActivity" class="w-6 h-6 cursor-pointer" checked />
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Show Activity</h3><p class="text-xs text-[#86868b]">Let others see your gaming activity</p></div>
+                            <input type="checkbox" id="showActivity" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Allow Messages -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Allow Messages</h3>
-                                <p class="text-sm text-gray-400">Allow other users to send you messages</p>
-                            </div>
-                            <input type="checkbox" id="allowMessages" class="w-6 h-6 cursor-pointer" checked />
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Allow Messages</h3><p class="text-xs text-[#86868b]">Allow other users to send you messages</p></div>
+                            <input type="checkbox" id="allowMessages" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Buttons -->
-                        <div class="flex gap-4 pt-4">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold">
-                                Save Privacy Settings
-                            </button>
+                        <div class="pt-2">
+                            <button type="submit" class="btn-primary text-white px-6 py-2.5 rounded-full font-medium text-sm transition">Save Privacy Settings</button>
                         </div>
-
-                        <!-- Message -->
-                        <div id="privacyMessage" class="hidden rounded-lg px-4 py-3"></div>
+                        <div id="privacyMessage" class="hidden rounded-xl px-4 py-3 text-sm"></div>
                     </form>
                 </div>
 
                 <!-- Notifications Tab -->
-                <div id="notifications-tab" class="tab-content hidden bg-gray-800 border border-gray-700 rounded-lg p-6">
-                    <h2 class="text-2xl font-bold mb-6">Notification Settings</h2>
-                    
-                    <form id="notificationsForm" class="space-y-6">
-                        
-                        <!-- Email Notifications -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Email Notifications</h3>
-                                <p class="text-sm text-gray-400">Receive updates via email</p>
-                            </div>
-                            <input type="checkbox" id="emailNotifications" class="w-6 h-6 cursor-pointer" checked />
+                <div id="notifications-tab" class="tab-content hidden bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+                    <h2 class="text-base font-semibold text-[#f5f5f7] mb-5">Notification Settings</h2>
+                    <form id="notificationsForm" class="space-y-3">
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Email Notifications</h3><p class="text-xs text-[#86868b]">Receive updates via email</p></div>
+                            <input type="checkbox" id="emailNotifications" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Game Updates -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Game Updates</h3>
-                                <p class="text-sm text-gray-400">Get notified about new games</p>
-                            </div>
-                            <input type="checkbox" id="gameUpdates" class="w-6 h-6 cursor-pointer" checked />
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Game Updates</h3><p class="text-xs text-[#86868b]">Get notified about new games</p></div>
+                            <input type="checkbox" id="gameUpdates" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Comments on Games -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Comments on My Games</h3>
-                                <p class="text-sm text-gray-400">Notify when users comment on your games</p>
-                            </div>
-                            <input type="checkbox" id="commentsNotifications" class="w-6 h-6 cursor-pointer" checked />
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Comments on My Games</h3><p class="text-xs text-[#86868b]">Notify when users comment on your games</p></div>
+                            <input type="checkbox" id="commentsNotifications" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Promotions -->
-                        <div class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
-                            <div>
-                                <h3 class="font-semibold">Promotions & Offers</h3>
-                                <p class="text-sm text-gray-400">Receive promotional emails</p>
-                            </div>
-                            <input type="checkbox" id="promotions" class="w-6 h-6 cursor-pointer" checked />
+                        <div class="flex items-center justify-between p-4 bg-[#2c2c2e] border border-white/[0.06] rounded-xl">
+                            <div><h3 class="font-medium text-sm">Promotions & Offers</h3><p class="text-xs text-[#86868b]">Receive promotional emails</p></div>
+                            <input type="checkbox" id="promotions" class="w-4 h-4 cursor-pointer accent-[#0071e3]" checked />
                         </div>
-
-                        <!-- Buttons -->
-                        <div class="flex gap-4 pt-4">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold">
-                                Save Notification Settings
-                            </button>
+                        <div class="pt-2">
+                            <button type="submit" class="btn-primary text-white px-6 py-2.5 rounded-full font-medium text-sm transition">Save Notification Settings</button>
                         </div>
-
-                        <!-- Message -->
-                        <div id="notificationsMessage" class="hidden rounded-lg px-4 py-3"></div>
+                        <div id="notificationsMessage" class="hidden rounded-xl px-4 py-3 text-sm"></div>
                     </form>
                 </div>
 
             </div>
-
         </div>
-
-        <!-- Danger Zone -->
-        <div class="mt-12 bg-red-900 border border-red-700 rounded-lg p-6">
-            <h2 class="text-2xl font-bold text-red-400 mb-6">Danger Zone</h2>
-            
-            <div class="space-y-4">
-                <div class="flex items-center justify-between p-4 bg-red-800 rounded-lg">
-                    <div>
-                        <h3 class="font-semibold">Delete Account</h3>
-                        <p class="text-sm text-gray-300">Permanently delete your account and all data</p>
-                    </div>
-                    <button type="button" onclick="deleteAccount()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-bold">
-                        Delete
-                    </button>
-                </div>
-                
-                <div class="flex items-center justify-between p-4 bg-red-800 rounded-lg">
-                    <div>
-                        <h3 class="font-semibold">Logout</h3>
-                        <p class="text-sm text-gray-300">Sign out from this device</p>
-                    </div>
-                    <button type="button" onclick="logout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-bold">
-                        Logout
-                    </button>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script>
-        const API_URL = 'http://localhost:3001';
+        // Using centralized API configuration from api-config.js
         let selectedFile = null;
 
         // Check if user is logged in
@@ -428,16 +239,14 @@
         function switchTab(tabName) {
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.classList.add('hidden'));
-
             document.getElementById(tabName + '-tab').classList.remove('hidden');
-
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => {
-                btn.classList.remove('bg-blue-600');
-                btn.classList.add('hover:bg-gray-700');
+                btn.classList.remove('bg-[#0071e3]', 'text-white');
+                btn.classList.add('text-[#86868b]');
                 if (btn.dataset.tab === tabName) {
-                    btn.classList.add('bg-blue-600');
-                    btn.classList.remove('hover:bg-gray-700');
+                    btn.classList.add('bg-[#0071e3]', 'text-white');
+                    btn.classList.remove('text-[#86868b]');
                 }
             });
         }
@@ -452,7 +261,7 @@
         function loadProfileData() {
             const fullName = sessionStorage.getItem('fullName');
             const username = sessionStorage.getItem('username');
-            const email = sessionStorage.getItem('userEmail');
+            const email = sessionStorage.getItem('email');
             const bio = sessionStorage.getItem('userBio') || '';
             const profilePictureUrl = localStorage.getItem('profilePicture');
 
@@ -605,7 +414,8 @@
             pictureMessage.classList.remove('hidden');
 
             try {
-                const res = await fetch(`${API_URL}/profile/${sessionStorage.getItem('userId')}/picture`, {
+                const userId = sessionStorage.getItem('userId');
+                const result = await apiCall(API_ENDPOINTS.userPicture(userId), {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('authToken')}`
@@ -613,8 +423,8 @@
                     body: formData
                 });
 
-                if (res.ok) {
-                    const data = await res.json();
+                if (result.success) {
+                    const data = result.data;
                     localStorage.setItem('profilePicture', data.picturePath);
                     
                     pictureMessage.textContent = '✅ Profile picture updated successfully!';
@@ -631,8 +441,7 @@
                         window.location.reload();
                     }, 2000);
                 } else {
-                    const error = await res.json();
-                    pictureMessage.textContent = `❌ ${error.error || 'Error uploading picture'}`;
+                    pictureMessage.textContent = `❌ ${result.error || 'Error uploading picture'}`;
                     pictureMessage.className = 'bg-red-900 border border-red-600 text-red-200 px-4 py-3 rounded-lg';
                 }
                 pictureMessage.classList.remove('hidden');
@@ -661,16 +470,15 @@
             }
 
             try {
-                const res = await fetch(`${API_URL}/profile/${userId}`, {
+                const result = await apiCall(API_ENDPOINTS.userProfile(userId), {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${sessionStorage.getItem('authToken')}`
                     },
                     body: JSON.stringify({ fullName, bio })
                 });
 
-                if (res.ok) {
+                if (result.success) {
                     sessionStorage.setItem('fullName', fullName);
                     profileMessage.textContent = '✅ Profile updated successfully!';
                     profileMessage.className = 'bg-green-900 border border-green-600 text-green-200 px-4 py-3 rounded-lg';
@@ -719,18 +527,17 @@
             }
 
             try {
-                const res = await fetch(`${API_URL}/profile/${userId}/password`, {
+                const result = await apiCall(API_ENDPOINTS.userPassword(userId), {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${sessionStorage.getItem('authToken')}`
                     },
                     body: JSON.stringify({ currentPassword, newPassword })
                 });
 
-                const data = await res.json();
+                const data = result.data || {};
 
-                if (res.ok) {
+                if (result.success) {
                     passwordMessage.textContent = '✅ Password updated successfully!';
                     passwordMessage.className = 'bg-green-900 border border-green-600 text-green-200 px-4 py-3 rounded-lg';
                     document.getElementById('passwordForm').reset();
@@ -777,27 +584,6 @@
                 sessionStorage.removeItem('userEmail');
                 localStorage.removeItem('rememberedEmail');
                 window.location.href = 'LogIn.html';
-            }
-        }
-
-        // Delete account
-        function deleteAccount() {
-            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                if (confirm('Type "DELETE" to confirm account deletion')) {
-                    const userId = sessionStorage.getItem('userId');
-                    
-                    fetch(`${API_URL}/profile/${userId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${sessionStorage.getItem('authToken')}`
-                        }
-                    }).then(res => {
-                        if (res.ok) {
-                            alert('Account deleted successfully');
-                            logout();
-                        }
-                    }).catch(err => console.error(err));
-                }
             }
         }
 

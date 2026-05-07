@@ -4,242 +4,197 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Game Hub - Play Amazing Games Online</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>CEIT METAVERSE AND GAME</title>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+        .btn-primary { background: #0071e3; transition: background 0.2s ease, transform 0.1s ease; }
+        .btn-primary:hover { background: #0077ed; }
+        .btn-primary:active { transform: scale(0.98); }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
+<body class="bg-black text-[#f5f5f7] flex flex-col min-h-screen">
 
-    <!-- Navigation Bar -->
-    <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-10">
-            <div class="text-3xl font-bold">
-                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
-            </div>
-            <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Game Hub</a>
-            <a href="Catagory.html" class="text-lg font-semibold hover:text-blue-400">Catalog</a>   
-            <a href="#" class="text-lg font-semibold hover:text-blue-400">About</a>
-        </div>
-        <div class="flex items-center space-x-4">
-            <input type="text" placeholder="Search games..." 
-                class="w-64 bg-gray-700 p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-600" />
-            <button id="userMenuBtn" onclick="toggleUserMenu()" class="w-12 h-12 rounded-full bg-gray-600 hover:bg-gray-500 flex items-center justify-center text-xl">
-                👤
-            </button>
-            
-            <!-- User Dropdown Menu -->
-            <div id="userMenu" class="hidden absolute top-16 right-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
-                <a href="Profile.html" class="block px-4 py-2 hover:bg-gray-700">Profile</a>
-                <a href="AddPage.html" class="block px-4 py-2 hover:bg-gray-700">Upload Game</a>
-                <button onclick="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400">Logout</button>
+    <!-- Navigation -->
+    <nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center gap-8">
+            <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
+                <div class="hidden sm:block">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                </div>
+                <span class="text-sm font-semibold sm:hidden">CMG</span>
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="HomePage.html" class="text-sm font-medium text-[#f5f5f7]">Home</a>
+                <a href="Catagory.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">Catalog</a>
+                <button onclick="toggleAbout()" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">About</button>
             </div>
         </div>
-    </div>
-
-    <!-- Hero Section -->
-    <div class="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-16">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <h1 class="text-5xl font-bold mb-4">Welcome to Game Hub</h1>
-            <p class="text-xl text-gray-100 mb-8">Play the best games online, right in your browser. No installation needed!</p>
-            <div class="flex gap-4 justify-center">
-                <button onclick="navigateToCatalog()" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
-                    Browse Games
+        <div class="flex items-center gap-3">
+            <input type="text" id="searchInput" placeholder="Search"
+                class="w-36 md:w-52 bg-[#1c1c1e] border border-white/[0.08] px-3 py-1.5 rounded-lg text-sm outline-none focus:ring-1 focus:ring-[#0071e3] transition placeholder-[#86868b]" />
+            <div class="relative">
+                <button id="userMenuBtn" onclick="toggleUserMenu()"
+                    class="w-8 h-8 rounded-full bg-[#1c1c1e] border border-white/[0.1] hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
                 </button>
-                <button onclick="toggleAbout()" class="bg-blue-700 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-800 transition">
-                    Learn More
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Featured Games Section -->
-    <div id="featuredGames" class="max-w-6xl mx-auto px-4 py-16">
-        <h2 class="text-4xl font-bold mb-8 text-center">Featured Games</h2>
-        <div id="featuredContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Games will be loaded here -->
-            <div class="text-center py-8">
-                <p class="text-gray-400">Loading featured games...</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Section -->
-    <div class="bg-gray-800 border-t border-gray-700 py-16">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div>
-                    <h3 id="gameCount" class="text-4xl font-bold text-blue-400 mb-2">0</h3>
-                    <p class="text-gray-400 text-lg">Games Available</p>
-                </div>
-                <div>
-                    <h3 class="text-4xl font-bold text-green-400 mb-2">10K+</h3>
-                    <p class="text-gray-400 text-lg">Active Players</p>
-                </div>
-                <div>
-                    <h3 class="text-4xl font-bold text-purple-400 mb-2">24/7</h3>
-                    <p class="text-gray-400 text-lg">Online Support</p>
+                <div id="userMenu" class="hidden absolute top-11 right-0 bg-[#1c1c1e] border border-white/[0.08] rounded-2xl shadow-2xl shadow-black z-50 min-w-[190px] overflow-hidden py-1.5">
+                    <a href="Profile.html" class="block px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#f5f5f7]">Profile</a>
+                    <a href="AddPage.html" class="block px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#f5f5f7]">Upload Game</a>
+                    <a href="SettingProfilePage.html" class="block px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#f5f5f7]">Settings</a>
+                    <div class="border-t border-white/[0.06] my-1"></div>
+                    <a href="LogIn.html" id="loginLink" class="block px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#0071e3]">Sign In</a>
+                    <button onclick="logout()" id="logoutBtn" style="display:none" class="w-full text-left px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#ff453a]">Sign Out</button>
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- About Section (Hidden) -->
-    <div id="aboutSection" class="hidden bg-gray-800 border-t border-gray-700 py-16">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-6">About Game Hub</h2>
-            <p class="text-gray-300 text-lg leading-relaxed mb-4">
-                Game Hub is a platform dedicated to bringing you the best gaming experience. We host a wide variety of games 
-                that you can play directly in your browser without any installation or download required.
-            </p>
-            <p class="text-gray-300 text-lg leading-relaxed mb-4">
-                Our mission is to make gaming accessible to everyone, everywhere. Whether you're a casual gamer or a hardcore 
-                enthusiast, you'll find something you love on our platform.
-            </p>
-            <h3 class="text-2xl font-bold mt-8 mb-4">Why Choose Game Hub?</h3>
-            <ul class="space-y-3 text-gray-300">
-                <li>✅ No installation required - play instantly</li>
-                <li>✅ Wide variety of games across all genres</li>
-                <li>✅ Safe and secure gaming environment</li>
-                <li>✅ Regular updates with new games</li>
-                <li>✅ Community-driven platform</li>
-            </ul>
-            <button onclick="toggleAbout()" class="mt-6 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold">
-                Close
-            </button>
+    <!-- Hero -->
+    <main class="flex-1">
+        <section class="relative pt-32 pb-24 px-6 text-center overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-[#0071e3]/[0.07] rounded-full blur-[120px]"></div>
+            </div>
+            <div class="relative z-10 max-w-3xl mx-auto">
+                <p class="text-[#0071e3] text-xs font-semibold tracking-[0.15em] uppercase mb-5">CEIT METAVERSE AND GAME</p>
+                <h1 class="text-5xl md:text-[64px] font-bold tracking-tight leading-[1.05] text-[#f5f5f7] mb-6">
+                    Play amazing games.<br class="hidden md:block" />Right in your browser.
+                </h1>
+                <p class="text-[17px] text-[#86868b] mb-10 max-w-xl mx-auto leading-relaxed">
+                    No installation, no hassle. Discover and play incredible games created by the community.
+                </p>
+                <div class="flex gap-3 justify-center flex-wrap">
+                    <button onclick="navigateToCatalog()" class="btn-primary text-white px-7 py-2.5 rounded-full font-medium text-sm">
+                        Browse Games
+                    </button>
+                    <button onclick="toggleAbout()" class="bg-[#1c1c1e] border border-white/[0.1] hover:bg-[#2c2c2e] text-[#f5f5f7] px-7 py-2.5 rounded-full font-medium text-sm transition-colors">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Modal -->
+        <div id="aboutSection" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-xl">
+            <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-3xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-8 shadow-2xl shadow-black">
+                <p class="text-[#86868b] text-xs font-semibold tracking-[0.15em] uppercase mb-2">About</p>
+                <h2 class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-4">CEIT METAVERSE AND GAME</h2>
+                <p class="text-[#86868b] text-sm leading-relaxed mb-3">
+                    A platform dedicated to bringing you the best browser gaming experience. Play instantly—no installation required.
+                </p>
+                <p class="text-[#86868b] text-sm leading-relaxed mb-6">
+                    Our mission is to make gaming accessible to everyone, everywhere. Casual or hardcore, you'll find something you love.
+                </p>
+                <p class="text-xs font-semibold text-[#f5f5f7] mb-3">Why choose us</p>
+                <ul class="space-y-2.5 text-sm text-[#86868b] mb-8">
+                    <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>No installation — play instantly</li>
+                    <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wide variety across all genres</li>
+                    <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Safe and secure environment</li>
+                    <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Community-driven platform</li>
+                </ul>
+                <button onclick="toggleAbout()" class="w-full btn-primary text-white py-3 rounded-full font-medium text-sm">Close</button>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Footer -->
-    <div class="bg-gray-800 border-t border-gray-700 py-8">
-        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500 text-sm">
-            <p>&copy; 2024 Game Hub. All rights reserved.</p>
-            <p class="mt-2">
-                <a href="#" class="hover:text-blue-400">Privacy Policy</a> | 
-                <a href="#" class="hover:text-blue-400">Terms of Service</a> | 
-                <a href="#" class="hover:text-blue-400">Contact Us</a>
-            </p>
+    <footer class="border-t border-white/[0.06] py-12">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:justify-between gap-8 mb-8">
+                <div>
+                    <div class="inline-block mb-3">
+                        <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-6 w-auto" />
+                    </div>
+                    <p class="text-[#86868b] text-xs">Your ultimate gaming destination</p>
+                </div>
+                <div class="flex gap-12">
+                    <div>
+                        <p class="text-xs font-semibold text-[#f5f5f7] mb-3">Links</p>
+                        <a href="#" class="text-[#86868b] hover:text-[#f5f5f7] transition-colors text-xs block mb-2">Privacy Policy</a>
+                        <a href="#" class="text-[#86868b] hover:text-[#f5f5f7] transition-colors text-xs block">Terms of Service</a>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-[#f5f5f7] mb-3">Contact</p>
+                        <a href="mailto:support@gamehub.com" class="text-[#86868b] hover:text-[#f5f5f7] transition-colors text-xs">support@gamehub.com</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/[0.06] pt-6">
+                <p class="text-[#86868b] text-xs">Copyright &copy; 2024 CEIT METAVERSE AND GAME. All rights reserved.</p>
+            </div>
         </div>
-    </div>
+    </footer>
 
+    <script src="api-config.js"></script>
+    <script src="ui-utils.js"></script>
     <script>
-        const API_URL = 'http://localhost:3001';
+        // ============================================
+        // CEIT METAVERSE AND GAME - Frontend Configuration
+        // ============================================
+        // Using centralized API configuration from api-config.js
+        // Using UI utilities from ui-utils.js
 
-        // Check if user is logged in
+        // ============================================
+        // Authentication & User Management
+        // ============================================
         function checkAuth() {
             const authToken = sessionStorage.getItem('authToken');
-            const userMenu = document.getElementById('userMenu');
-            const userMenuBtn = document.getElementById('userMenuBtn');
-
+            const loginLink = document.getElementById('loginLink');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
             if (!authToken) {
-                // User not logged in - redirect to login
-                console.log("No auth token found. User should be redirected to login.");
-                // Uncomment the line below to auto-redirect to login
-                // window.location.href = 'LogIn.html';
+                loginLink.style.display = 'block';
+                logoutBtn.style.display = 'none';
             } else {
-                // User is logged in - show profile icon
-                userMenuBtn.style.display = 'flex';
+                loginLink.style.display = 'none';
+                logoutBtn.style.display = 'block';
             }
         }
 
-        // Toggle user menu
-        function toggleUserMenu() {
-            const userMenu = document.getElementById('userMenu');
-            userMenu.classList.toggle('hidden');
-        }
-
-        // Logout user
         function logout() {
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('userId');
-            localStorage.removeItem('userEmail');
-            window.location.href = 'LogIn.html';
+            handleLogout(); // From ui-utils.js
         }
 
-        // Navigate to catalog
+        // ============================================
+        // Navigation & UI Functions
+        // ============================================
         function navigateToCatalog() {
-            const authToken = sessionStorage.getItem('authToken');
-            if (!authToken) {
-                alert('Please login first to browse games');
-                window.location.href = 'LogIn.html';
-            } else {
-                window.location.href = 'Catagory.html';
-            }
+            window.location.href = 'Catagory.html';
         }
 
-        // Toggle about section
         function toggleAbout() {
             const aboutSection = document.getElementById('aboutSection');
             aboutSection.classList.toggle('hidden');
-            if (!aboutSection.classList.contains('hidden')) {
-                aboutSection.scrollIntoView({ behavior: 'smooth' });
-            }
         }
 
-        // Load featured games
-        async function loadFeaturedGames() {
-            try {
-                const res = await fetch(`${API_URL}/games`);
-                if (!res.ok) throw new Error('Failed to fetch games');
-                
-                const games = await res.json();
-                const featuredContainer = document.getElementById('featuredContainer');
-                
-                // Update game count
-                document.getElementById('gameCount').textContent = games.length;
-
-                // Display featured games (first 8)
-                featuredContainer.innerHTML = '';
-                games.slice(0, 8).forEach(game => {
-                    const gameCard = document.createElement('a');
-                    gameCard.href = 'javascript:void(0)';
-                    gameCard.className = 'game-card block rounded-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer';
-                    gameCard.onclick = () => playGame(game);
-                    gameCard.innerHTML = `
-                        <div class="h-40 bg-gray-700 flex items-center justify-center overflow-hidden">
-                            ${game.coverImage ? `<img src="${API_URL}/${game.coverImage}" alt="${game.title}" class="w-full h-full object-cover hover:scale-110 transition-transform" />` : '<span class="text-gray-400">Game Cover</span>'}
-                        </div>
-                        <div class="p-4 bg-gray-700 border border-gray-600">
-                            <h3 class="text-lg font-bold mb-2">${game.title}</h3>
-                            <p class="text-gray-300 text-sm mb-2">${game.shortDesc || 'No description'}</p>
-                            <p class="text-xs text-blue-400">${game.gameType}</p>
-                            <button class="mt-3 w-full bg-cyan-600 hover:bg-cyan-700 px-3 py-2 rounded text-sm font-bold">
-                                Play Now
-                            </button>
-                        </div>
-                    `;
-                    featuredContainer.appendChild(gameCard);
-                });
-
-                if (games.length === 0) {
-                    featuredContainer.innerHTML = '<p class="text-gray-400 col-span-full text-center py-8">No games available yet</p>';
-                }
-            } catch (err) {
-                console.error("Error loading games:", err);
-                document.getElementById('featuredContainer').innerHTML = `<p class="text-red-500 col-span-full">Failed to load games. Make sure the server is running.</p>`;
-            }
-        }
-
-        // Play game
-        function playGame(game) {
-            const authToken = sessionStorage.getItem('authToken');
-            if (!authToken) {
-                alert('Please login first to play games');
-                window.location.href = 'LogIn.html';
-            } else {
-                sessionStorage.setItem('selectedGame', JSON.stringify(game));
-                window.location.href = 'GamePage.html';
-            }
-        }
-
-        // Initialize on page load
+        // ============================================
+        // Initialize
+        // ============================================
         window.addEventListener('load', () => {
             checkAuth();
-            loadFeaturedGames();
+            
+            // Show welcome message if just logged in
+            const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+            if (justLoggedIn) {
+                const username = sessionStorage.getItem('username') || 'User';
+                showToast(`Welcome back, ${username}!`, 'success');
+                sessionStorage.removeItem('justLoggedIn');
+            }
         });
 
         // Close user menu when clicking outside
         document.addEventListener('click', (e) => {
             const userMenu = document.getElementById('userMenu');
             const userMenuBtn = document.getElementById('userMenuBtn');
-            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+            if (userMenuBtn && userMenu && !userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
                 userMenu.classList.add('hidden');
             }
         });

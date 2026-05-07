@@ -33,6 +33,7 @@ export class AuthController {
       // Create user
       const user = await prisma.user.create({
         data: {
+          id:       crypto.randomUUID(),
           username,
           email,
           password: hashedPassword,

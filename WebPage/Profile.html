@@ -1,107 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>User Profile - Game Hub</title>
+    <script src="api-config.js"></script>
+    <script src="ui-utils.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Profile — CEIT METAVERSE AND GAME</title>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+        .game-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .game-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(0,0,0,0.5); }
+        .sidebar-link { transition: all 0.15s ease; }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(255,255,255,0.05); color: #f5f5f7; }
+        .btn-primary { background: #0071e3; transition: background 0.2s ease; }
+        .btn-primary:hover { background: #0077ed; }
+    </style>
 </head>
+<body class="bg-black text-[#f5f5f7] min-h-screen">
 
-<body class="bg-gray-900 text-gray-100 font-sans">
-
-    <!-- Navigation Bar -->
-    <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-10">
-            <div class="text-3xl font-bold">
-                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
-            </div>
-            <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Home</a>
-            <a href="Catagory.html" class="text-2xl font-semibold hover:text-blue-400">Catalog</a>
-            <a href="#" class="text-2xl font-semibold hover:text-blue-400">Developer Logs</a>
-        </div>
-        <div class="flex items-center space-x-4">
-            <input type="text" placeholder="Search"
-                class="w-64 bg-gray-700 p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-600" />
-            <button onclick="logout()"
-                class="w-12 h-12 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center text-xl"
-                title="Logout">
-                🚪
-            </button>
-        </div>
-    </div>
-
-    <!-- Profile Container -->
-    <div class="max-w-6xl mx-auto px-4 py-12">
-
-        <!-- Profile Header -->
-        <div class="bg-gray-800 border border-gray-700 rounded-lg p-8 mb-8">
-            <div class="flex items-center space-x-8">
-                <!-- Profile Picture -->
-                <div id="profilePicture"
-                    class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-5xl">
-                    👤
+    <!-- Navigation -->
+    <nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center gap-8">
+            <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
+                <div class="hidden sm:block">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
                 </div>
+                <span class="text-sm font-semibold sm:hidden">CMG</span>
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="HomePage.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Home</a>
+                <a href="Catagory.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Catalog</a>
+            </div>
+        </div>
+        <a href="AddPage.html" class="hidden sm:inline-flex items-center gap-2 btn-primary text-white text-sm font-medium px-4 py-2 rounded-full transition">
+            + Upload Game
+        </a>
+    </nav>
 
-                <!-- Profile Info -->
-                <div class="flex-1">
-                    <h1 id="profileFullName" class="text-4xl font-bold mb-2">Loading...</h1>
-                    <p id="profileUsername" class="text-xl text-gray-400 mb-2">@loading</p>
-                    <p id="profileEmail" class="text-lg text-blue-400 mb-4">Loading...</p>
-                    <button onclick="window.location.href='SettingProfilePage.html'"
-                        class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold">
-                        Edit Profile
+    <!-- Main Layout -->
+    <div class="max-w-7xl mx-auto px-4 py-8 flex gap-6">
+
+        <!-- Sidebar -->
+        <aside class="w-52 flex-shrink-0 hidden lg:block">
+            <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-3 sticky top-20">
+                <p class="text-xs font-semibold text-[#86868b] uppercase tracking-widest px-3 mb-2">Menu</p>
+                <nav class="space-y-0.5">
+                    <a href="Profile.html" class="sidebar-link active flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-[#f5f5f7]">
+                        Overview
+                    </a>
+                    <a href="HomePage.html" class="sidebar-link flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm text-[#86868b]">
+                        Home
+                    </a>
+                    <a href="Catagory.html" class="sidebar-link flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm text-[#86868b]">
+                        Catalog
+                    </a>
+                    <a href="AddPage.html" class="sidebar-link flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm text-[#86868b]">
+                        Upload Game
+                    </a>
+                    <div class="border-t border-white/[0.06] my-2"></div>
+                    <a href="SettingProfilePage.html" class="sidebar-link flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm text-[#86868b]">
+                        Settings
+                    </a>
+                    <button onclick="logout()" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm text-[#ff453a] text-left">
+                        Sign Out
                     </button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 min-w-0 space-y-5">
+
+            <!-- Profile Header Card -->
+            <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-7">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <div id="profilePicture" class="flex-shrink-0 w-24 h-24 rounded-full bg-[#2c2c2e] border border-white/[0.08] flex items-center justify-center text-4xl overflow-hidden">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h1 id="profileFullName" class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-1">Loading...</h1>
+                        <p id="profileUsername" class="text-[#86868b] text-sm mb-1">@loading</p>
+                        <p id="profileEmail" class="text-[#0071e3] text-sm mb-5">Loading...</p>
+                        <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+                            <button onclick="window.location.href='SettingProfilePage.html'"
+                                class="btn-primary text-white px-5 py-2 rounded-full text-sm font-medium transition">
+                                Edit Profile
+                            </button>
+                            <button onclick="shareProfile()"
+                                class="bg-[#2c2c2e] border border-white/[0.08] hover:bg-[#3a3a3c] text-[#f5f5f7] px-5 py-2 rounded-full text-sm font-medium transition-colors">
+                                Share
+                            </button>
+                            <button onclick="logout()"
+                                class="bg-[#2c2c2e] border border-white/[0.08] hover:bg-[#2c2c2e] text-[#ff453a] px-5 py-2 rounded-full text-sm font-medium transition-colors lg:hidden">
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 pt-5 border-t border-white/[0.06]">
+                    <p class="text-xs font-semibold text-[#86868b] uppercase tracking-widest mb-2">Bio</p>
+                    <p id="profileBio" class="text-[#86868b] text-sm leading-relaxed">Loading bio...</p>
                 </div>
             </div>
 
-            <!-- Profile Bio -->
-            <div class="mt-6">
-                <h2 class="text-2xl font-semibold mb-2">Bio</h2>
-                <p id="profileBio" class="text-gray-300"></p>
+            <!-- Stats Row -->
+            <div class="grid grid-cols-3 gap-4">
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-5 text-center">
+                    <p class="text-2xl font-bold text-[#0071e3] mb-1">0</p>
+                    <p class="text-[#86868b] text-xs">Games Played</p>
+                </div>
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-5 text-center">
+                    <p class="text-2xl font-bold text-[#32d74b] mb-1">0</p>
+                    <p class="text-[#86868b] text-xs">Games Uploaded</p>
+                </div>
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-5 text-center">
+                    <p id="memberSince" class="text-2xl font-bold text-[#f5f5f7] mb-1">--</p>
+                    <p class="text-[#86868b] text-xs">Member Since</p>
+                </div>
             </div>
-        </div>
 
-        <!-- Stats Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-                <h3 class="text-3xl font-bold text-blue-400 mb-2">0</h3>
-                <p class="text-gray-400">Games Played</p>
+            <!-- Uploaded Games -->
+            <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-base font-semibold text-[#f5f5f7]">Your Uploaded Games</h2>
+                    <a href="AddPage.html" class="btn-primary text-white text-xs font-medium px-4 py-2 rounded-full transition">+ Upload New</a>
+                </div>
+                <div id="uploadedGames" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-[#86868b] text-sm">No games uploaded yet</p>
+                        <a href="AddPage.html" class="text-[#0071e3] hover:opacity-80 text-sm mt-2 inline-block">Upload your first game →</a>
+                    </div>
+                </div>
             </div>
-            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-                <h3 class="text-3xl font-bold text-green-400 mb-2">0</h3>
-                <p class="text-gray-400">Games Uploaded</p>
-            </div>
-            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-                <h3 id="memberSince" class="text-3xl font-bold text-purple-400 mb-2">--</h3>
-                <p class="text-gray-400">Member Since</p>
-            </div>
-        </div>
 
-        <!-- Uploaded Games Section -->
-        <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
-            <h2 class="text-2xl font-bold mb-6">Your Uploaded Games</h2>
-            <div id="uploadedGames" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <p class="text-gray-400 col-span-full">No games uploaded yet. <a href="AddPage.html"
-                        class="text-blue-400 hover:text-blue-300">Upload one now!</a></p>
+            <!-- Favorite Games -->
+            <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-base font-semibold text-[#f5f5f7]">Favorite Games</h2>
+                    <a href="Catagory.html" class="text-[#0071e3] hover:opacity-80 transition text-sm font-medium">Browse all →</a>
+                </div>
+                <div id="favoriteGames" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-[#86868b] text-sm">No favorite games yet</p>
+                        <a href="Catagory.html" class="text-[#0071e3] hover:opacity-80 text-sm mt-2 inline-block">Explore games →</a>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Favorite Games Section -->
-        <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-            <h2 class="text-2xl font-bold mb-6">Favorite Games</h2>
-            <div id="favoriteGames" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <p class="text-gray-400 col-span-full">No favorite games yet. <a href="Catagory.html"
-                        class="text-blue-400 hover:text-blue-300">Browse games!</a></p>
-            </div>
-        </div>
+        </div><!-- End Main Content -->
+    </div><!-- End Layout -->
 
-    </div>
 
     <script>
-        const API_URL = 'http://localhost:3001';
+        // ============================================
+        // Configuration - Using centralized API configuration
+        // ============================================
 
-        // Check if user is logged in
+        // ============================================
+        // Authentication & User Profile
+        // ============================================
         function checkAuth() {
             const authToken = sessionStorage.getItem('authToken');
             if (!authToken) {
@@ -111,23 +176,24 @@
             return true;
         }
 
-        // Load and display user profile
         function loadUserProfile() {
-            const fullName = sessionStorage.getItem('fullName');
-            const username = sessionStorage.getItem('username');
-            const email = sessionStorage.getItem('userEmail');
-            const userId = sessionStorage.getItem('userId');
-            const bio = sessionStorage.getItem('userBio');
-            const profilePictureUrl = localStorage.getItem('profilePicture');
+            const fullName = sessionStorage.getItem('fullName') || sessionStorage.getItem('username') || 'User';
+            const username = sessionStorage.getItem('username') || 'user';
+            const email = sessionStorage.getItem('email') || 'No email';
+            const bio = sessionStorage.getItem('userBio') || 'This user has not set up a bio yet.';
 
             // Display user info
-            document.getElementById('profileFullName').textContent = fullName || 'User';
-            document.getElementById('profileUsername').textContent = `@${username || 'user'}`;
-            document.getElementById('profileEmail').textContent = email || 'No email';
-            document.getElementById('profileBio').textContent = bio || 'This user has not set up a bio yet.';
+            document.getElementById('profileFullName').textContent = fullName;
+            document.getElementById('profileUsername').textContent = `@${username}`;
+            document.getElementById('profileEmail').textContent = email;
+            document.getElementById('profileBio').textContent = bio;
 
             // Load and display profile picture
-            if (profilePictureUrl) {
+            const profilePictureRelative = localStorage.getItem('profilePicture');
+            if (profilePictureRelative) {
+                const profilePictureUrl = profilePictureRelative.startsWith('http')
+                    ? profilePictureRelative
+                    : `${API_CONFIG.baseURL}/${profilePictureRelative}`;
                 const img = document.createElement('img');
                 img.src = profilePictureUrl;
                 img.alt = 'Profile Picture';
@@ -135,40 +201,73 @@
                 img.onload = () => {
                     document.getElementById('profilePicture').innerHTML = '';
                     document.getElementById('profilePicture').appendChild(img);
+                    hideLoading(); // Hide after image loads
                 };
                 img.onerror = () => {
                     document.getElementById('profilePicture').textContent = '👤';
+                    hideLoading(); // Hide even if image fails
                 };
+            } else {
+                hideLoading(); // Hide if no profile picture
             }
 
-            // Get current date and display as member since
+            // Display member since date
             const today = new Date();
             const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('memberSince').textContent = formattedDate;
         }
 
-        // Logout user
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                sessionStorage.removeItem('authToken');
-                sessionStorage.removeItem('userId');
-                sessionStorage.removeItem('username');
-                sessionStorage.removeItem('fullName');
-                sessionStorage.removeItem('userEmail');
-                sessionStorage.removeItem('userBio');
-                localStorage.removeItem('rememberedEmail');
-                window.location.href = 'LogIn.html';
+        // Sidebar Section Toggle
+        // ============================================
+        function toggleSection(section) {
+            if (section === 'security' || section === 'privacy') {
+                alert(`${section.charAt(0).toUpperCase() + section.slice(1)} settings coming soon! For now, use Profile Settings to manage your account.`);
             }
         }
 
-        // Initialize on page load
+        // ============================================
+        // Share Profile
+        // ============================================
+        function shareProfile() {
+            const username = sessionStorage.getItem('username') || 'user';
+            const profileUrl = `${window.location.origin}/WebPage/Profile.html?user=${username}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My CEIT METAVERSE AND GAME Profile',
+                    text: `Check out my profile on CEIT METAVERSE AND GAME!`,
+                    url: profileUrl
+                }).catch(() => copyToClipboard(profileUrl));
+            } else {
+                copyToClipboard(profileUrl);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Profile link copied to clipboard!');
+            }).catch(() => {
+                prompt('Copy this link:', text);
+            });
+        }
+
+        // ============================================
+        // ============================================
+        // Logout
+        // ============================================
+        function logout() {
+            handleLogout(); // From ui-utils.js
+        }
+
+        // ============================================
+        // Initialize
+        // ============================================
         window.addEventListener('load', () => {
-            if (checkAuth()) {
+            if (requireAuth()) {
                 loadUserProfile();
             }
         });
     </script>
 
 </body>
-
 </html>

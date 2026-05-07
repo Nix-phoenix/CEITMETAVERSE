@@ -1,150 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Game Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Game — CEIT METAVERSE AND GAME</title>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+        .btn-primary { background: #0071e3; transition: background 0.2s ease; }
+        .btn-primary:hover { background: #0077ed; }
+        @keyframes spin-ring { to { transform: rotate(360deg); } }
+        .spin-ring { animation: spin-ring 1s linear infinite; }
+    </style>
 </head>
 
-<body class="bg-gray-900 text-white font-sans">
+<body class="bg-black text-[#f5f5f7] min-h-screen">
 
-    <!-- Navigation Bar -->
-    <div class="w-full bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-10">
-            <div class="text-3xl font-bold">
-                <img src="../Image/WebLogo.png" alt="Web Logo" class="h-12 w-12" />
+    <!-- Navigation -->
+    <nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center gap-8">
+            <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
+                <div class="hidden sm:block">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                </div>
+                <span class="text-sm font-semibold sm:hidden">CMG</span>
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="HomePage.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Home</a>
+                <a href="Catagory.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors">Catalog</a>
             </div>
-            <a href="HomePage.html" class="text-2xl font-semibold hover:text-blue-400">Home</a>
-            <a href="Catagory.html" class="text-2xl font-semibold hover:text-blue-400">Catalog</a>
-            <a href="#" class="text-2xl font-semibold hover:text-blue-400">Developer Logs</a>
         </div>
-        <div class="flex items-center space-x-4">
-            <input type="text" placeholder="Search"
-                class="w-64 bg-gray-700 p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-600" />
-            <a href="Profile.html" class="w-12 h-12 rounded-full bg-gray-600 hover:bg-gray-500"></a>
+        <div class="flex items-center gap-4">
+            <a href="Catagory.html" class="text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors hidden sm:block">← Back to Catalog</a>
+            <a href="Profile.html" class="w-8 h-8 rounded-full bg-[#1c1c1e] border border-white/[0.1] hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
         </div>
-    </div>
+    </nav>
 
     <!-- Main Content -->
-    <div class="w-[80%] mx-auto mt-10 bg-gray-800 p-6 border border-blue-600 rounded-lg">
+    <div class="max-w-screen-xl mx-auto px-4 py-6">
 
-        <div class="grid grid-cols-4 gap-4">
+        <!-- Top Section: Info + Game -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-5 mb-5">
 
-            <!-- Left: Game Description -->
-            <div class="col-span-2 bg-gray-700 h-[850px] p-6 overflow-y-auto rounded-lg border border-gray-600">
-                <h2 id="gameTitle" class="text-3xl font-bold mb-4">Game Title</h2>
-                <p id="gameType" class="text-lg text-blue-400 mb-4">Type: RPG</p>
-                
-                <!-- Developer/Creator Credits
-                <div class="mb-6 bg-gray-600 p-4 rounded-lg border border-gray-500">
-                    <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
-                        👨‍💻 Developer
-                    </h3>
-                    <div class="flex items-center gap-4">
-                        <div id="creatorPicture" class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-lg flex-shrink-0">
-                            👤
-                        </div>
-                        <div>
-                            <p id="creatorName" class="font-bold text-lg">Unknown Developer</p>
-                            <p id="creatorUsername" class="text-gray-400 text-sm">@unknown</p>
-                            <p id="uploadedDate" class="text-gray-500 text-xs mt-1">Uploaded: N/A</p>
-                        </div>
-                    </div>
-                    <button onclick="viewDeveloperProfile()" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded text-sm font-bold">
-                        View Developer Profile
-                    </button>
-                </div> -->
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold mb-2">Description</h3>
-                    <p id="gameDescription" class="text-gray-300 leading-relaxed">Game description goes here...</p>
+            <!-- Left: Game Info Panel -->
+            <div class="lg:col-span-2 flex flex-col gap-4">
+
+                <!-- Title Card -->
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-5">
+                    <h1 id="gameTitle" class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-2">Loading...</h1>
+                    <span id="gameType" class="inline-block bg-[#0071e3]/20 text-[#0071e3] text-xs font-medium px-3 py-1 rounded-full">Type</span>
                 </div>
 
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold mb-2">Tags</h3>
-                    <div id="gameTags" class="flex gap-2 flex-wrap">
-                        <!-- Tags will be inserted here -->
+                <!-- Description -->
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-5 flex-1">
+                    <p class="text-xs font-semibold text-[#86868b] uppercase tracking-widest mb-2">About This Game</p>
+                    <p id="gameDescription" class="text-[#86868b] leading-relaxed text-sm">Loading description...</p>
+                    <div class="mt-4">
+                        <p class="text-xs font-semibold text-[#86868b] uppercase tracking-widest mb-2">Tags</p>
+                        <div id="gameTags" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
 
-                <!-- Game Stats -->
-                <div class="mb-6 grid grid-cols-3 gap-3">
-                    <div class="bg-gray-600 p-3 rounded text-center">
-                        <p id="playCount" class="text-2xl font-bold text-blue-400">0</p>
-                        <p class="text-xs text-gray-400">Plays</p>
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-xl p-4 text-center">
+                        <p id="playCount" class="text-xl font-bold text-[#0071e3]">0</p>
+                        <p class="text-xs text-[#86868b] mt-1">Plays</p>
                     </div>
-                    <div class="bg-gray-600 p-3 rounded text-center">
-                        <p id="commentCount" class="text-2xl font-bold text-green-400">0</p>
-                        <p class="text-xs text-gray-400">Comments</p>
+                    <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-xl p-4 text-center">
+                        <p id="commentCount" class="text-xl font-bold text-[#32d74b]">0</p>
+                        <p class="text-xs text-[#86868b] mt-1">Comments</p>
                     </div>
-                    <div class="bg-gray-600 p-3 rounded text-center">
-                        <p id="favoriteCount" class="text-2xl font-bold text-red-400">0</p>
-                        <p class="text-xs text-gray-400">Favorites</p>
+                    <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-xl p-4 text-center">
+                        <p id="favoriteCount" class="text-xl font-bold text-[#ff453a]">0</p>
+                        <p class="text-xs text-[#86868b] mt-1">Favorites</p>
                     </div>
                 </div>
 
-                <a href="Catagory.html" class="block w-full bg-gray-600 hover:bg-gray-700 px-4 py-3 rounded-lg text-lg font-bold text-center">
-                    Back to Catalog
+                <!-- Hidden creator fields (kept for JS compatibility) -->
+                <div class="hidden">
+                    <div id="creatorPicture"></div>
+                    <p id="creatorName"></p>
+                    <p id="creatorUsername"></p>
+                    <p id="uploadedDate"></p>
+                </div>
+
+                <a href="Catagory.html" class="w-full bg-[#1c1c1e] border border-white/[0.08] hover:bg-[#2c2c2e] text-[#86868b] hover:text-[#f5f5f7] px-4 py-3 rounded-full font-medium transition-colors text-center text-sm">
+                    ← Back to Catalog
                 </a>
             </div>
 
-            <!-- Top Right: Game Scene (iframe) -->
-            <div class="col-start-3 col-span-2 bg-gray-700 h-[460px] relative rounded-lg overflow-hidden border border-gray-600">
-                <iframe id="gameFrame" src="" class="w-full h-full border-none"></iframe>
-                
-                <!-- Fullscreen Icon -->
-                <button class="absolute bottom-2 right-2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white text-xl px-3 py-2 rounded z-10"
-                    onclick="toggleFullscreen()">
-                    ⤢
-                </button>
-            </div>
-
-            <!-- Bottom: Comment Section -->
-            <div class="col-start-1 col-span-4 bg-gray-700 h-[260px] p-6 rounded-lg border border-gray-600 overflow-y-auto">
-                <h3 class="text-2xl font-bold mb-4">Comments</h3>
-                <div id="commentsSection" class="space-y-4">
-                    <p class="text-gray-400">No comments yet. Be the first to comment!</p>
-                </div>
-                
-                <div class="mt-6 border-t border-gray-600 pt-4">
-                    <textarea id="commentInput" placeholder="Write a comment..." class="w-full bg-gray-600 text-white p-2 rounded mb-2 resize-none h-12"></textarea>
-                    <button onclick="addComment()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-bold">
-                        Post Comment
+            <!-- Right: Game Iframe -->
+            <div class="lg:col-span-3">
+                <div class="bg-[#111] border border-white/[0.06] rounded-2xl overflow-hidden relative" style="height: 560px;">
+                    <div id="gameLoading" class="absolute inset-0 flex flex-col items-center justify-center bg-[#111] z-10">
+                        <div class="w-12 h-12 border-2 border-white/[0.06] border-t-[#0071e3] rounded-full spin-ring mb-4"></div>
+                        <p class="text-[#f5f5f7] font-medium text-sm">Loading game...</p>
+                        <p class="text-[#86868b] text-xs mt-1">Unity WebGL may take a moment</p>
+                    </div>
+                    <iframe id="gameFrame" src=""
+                        class="w-full h-full border-none"
+                        allow="fullscreen; autoplay"
+                        onload="document.getElementById('gameLoading').style.display='none'"
+                    ></iframe>
+                    <button onclick="toggleFullscreen()"
+                        class="absolute bottom-3 right-3 bg-black/70 hover:bg-black/90 text-[#f5f5f7] text-xs px-3 py-1.5 rounded-lg z-20 transition"
+                        title="Fullscreen">
+                        Fullscreen
                     </button>
                 </div>
             </div>
+        </div>
 
+        <!-- Comment Section -->
+        <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
+            <h3 class="text-base font-semibold text-[#f5f5f7] mb-5">Comments</h3>
+            <div class="flex gap-3 mb-5">
+                <div class="w-8 h-8 rounded-full bg-[#2c2c2e] border border-white/[0.08] flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="flex-1">
+                    <textarea id="commentInput"
+                        placeholder="Share your thoughts..."
+                        class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-[#f5f5f7] placeholder-[#86868b] focus:outline-none focus:ring-1 focus:ring-[#0071e3] transition resize-none"
+                        rows="2"></textarea>
+                    <div class="flex justify-end mt-2">
+                        <button onclick="addComment()" class="btn-primary text-white text-sm font-medium px-5 py-2 rounded-full transition">
+                            Post
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="commentsSection" class="space-y-3 max-h-72 overflow-y-auto">
+                <div class="text-center py-8">
+                    <p class="text-[#86868b] text-sm">No comments yet. Be the first!</p>
+                </div>
+            </div>
         </div>
 
     </div>
 
+    <script src="api-config.js"></script>
+    <script src="ui-utils.js"></script>
     <script>
-        const API_URL = 'http://localhost:3001';
         let selectedGame = null;
         let creatorInfo = null;
 
-        // Load game data from sessionStorage
-        function loadGameData() {
-            const gameData = sessionStorage.getItem('selectedGame');
-            if (gameData) {
-                selectedGame = JSON.parse(gameData);
+        async function loadGameData() {
+            const cachedGame = sessionStorage.getItem('selectedGame');
+            const gameId = sessionStorage.getItem('selectedGameId');
+
+            if (cachedGame) {
+                selectedGame = JSON.parse(cachedGame);
                 displayGameInfo();
                 loadGameInFrame();
                 fetchCreatorInfo();
+            } else if (gameId) {
+                try {
+                    const result = await apiCall(API_ENDPOINTS.gameById(gameId));
+                    selectedGame = result.id ? result : null;
+                    if (selectedGame) {
+                        displayGameInfo();
+                        loadGameInFrame();
+                        fetchCreatorInfo();
+                    } else {
+                        document.body.innerHTML = '<p class="text-red-500 text-center mt-10">Game not found. <a href="Catagory.html" class="text-blue-400">Go back to catalog</a></p>';
+                    }
+                } catch (err) {
+                    document.body.innerHTML = '<p class="text-red-500 text-center mt-10">Game not found. <a href="Catagory.html" class="text-blue-400">Go back to catalog</a></p>';
+                }
             } else {
-                document.body.innerHTML = '<p class="text-red-500 text-center mt-10">Game not found. <a href="Catagory.html" class="text-blue-400">Go back to catalog</a></p>';
+                document.body.innerHTML = '<p class="text-red-500 text-center mt-10">No game selected. <a href="Catagory.html" class="text-blue-400">Go back to catalog</a></p>';
             }
         }
 
-        // Fetch creator/developer information
         async function fetchCreatorInfo() {
             try {
                 if (selectedGame.creatorId) {
-                    const res = await fetch(`${API_URL}/profile/${selectedGame.creatorId}`);
-                    if (res.ok) {
-                        creatorInfo = await res.json();
+                    const endpoint = API_ENDPOINTS.userProfile(selectedGame.creatorId);
+                    const result = await apiCall(endpoint);
+                    if (result && result.id) {
+                        creatorInfo = result;
                         displayCreatorInfo();
                     }
                 }
@@ -153,76 +198,63 @@
             }
         }
 
-        // // Display creator/developer information
         function displayCreatorInfo() {
             if (creatorInfo) {
                 document.getElementById('creatorName').textContent = creatorInfo.fullName || 'Unknown Developer';
                 document.getElementById('creatorUsername').textContent = `@${creatorInfo.username || 'unknown'}`;
-                
-                // Format upload date
                 const uploadDate = new Date(selectedGame.createdAt);
                 const formattedDate = uploadDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                 document.getElementById('uploadedDate').textContent = `Uploaded: ${formattedDate}`;
-
-                // Load creator's profile picture
                 if (creatorInfo.profilePicture) {
                     const img = document.createElement('img');
                     img.src = creatorInfo.profilePicture;
                     img.alt = creatorInfo.fullName;
-                    img.className = 'w-12 h-12 rounded-full object-cover';
+                    img.className = 'w-10 h-10 rounded-full object-cover';
                     document.getElementById('creatorPicture').innerHTML = '';
                     document.getElementById('creatorPicture').appendChild(img);
                 }
             }
         }
 
-        // View developer profile
         function viewDeveloperProfile() {
             if (creatorInfo) {
-                // Store creator info in sessionStorage for profile page
-                sessionStorage.setItem('viewingUserId', creatorInfo._id);
+                sessionStorage.setItem('viewingUserId', creatorInfo.id);
                 window.location.href = 'Profile.html';
             } else {
                 alert('Developer information not available');
             }
         }
 
-        // Display game information
         function displayGameInfo() {
             document.getElementById('gameTitle').textContent = selectedGame.title;
-            document.getElementById('gameType').textContent = `Type: ${selectedGame.gameType}`;
+            document.getElementById('gameType').textContent = selectedGame.gameType || 'Game';
             document.getElementById('gameDescription').textContent = selectedGame.fullDesc || selectedGame.shortDesc || 'No description available';
             
-            // Display tags
             const tagsContainer = document.getElementById('gameTags');
             tagsContainer.innerHTML = '';
             if (selectedGame.tags && selectedGame.tags.length > 0) {
                 selectedGame.tags.forEach(tag => {
                     const tagEl = document.createElement('span');
-                    tagEl.className = 'bg-gray-600 px-3 py-1 rounded text-sm';
+                    tagEl.className = 'bg-[#2c2c2e] text-[#86868b] px-2 py-0.5 rounded-full text-xs';
                     tagEl.textContent = tag;
                     tagsContainer.appendChild(tagEl);
                 });
             } else {
-                tagsContainer.innerHTML = '<span class="text-gray-400 text-sm">No tags</span>';
+                tagsContainer.innerHTML = '<span class="text-gray-500 text-xs">No tags</span>';
             }
         }
 
-        // Load game in frame
         function loadGameInFrame() {
             const gameFrame = document.getElementById('gameFrame');
-            
-            if (selectedGame.gameFile) {
-                // Construct the URL to index.html inside the extracted game folder
-                const gameURL = `${API_URL}/${selectedGame.gameFile}/index.html`;
+            if (selectedGame && selectedGame.id) {
+                const gameURL = `${API_CONFIG.baseURL}/play/${selectedGame.id}`;
                 gameFrame.src = gameURL;
-                console.log("Loading game from:", gameURL);
+                console.log('Loading Unity game from:', gameURL);
             } else {
-                gameFrame.innerHTML = '<p class="text-gray-400 p-4">Game file not found</p>';
+                document.getElementById('gameLoading').innerHTML = '<p class="text-gray-400 p-4">Game file not found</p>';
             }
         }
 
-        // Fullscreen toggle
         function toggleFullscreen() {
             const gameFrame = document.getElementById('gameFrame');
             if (gameFrame.requestFullscreen) {
@@ -232,7 +264,6 @@
             }
         }
 
-        // Add comment (placeholder)
         function addComment() {
             const commentInput = document.getElementById('commentInput');
             const commentText = commentInput.value.trim();
@@ -240,26 +271,37 @@
             if (commentText) {
                 const commentsSection = document.getElementById('commentsSection');
                 
-                if (commentsSection.textContent.includes('No comments yet')) {
+                if (commentsSection.querySelector('.text-center')) {
                     commentsSection.innerHTML = '';
                 }
-                
+
+                const username = sessionStorage.getItem('username') || 'Anonymous';
                 const commentEl = document.createElement('div');
-                commentEl.className = 'bg-gray-600 p-3 rounded';
+                commentEl.className = 'flex gap-3 p-4 bg-[#2c2c2e] rounded-xl';
                 commentEl.innerHTML = `
-                    <p class="font-semibold text-blue-400">Anonymous User</p>
-                    <p class="text-gray-200 text-sm">${commentText}</p>
-                    <p class="text-xs text-gray-400 mt-1">Just now</p>
+                    <div class="w-8 h-8 rounded-full bg-[#1c1c1e] border border-white/[0.08] flex items-center justify-center flex-shrink-0">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <p class="font-medium text-[#0071e3] text-sm">${username}</p>
+                            <span class="text-[#86868b] text-xs">Just now</span>
+                        </div>
+                        <p class="text-[#f5f5f7] text-sm">${commentText}</p>
+                    </div>
                 `;
                 commentsSection.prepend(commentEl);
                 
-                // Update comment count
                 const commentCount = parseInt(document.getElementById('commentCount').textContent) + 1;
                 document.getElementById('commentCount').textContent = commentCount;
                 
                 commentInput.value = '';
             }
         }
+
+        document.getElementById('commentInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) addComment();
+        });
 
         // Load game data on page load
         loadGameData();
