@@ -42,6 +42,8 @@ app.use(express.json({ limit: '50mb' }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../../')));
+// Serve the frontend WebPage folder at root so Render serves the UI
+app.use('/', express.static(path.join(__dirname, '../../WebPage')));
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 app.use('/game-files', express.static(path.join(__dirname, '../../uploads/games')));
 
@@ -65,6 +67,15 @@ app.use('/uploads/games', express.static(path.join(__dirname, '../../uploads/gam
         else if (filePath.endsWith('.json'))      res.setHeader('Content-Type', 'application/json');
     }
 }));
+
+// If a client requests the root path, send the HomePage HTML so the
+// frontend appears at the service root (Render will route to '/').
+app.get('/', (req, res) => {
+    const front = path.join(__dirname, '../../WebPage/HomePage.html');
+    if (fs.existsSync(front)) return res.sendFile(front);
+    // fallback: send a simple message if frontend not present
+    return res.status(404).send('Frontend not found. Please ensure WebPage/HomePage.html exists.');
+});
 
 // Create uploads directories (always relative to repo root, not cwd)
 const uploadsBase = path.join(__dirname, '../../uploads');
