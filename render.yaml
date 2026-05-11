@@ -1,4 +1,13 @@
 services:
+  - type: static
+    name: ceit-metaverse-frontend
+    env: static
+    staticPublishPath: WebPage
+    buildCommand: echo "No build step for static frontend"
+    envVars:
+      - key: ALLOWED_ORIGIN
+        value: https://ceitmetaverse-9.onrender.com
+
   - type: web
     name: ceit-metaverse-backend
     runtime: node
@@ -13,12 +22,3 @@ services:
         sync: false
       - key: ALLOWED_ORIGIN
         sync: false
-
-  - type: static
-    name: ceit-metaverse-frontend
-    env: static
-    staticPublishPath: WebPage
-    buildCommand: echo "No build step for static frontend"
-    envVars:
-      - key: ALLOWED_ORIGIN
-        value: https://ceitmetaverse-9.onrender.com
