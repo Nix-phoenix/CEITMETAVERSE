@@ -15,9 +15,9 @@ function resolveBaseURL() {
         return String(window.__API_BASE__).replace(/\/+$/, '');
     }
     if (location.hostname === 'localhost' || location.hostname.startsWith('127.')) {
-        return 'http://localhost:5000';
+        return 'http://localhost:3001';
     }
-    return 'https://ceit-metaverse-backend.onrender.com';
+    return 'https://ceitmetaverse-9.onrender.com';
 }
 
 const API_CONFIG = {
