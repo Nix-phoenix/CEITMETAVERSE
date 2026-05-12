@@ -1,9 +1,27 @@
 // ── API Configuration ─────────────────────────────────────────────────────────
 // Central place to manage the backend base URL and all endpoints.
-// Change BASE_URL here when deploying or switching environments.
+// Resolution order for base URL:
+// 1. <meta name="api-base" content="..."> on the page
+// 2. window.__API_BASE__ (if set by a build/script)
+// 3. localhost (when running locally)
+// 4. production fallback: https://ceit-metaverse-backend.onrender.com
+
+function resolveBaseURL() {
+    try {
+        const meta = document.querySelector('meta[name="api-base"]');
+        if (meta && meta.content) return meta.content.replace(/\/+$/, '');
+    } catch (e) {}
+    if (typeof window !== 'undefined' && window.__API_BASE__) {
+        return String(window.__API_BASE__).replace(/\/+$/, '');
+    }
+    if (location.hostname === 'localhost' || location.hostname.startsWith('127.')) {
+        return 'http://localhost:5000';
+    }
+    return 'https://ceit-metaverse-backend.onrender.com';
+}
 
 const API_CONFIG = {
-    baseURL: 'http://localhost:5000',
+    baseURL: resolveBaseURL(),
 };
 
 // ── Endpoints ─────────────────────────────────────────────────────────────────
