@@ -516,31 +516,15 @@ app.delete('/profile/:userId', async (req, res) => {
     }
 });
 
-// Start server with port fallback if in use
-function startServer(port, attemptsLeft = 5) {
-    const numericPort = Number(port) || 3001;
-    const server = app.listen(numericPort, () => {
-        console.log(`\n✅ Server running on http://localhost:${numericPort}`);
-        console.log(`✅ API available at http://localhost:${numericPort}/test`);
-        console.log(`✅ Swagger UI available at http://localhost:${numericPort}/docs\n`);
-    });
+// Start server — always bind to the PORT provided by the environment (required by Render)
+const numericPort = Number(PORT) || 3000;
+const server = app.listen(numericPort, '0.0.0.0', () => {
+    console.log(`\n✅ Server running on port ${numericPort}`);
+    console.log(`✅ API available at /test`);
+    console.log(`✅ Swagger UI available at /docs\n`);
+});
 
-    server.on('error', (err) => {
-        if (err && err.code === 'EADDRINUSE') {
-            console.error(`❌ Port ${numericPort} is already in use.`);
-            if (attemptsLeft > 0) {
-                const nextPort = numericPort + 1;
-                console.log(`➡️ Trying next port: ${nextPort} (attempts left: ${attemptsLeft - 1})`);
-                setTimeout(() => startServer(nextPort, attemptsLeft - 1), 500);
-            } else {
-                console.error('❌ No available ports found. Exiting.');
-                process.exit(1);
-            }
-        } else {
-            console.error('❌ Server error:', err);
-            process.exit(1);
-        }
-    });
-}
-
-startServer(PORT);
+server.on('error', (err) => {
+    console.error('❌ Server error:', err);
+    process.exit(1);
+});
