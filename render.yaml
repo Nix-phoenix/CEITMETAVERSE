@@ -1,15 +1,21 @@
 services:
   - type: static
     name: ceit-metaverse-frontend
-    env: static
+    branch: vresion-2.1
     staticPublishPath: WebPage
-    buildCommand: echo "No build step for static frontend"
-    envVars:
-      - key: ALLOWED_ORIGIN
-        value: https://ceitmetaverse-9.onrender.com
+    buildCommand: echo "no build"
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
 
   - type: web
     name: ceit-metaverse-backend
+    branch: vresion-2.1
     runtime: node
     buildCommand: cd Script/DataBase && npm install && npx prisma generate --schema=./prisma/schema.prisma && npx prisma migrate deploy --schema=./prisma/schema.prisma
     startCommand: cd Script/DataBase && node sever.js
