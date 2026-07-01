@@ -14,3 +14,5 @@ services:
         sync: false
       - key: ALLOWED_ORIGIN
         value: https://ceitmetaverse-9.onrender.com
+      - key: GOOGLE_CLIENT_ID
+        value: 749193197042-2ocl4nnvcgji9q2a1b0o3qeva1c4l7ao.apps.googleusercontent.com

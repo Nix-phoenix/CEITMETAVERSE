@@ -1,23 +1,26 @@
 // ── API Configuration ─────────────────────────────────────────────────────────
 // Central place to manage the backend base URL and all endpoints.
 // Resolution order for base URL:
-// 1. <meta name="api-base" content="..."> on the page
-// 2. window.__API_BASE__ (if set by a build/script)
-// 3. localhost (when running locally)
-// 4. production fallback: https://ceit-metaverse-backend.onrender.com
+// 1. window.__API_BASE__ (explicit runtime override)
+// 2. <meta name="api-base" content="..."> on the page (optional)
+// 3. current origin when page is served over http(s)
+// 4. localhost fallback when opened from file:// during local dev
 
 function resolveBaseURL() {
+    if (typeof window !== 'undefined' && window.__API_BASE__) {
+        return String(window.__API_BASE__).replace(/\/+$/, '');
+    }
+
     try {
         const meta = document.querySelector('meta[name="api-base"]');
         if (meta && meta.content) return meta.content.replace(/\/+$/, '');
     } catch (e) {}
-    if (typeof window !== 'undefined' && window.__API_BASE__) {
-        return String(window.__API_BASE__).replace(/\/+$/, '');
+
+    if (location.protocol === 'http:' || location.protocol === 'https:') {
+        return location.origin.replace(/\/+$/, '');
     }
-    if (location.hostname === 'localhost' || location.hostname.startsWith('127.')) {
-        return 'http://localhost:3001';
-    }
-    return 'https://ceitmetaverse-9.onrender.com';
+
+    return 'http://localhost:5000';
 }
 
 const API_CONFIG = {
@@ -27,8 +30,9 @@ const API_CONFIG = {
 // ── Endpoints ─────────────────────────────────────────────────────────────────
 const API_ENDPOINTS = {
     // Auth
-    register: `${API_CONFIG.baseURL}/register`,
-    login:    `${API_CONFIG.baseURL}/login`,
+    register:    `${API_CONFIG.baseURL}/register`,
+    login:       `${API_CONFIG.baseURL}/login`,
+    googleAuth:  `${API_CONFIG.baseURL}/auth/google`,
 
     // Games
     addGame:              `${API_CONFIG.baseURL}/addGame`,
@@ -58,7 +62,9 @@ async function apiCall(url, options = {}) {
     const headers = {};
 
     // Add auth header when a token is supplied
-    const storedToken = token || localStorage.getItem('token');
+    const storedToken = token
+        || sessionStorage.getItem('authToken')
+        || localStorage.getItem('authToken');
     if (storedToken) {
         headers['Authorization'] = `Bearer ${storedToken}`;
     }
@@ -86,4 +92,27 @@ async function apiCall(url, options = {}) {
     }
 
     return data;
+}
+
+// ── Auth helpers ──────────────────────────────────────────────────────────────
+// Call after any successful login/register/Google-auth response.
+// rememberMe=true persists to localStorage so the session survives browser restart.
+function saveAuthSession(data, rememberMe = false) {
+    const store = rememberMe ? localStorage : sessionStorage;
+    store.setItem('authToken', data.token);
+    store.setItem('userId',    data.userId);
+    store.setItem('username',  data.username  || '');
+    store.setItem('fullName',  data.fullName  || data.username || '');
+    store.setItem('email',     data.email     || '');
+}
+
+function clearAuthSession() {
+    ['authToken', 'userId', 'username', 'fullName', 'email'].forEach(k => {
+        sessionStorage.removeItem(k);
+        localStorage.removeItem(k);
+    });
+}
+
+function getAuthToken() {
+    return sessionStorage.getItem('authToken') || localStorage.getItem('authToken') || null;
 }

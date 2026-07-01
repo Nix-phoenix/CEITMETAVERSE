@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1f0e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d2a18;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#32d74b;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#00ff88;stop-opacity:0.5" />
+    </linearGradient>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="url(#bg)" rx="12"/>
+
+  <!-- Glow -->
+  <circle cx="200" cy="110" r="80" fill="url(#glow)" filter="url(#blur)" opacity="0.45"/>
+
+  <!-- Grid lines -->
+  <g stroke="#32d74b" stroke-width="0.4" opacity="0.12">
+    <line x1="0" y1="65" x2="400" y2="65"/>
+    <line x1="0" y1="130" x2="400" y2="130"/>
+    <line x1="0" y1="195" x2="400" y2="195"/>
+    <line x1="100" y1="0" x2="100" y2="260"/>
+    <line x1="200" y1="0" x2="200" y2="260"/>
+    <line x1="300" y1="0" x2="300" y2="260"/>
+  </g>
+
+  <!-- Shield icon -->
+  <path d="M200 46 L228 58 L228 88 Q228 108 200 116 Q172 108 172 88 L172 58 Z"
+        fill="none" stroke="#32d74b" stroke-width="2" opacity="0.9"/>
+  <path d="M200 54 L222 64 L222 88 Q222 104 200 111 Q178 104 178 88 L178 64 Z"
+        fill="#32d74b" opacity="0.15"/>
+  <!-- Sword / cross inside -->
+  <line x1="200" y1="64" x2="200" y2="100" stroke="#32d74b" stroke-width="2.5"/>
+  <line x1="190" y1="74" x2="210" y2="74" stroke="#32d74b" stroke-width="2.5"/>
+  <circle cx="200" cy="64" r="3" fill="#00ff88"/>
+
+  <!-- Title -->
+  <text x="200" y="138" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700"
+        fill="#f5f5f7" text-anchor="middle" letter-spacing="1">Nuksuksa Game</text>
+
+  <!-- Subtitle -->
+  <text x="200" y="160" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="400"
+        fill="#86868b" text-anchor="middle">Nuksuksa Interactive Experience</text>
+
+  <!-- Tags -->
+  <rect x="117" y="178" width="52" height="20" rx="10" fill="#32d74b" opacity="0.2"/>
+  <text x="143" y="192" font-family="Inter, Arial, sans-serif" font-size="10" fill="#32d74b" text-anchor="middle">unity</text>
+
+  <rect x="177" y="178" width="62" height="20" rx="10" fill="#32d74b" opacity="0.2"/>
+  <text x="208" y="192" font-family="Inter, Arial, sans-serif" font-size="10" fill="#32d74b" text-anchor="middle">adventure</text>
+
+  <rect x="247" y="178" width="36" height="20" rx="10" fill="#32d74b" opacity="0.2"/>
+  <text x="265" y="192" font-family="Inter, Arial, sans-serif" font-size="10" fill="#32d74b" text-anchor="middle">3d</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="232" width="400" height="28" fill="#32d74b" opacity="0.1"/>
+  <text x="200" y="250" font-family="Inter, Arial, sans-serif" font-size="11" fill="#32d74b"
+        text-anchor="middle" opacity="0.8">CEIT METAVERSE AND GAME</text>
+</svg>

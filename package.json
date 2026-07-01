@@ -1,4 +1,11 @@
 {
+  "name": "ceitmetaverse",
+  "private": true,
+  "scripts": {
+    "dev": "cd Script/DataBase && npm run dev",
+    "start": "cd Script/DataBase && npm run start",
+    "seed": "cd Script/DataBase && npm run seed"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "jsonwebtoken": "^9.0.3"

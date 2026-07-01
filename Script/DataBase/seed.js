@@ -22,40 +22,56 @@ async function main() {
   });
 
   const game1 = await prisma.game.upsert({
-    where: { id: 'game-1' },
-    update: {},
+    where: { id: 'game-ceit' },
+    update: { coverImage: 'uploads/images/ceit-thumb.svg' },
     create: {
-      id: 'game-1',
-      title: 'Sample Game 1',
-      shortDesc: 'A seeded sample game',
-      fullDesc: 'Detailed seeded game description',
-      gameType: 'html5',
-      tags: ['seed', 'sample'],
-      coverImage: null,
-      gameFile: 'games/sample1/index.html',
+      id: 'game-ceit',
+      title: 'CEIT Game',
+      shortDesc: 'Interactive CEIT Metaverse experience',
+      fullDesc: 'Explore the CEIT Metaverse in this immersive Unity WebGL game. Navigate through virtual environments and experience the future of education.',
+      gameType: 'Unity',
+      tags: ['unity', 'metaverse', 'education', '3d'],
+      coverImage: 'uploads/images/ceit-thumb.svg',
+      gameFile: 'games/ceit',
       creatorId: user.id,
     },
   });
 
   const game2 = await prisma.game.upsert({
-    where: { id: 'game-2' },
-    update: {},
+    where: { id: 'game-nuksuksa' },
+    update: { coverImage: 'uploads/images/nuksuksa-thumb.svg' },
     create: {
-      id: 'game-2',
-      title: 'Sample Game 2',
-      shortDesc: 'Another seeded game',
-      fullDesc: 'Another detailed seeded game description',
-      gameType: 'html5',
-      tags: ['seed', 'example'],
-      coverImage: null,
-      gameFile: 'games/sample2/index.html',
+      id: 'game-nuksuksa',
+      title: 'Nuksuksa Game',
+      shortDesc: 'Nuksuksa interactive experience',
+      fullDesc: 'An engaging Unity WebGL game featuring the Nuksuksa environment. Discover and interact with various elements in this virtual world.',
+      gameType: 'Unity',
+      tags: ['unity', 'adventure', '3d', 'interactive'],
+      coverImage: 'uploads/images/nuksuksa-thumb.svg',
+      gameFile: 'games/nuksuksa',
+      creatorId: user.id,
+    },
+  });
+
+  const game3 = await prisma.game.upsert({
+    where: { id: 'game-sfada' },
+    update: { coverImage: 'uploads/images/sfada-thumb.svg' },
+    create: {
+      id: 'game-sfada',
+      title: 'SFADA Game',
+      shortDesc: 'SFADA virtual world',
+      fullDesc: 'Experience the SFADA virtual environment in this Unity WebGL game. Explore, interact, and discover the unique features of this digital space.',
+      gameType: 'Unity',
+      tags: ['unity', 'exploration', '3d', 'virtual'],
+      coverImage: 'uploads/images/sfada-thumb.svg',
+      gameFile: 'games/sfada',
       creatorId: user.id,
     },
   });
 
   console.log('✅ Seed completed:');
   console.log('  - user:', user.email);
-  console.log('  - games:', game1.id, game2.id);
+  console.log('  - games:', game1.id, game2.id, game3.id);
 }
 
 main()

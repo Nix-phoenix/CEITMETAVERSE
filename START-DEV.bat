@@ -57,7 +57,7 @@ echo ==========================================
 echo.
 
 REM Open frontend
-start "" "%SCRIPT_DIR%WebPage\HomePage.html"
+start "" "http://localhost:5000/HomePage.html"
 
 echo.
 echo ==========================================
@@ -65,7 +65,7 @@ echo Setup Complete!
 echo ==========================================
 echo.
 echo Backend: http://localhost:5000
-echo Frontend: file:///WebPage/HomePage.html
+echo Frontend: http://localhost:5000/HomePage.html
 echo Diagnostic: Open ConnectionDiagnostic.html to test connection
 echo.
 echo Make sure:

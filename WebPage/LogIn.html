@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Sign In — CEIT METAVERSE AND GAME</title>
@@ -13,256 +14,237 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #111; }
         ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
-        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
-        .btn-primary { background: #0071e3; transition: background 0.2s ease, transform 0.1s ease; }
-        .btn-primary:hover { background: #0077ed; }
-        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary { background: #0071e3; transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s; }
+        .btn-primary:hover:not(:disabled) { background: #0077ed; }
+        .btn-primary:active:not(:disabled) { transform: scale(0.98); }
+        .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
         input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px #2c2c2e inset; -webkit-text-fill-color: #f5f5f7; }
+        .field-error { border-color: #ff453a !important; box-shadow: 0 0 0 3px rgba(255,69,58,.15) !important; }
+        .brand-panel {
+            background: linear-gradient(135deg, #070707 0%, #0d1a2e 60%, #0a0e1a 100%);
+        }
+        .brand-grid {
+            background-image: linear-gradient(rgba(0,113,227,.07) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,113,227,.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        .fade-up { animation: fadeUp .35s ease both; }
     </style>
 </head>
 <body class="bg-black text-[#f5f5f7] min-h-screen flex flex-col">
-    
-    <!-- Navigation -->
-    <nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
-        <div class="max-w-7xl w-full mx-auto flex items-center justify-between">
-            <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
-                <div class="hidden sm:block">
-                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
-                </div>
-                <span class="text-sm font-semibold sm:hidden">CMG</span>
-            </a>
-            <a href="HomePage.html" class="text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors">← Back to Home</a>
-        </div>
+
+    <nav class="w-full bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40 backdrop-blur-xl">
+        <a href="HomePage.html" class="hover:opacity-75 transition-opacity">
+            <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto hidden sm:block" />
+            <span class="text-sm font-semibold sm:hidden">CMG</span>
+        </a>
+        <a href="HomePage.html" class="text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors">← Back to Home</a>
     </nav>
 
-    <!-- Login Container -->
-    <div class="flex-1 flex items-center justify-center px-4 py-16">
-        <div class="w-full max-w-sm">
-            <div class="text-center mb-8">
-                <div class="bg-white inline-block rounded-2xl px-4 py-2 mb-5">
-                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-8 w-auto" />
+    <div class="flex-1 flex min-h-0">
+        <!-- Left brand panel -->
+        <div class="hidden lg:flex lg:w-[45%] brand-panel brand-grid flex-col items-center justify-center px-16 relative overflow-hidden">
+            <div class="absolute w-96 h-96 rounded-full bg-[#0071e3]/10 blur-3xl -top-20 -left-20 pointer-events-none"></div>
+            <div class="absolute w-64 h-64 rounded-full bg-[#0071e3]/8 blur-3xl bottom-10 right-10 pointer-events-none"></div>
+            <div class="relative z-10 text-center max-w-sm">
+                <div class="bg-white/5 border border-white/10 rounded-3xl px-6 py-4 inline-block mb-8">
+                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-12 w-auto" />
                 </div>
-                <h1 class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-1">Welcome back</h1>
-                <p class="text-sm text-[#86868b]">Sign in to your account</p>
-            </div>
-
-            <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-3xl p-7 shadow-2xl shadow-black">
-                <form id="loginForm" class="space-y-4">
-                    <div>
-                        <label for="email" class="block text-xs font-medium text-[#86868b] mb-1.5">Email</label>
-                        <input id="email" type="email" placeholder="you@example.com" required
-                            class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-[#f5f5f7] outline-none focus:ring-1 focus:ring-[#0071e3] focus:border-[#0071e3] transition placeholder-[#86868b]" />
+                <h2 class="text-3xl font-bold tracking-tight mb-3">Welcome back</h2>
+                <p class="text-[#86868b] leading-relaxed text-sm">Sign in to access your games, track your progress, and connect with the CEIT Metaverse community.</p>
+                <div class="mt-10 grid grid-cols-3 gap-4">
+                    <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4 text-center">
+                        <p class="text-xl font-bold text-[#0071e3]">3+</p>
+                        <p class="text-xs text-[#86868b] mt-1">Games</p>
                     </div>
-                    <div>
-                        <label for="password" class="block text-xs font-medium text-[#86868b] mb-1.5">Password</label>
-                        <div class="relative">
-                            <input id="password" type="password" placeholder="••••••••" required
-                                class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-[#f5f5f7] outline-none focus:ring-1 focus:ring-[#0071e3] focus:border-[#0071e3] transition placeholder-[#86868b]" />
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-2.5 text-[#86868b] hover:text-[#f5f5f7] transition-colors">
-                                <svg id="eyeIconOpen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                <svg id="eyeIconClosed" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                            </button>
+                    <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4 text-center">
+                        <p class="text-xl font-bold text-[#32d74b]">VR</p>
+                        <p class="text-xs text-[#86868b] mt-1">Ready</p>
+                    </div>
+                    <div class="bg-white/[0.04] border border-white/[0.07] rounded-2xl p-4 text-center">
+                        <p class="text-xl font-bold text-[#ffd60a]">3D</p>
+                        <p class="text-xs text-[#86868b] mt-1">Worlds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right form panel -->
+        <div class="flex-1 flex items-center justify-center px-4 py-10 bg-black">
+            <div class="w-full max-w-sm fade-up">
+
+                <div class="lg:hidden text-center mb-8">
+                    <div class="bg-white inline-block rounded-2xl px-4 py-2 mb-4">
+                        <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-8 w-auto" />
+                    </div>
+                    <h1 class="text-2xl font-bold tracking-tight">Welcome back</h1>
+                    <p class="text-sm text-[#86868b] mt-1">Sign in to your account</p>
+                </div>
+                <div class="hidden lg:block mb-7">
+                    <h1 class="text-2xl font-bold tracking-tight mb-1">Sign In</h1>
+                    <p class="text-sm text-[#86868b]">Enter your credentials to continue</p>
+                </div>
+
+                <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-3xl p-7 shadow-2xl shadow-black">
+
+                    <!-- Google button -->
+                    <div id="googleBtnContainer" class="w-full mb-4 min-h-[44px] flex items-center justify-center overflow-hidden rounded-xl"></div>
+
+                    <div class="relative my-5">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/[0.06]"></div></div>
+                        <div class="relative flex justify-center"><span class="px-3 bg-[#1c1c1e] text-[#86868b] text-xs">or sign in with email</span></div>
+                    </div>
+
+                    <form id="loginForm" class="space-y-4" novalidate>
+                        <div>
+                            <label for="email" class="block text-xs font-medium text-[#86868b] mb-1.5">Email or Username</label>
+                            <input id="email" type="text" placeholder="you@example.com" autocomplete="username" required
+                                class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-[#f5f5f7] outline-none
+                                       focus:ring-1 focus:ring-[#0071e3] focus:border-[#0071e3] transition placeholder-[#86868b]" />
+                            <p id="emailHint" class="text-[#ff453a] text-xs mt-1 hidden"></p>
                         </div>
-                    </div>
-                    <div class="flex items-center justify-between pt-1">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" id="rememberMe" class="w-3.5 h-3.5 rounded accent-[#0071e3]" />
-                            <span class="text-xs text-[#86868b]">Remember me</span>
-                        </label>
-                        <a href="#" class="text-xs text-[#0071e3] hover:opacity-80 transition-opacity">Forgot password?</a>
-                    </div>
+                        <div>
+                            <label for="password" class="block text-xs font-medium text-[#86868b] mb-1.5">Password</label>
+                            <div class="relative">
+                                <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required
+                                    class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-2.5 pr-12 text-sm text-[#f5f5f7] outline-none
+                                           focus:ring-1 focus:ring-[#0071e3] focus:border-[#0071e3] transition placeholder-[#86868b]" />
+                                <button type="button" id="togglePwd"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-[#86868b] hover:text-[#f5f5f7] transition-colors p-1">
+                                    <svg id="eyeOpen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg id="eyeClosed" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                </button>
+                            </div>
+                            <p id="pwdHint" class="text-[#ff453a] text-xs mt-1 hidden"></p>
+                        </div>
+                        <div class="flex items-center">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="rememberMe" class="w-3.5 h-3.5 rounded accent-[#0071e3]" />
+                                <span class="text-xs text-[#86868b]">Remember me</span>
+                            </label>
+                        </div>
 
-                    <div id="errorMessage" class="hidden bg-[#ff453a]/10 border border-[#ff453a]/20 text-[#ff453a] px-4 py-3 rounded-xl text-xs">
-                        <span id="errorText"></span>
-                    </div>
-                    <div id="successMessage" class="hidden bg-[#32d74b]/10 border border-[#32d74b]/20 text-[#32d74b] px-4 py-3 rounded-xl text-xs">
-                        <span id="successText">Login successful! Redirecting...</span>
-                    </div>
+                        <div id="alertBanner" class="hidden rounded-xl px-4 py-3 text-xs font-medium"></div>
 
-                    <button type="submit" id="loginBtn"
-                        class="w-full btn-primary text-white py-2.5 rounded-full font-medium text-sm mt-1 flex items-center justify-center gap-2">
-                        <span id="btnText">Sign In</span>
-                    </button>
-                </form>
+                        <button type="submit" id="loginBtn"
+                            class="w-full btn-primary text-white py-2.5 rounded-full font-semibold text-sm flex items-center justify-center gap-2">
+                            <svg id="btnSpinner" class="hidden animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity=".2"/><path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"/></svg>
+                            <span id="btnText">Sign In</span>
+                        </button>
+                    </form>
 
-                <div class="relative my-5">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/[0.06]"></div></div>
-                    <div class="relative flex justify-center"><span class="px-3 bg-[#1c1c1e] text-[#86868b] text-xs">or</span></div>
+                    <p class="text-center text-xs text-[#86868b] mt-5">
+                        Don't have an account?
+                        <a href="SignInPage.html" class="text-[#0071e3] hover:opacity-80 font-medium">Create one</a>
+                    </p>
                 </div>
-
-                <div class="space-y-2">
-                    <button type="button" disabled class="w-full bg-[#2c2c2e] border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-[#86868b] opacity-50 cursor-not-allowed">Continue with Facebook</button>
-                    <button type="button" disabled class="w-full bg-[#2c2c2e] border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-[#86868b] opacity-50 cursor-not-allowed">Continue with Google</button>
-                </div>
-
-                <p class="text-center text-xs text-[#86868b] mt-5">
-                    Don't have an account? <a href="SignInPage.html" class="text-[#0071e3] hover:opacity-80 transition-opacity font-medium">Create one</a>
-                </p>
             </div>
-
-            <p class="text-center mt-6 text-[#86868b] text-xs leading-relaxed">
-                Protected by reCAPTCHA &middot;
-                <a href="#" class="hover:text-[#f5f5f7] transition-colors">Privacy</a> &middot;
-                <a href="#" class="hover:text-[#f5f5f7] transition-colors">Terms</a>
-            </p>
         </div>
     </div>
 
     <script src="api-config.js"></script>
     <script src="ui-utils.js"></script>
     <script>
-        // ============================================
-        // Configuration - Using centralized API configuration from api-config.js
-        // Using UI utilities from ui-utils.js
-        // ============================================
+        const GOOGLE_CLIENT_ID = '749193197042-2ocl4nnvcgji9q2a1b0o3qeva1c4l7ao.apps.googleusercontent.com';
 
-        // ============================================
-        // Password Visibility Toggle
-        // ============================================
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            
-            const passwordInput = document.getElementById('password');
-            const eyeOpen = document.getElementById('eyeIconOpen');
-            const eyeClosed = document.getElementById('eyeIconClosed');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeOpen.classList.add('hidden');
-                eyeClosed.classList.remove('hidden');
-            } else {
-                passwordInput.type = 'password';
-                eyeOpen.classList.remove('hidden');
-                eyeClosed.classList.add('hidden');
+        function initGoogle() {
+            if (typeof google === 'undefined' || !google.accounts) return;
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleGoogleCredential,
+                auto_select: false,
+            });
+            const container = document.getElementById('googleBtnContainer');
+            google.accounts.id.renderButton(container, {
+                theme: 'filled_black',
+                size: 'large',
+                text: 'signin_with',
+                shape: 'pill',
+                width: container.offsetWidth || 320,
+            });
+        }
+
+        window.onGoogleLibraryLoad = initGoogle;
+
+        window.addEventListener('load', () => {
+            if (getAuthToken()) { window.location.replace('HomePage.html'); return; }
+            const remembered = localStorage.getItem('rememberedEmail');
+            if (remembered) { document.getElementById('email').value = remembered; document.getElementById('rememberMe').checked = true; }
+            if (typeof google !== 'undefined') initGoogle();
+        });
+
+        async function handleGoogleCredential(response) {
+            showAlert('Signing in with Google…', 'info');
+            try {
+                const data = await apiCall(API_ENDPOINTS.googleAuth, { method: 'POST', body: { credential: response.credential } });
+                saveAuthSession(data, document.getElementById('rememberMe').checked);
+                showAlert('Sign-in successful! Redirecting…', 'success');
+                setTimeout(() => { window.location.href = 'HomePage.html'; }, 900);
+            } catch (err) {
+                showAlert(err.data?.error || err.message || 'Google sign-in failed', 'error');
             }
         }
 
-        // ============================================
-        // Show Messages (using ui-utils)
-        // ============================================
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            if (errorDiv && errorText) {
-                errorText.textContent = message;
-                errorDiv.classList.remove('hidden');
-                
-                const successDiv = document.getElementById('successMessage');
-                if (successDiv) successDiv.classList.add('hidden');
-            }
-            showToast(message, 'error');
-        }
+        document.getElementById('togglePwd').addEventListener('click', () => {
+            const pwd = document.getElementById('password');
+            const open = document.getElementById('eyeOpen'), closed = document.getElementById('eyeClosed');
+            if (pwd.type === 'password') { pwd.type = 'text'; open.classList.add('hidden'); closed.classList.remove('hidden'); }
+            else { pwd.type = 'password'; open.classList.remove('hidden'); closed.classList.add('hidden'); }
+        });
 
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            const successText = document.getElementById('successText');
-            if (successDiv && successText) {
-                successText.textContent = message;
-                successDiv.classList.remove('hidden');
-                
-                const errorDiv = document.getElementById('errorMessage');
-                if (errorDiv) errorDiv.classList.add('hidden');
-            }
-            showToast(message, 'success');
+        function showAlert(msg, type) {
+            const b = document.getElementById('alertBanner');
+            b.textContent = msg;
+            b.className = 'rounded-xl px-4 py-3 text-xs font-medium';
+            if (type === 'success') b.className += ' bg-[#32d74b]/10 border border-[#32d74b]/20 text-[#32d74b]';
+            else if (type === 'error') b.className += ' bg-[#ff453a]/10 border border-[#ff453a]/20 text-[#ff453a]';
+            else b.className += ' bg-[#0071e3]/10 border border-[#0071e3]/20 text-[#0071e3]';
+            b.classList.remove('hidden');
         }
+        function setHint(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); }
+        function clearHint(id)    { document.getElementById(id).classList.add('hidden'); }
 
-        // ============================================
-        // Handle Login Form Submission
-        // ============================================
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const emailEl = document.getElementById('email');
+            const pwdEl   = document.getElementById('password');
+            const btn     = document.getElementById('loginBtn');
+            const spinner = document.getElementById('btnSpinner');
+            const btnText = document.getElementById('btnText');
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            const loginBtn = document.getElementById('loginBtn');
-            const emailField = document.getElementById('email');
-            const passwordField = document.getElementById('password');
+            clearHint('emailHint'); clearHint('pwdHint');
+            document.getElementById('alertBanner').classList.add('hidden');
 
-            // Clear previous errors
-            clearFieldError(emailField);
-            clearFieldError(passwordField);
+            const emailVal = emailEl.value.trim();
+            const pwdVal   = pwdEl.value;
+            let ok = true;
+            if (!emailVal) { setHint('emailHint', 'Email or username is required'); ok = false; }
+            if (!pwdVal)   { setHint('pwdHint',   'Password is required'); ok = false; }
+            if (!ok) return;
 
-            // Validate form
-            if (!email || !password) {
-                showError('Please fill in all fields');
-                if (!email) showFieldError(emailField, 'Email is required');
-                if (!password) showFieldError(passwordField, 'Password is required');
-                return;
-            }
-
-            if (!validateEmail(email)) {
-                showError('Please enter a valid email address');
-                showFieldError(emailField, 'Invalid email format');
-                return;
-            }
-
-            if (password.length < 6) {
-                showError('Password must be at least 6 characters');
-                showFieldError(passwordField, 'Password too short');
-                return;
-            }
-
-            // Show loading state
-            setButtonLoading(loginBtn, 'Signing in...');
-
+            btn.disabled = true; spinner.classList.remove('hidden'); btnText.textContent = 'Signing in…';
             try {
-                console.log('Login attempt:', email);
-
-                const result = await apiCall(API_ENDPOINTS.login, {
-                    method: 'POST',
-                    body: { email, password }
-                });
-
-                if (result.token) {
-                    showSuccess('Login successful! Redirecting...');
-
-                    // Store user data in sessionStorage
-                    sessionStorage.setItem('authToken', result.token);
-                    sessionStorage.setItem('userId', result.userId);
-                    sessionStorage.setItem('username', result.username || 'User');
-                    sessionStorage.setItem('fullName', result.fullName || result.username || 'User');
-                    sessionStorage.setItem('email', email);
-                    sessionStorage.setItem('justLoggedIn', 'true'); // Flag for welcome message
-
-                    // Store in localStorage if remember me is checked
-                    if (rememberMe) {
-                        localStorage.setItem('rememberedEmail', email);
-                    } else {
-                        localStorage.removeItem('rememberedEmail');
-                    }
-
-                    // Redirect after 1 second
-                    navigateTo('HomePage.html', 1000);
-                } else {
-                    showError(result.error || 'Invalid email or password');
-                    resetButton(loginBtn);
-                }
+                const data = await apiCall(API_ENDPOINTS.login, { method: 'POST', body: { email: emailVal, password: pwdVal } });
+                const remember = document.getElementById('rememberMe').checked;
+                saveAuthSession(data, remember);
+                if (remember) localStorage.setItem('rememberedEmail', emailVal);
+                else localStorage.removeItem('rememberedEmail');
+                showAlert('Login successful! Redirecting…', 'success');
+                setTimeout(() => { window.location.href = 'HomePage.html'; }, 900);
             } catch (err) {
-                console.error('Login error:', err);
-                showError(err.data?.error || 'Invalid email or password');
-                resetButton(loginBtn);
+                const msg = err.data?.error || err.message || 'Invalid credentials';
+                showAlert(msg, 'error');
+                if (msg.toLowerCase().includes('password')) setHint('pwdHint', 'Incorrect password');
+                else setHint('emailHint', 'Account not found');
+                btn.disabled = false; spinner.classList.add('hidden'); btnText.textContent = 'Sign In';
             }
         });
 
-        // ============================================
-        // Load Remembered Email
-        // ============================================
-        window.addEventListener('load', () => {
-            // Check if already logged in
-            if (sessionStorage.getItem('authToken')) {
-                showToast('You are already logged in', 'info');
-                navigateTo('HomePage.html', 1500);
-                return;
-            }
-
-            const rememberedEmail = localStorage.getItem('rememberedEmail');
-            if (rememberedEmail) {
-                document.getElementById('email').value = rememberedEmail;
-                document.getElementById('rememberMe').checked = true;
-            }
-        });
+        ['email','password'].forEach(id => document.getElementById(id).addEventListener('input', () => {
+            clearHint(id === 'email' ? 'emailHint' : 'pwdHint');
+            document.getElementById('alertBanner').classList.add('hidden');
+        }));
     </script>
-
 </body>
 </html>

@@ -10,13 +10,16 @@ const unzipper = require('unzipper');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const { OAuth2Client } = require('google-auth-library');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'a3f8d9c2e1b4f6a9c8d7e3f1a9b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const app = express();
 // Allow localhost, file://, and production origins (set ALLOWED_ORIGIN env var)
@@ -298,6 +301,57 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Google OAuth Login / Register
+app.post('/auth/google', async (req, res) => {
+    try {
+        const { credential } = req.body;
+        if (!credential) return res.status(400).json({ error: 'Google credential required' });
+        if (!GOOGLE_CLIENT_ID) return res.status(500).json({ error: 'Google login not configured on server' });
+
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const { email, name, sub: googleId, picture } = payload;
+
+        // Find or create user
+        let user = await prisma.user.findUnique({ where: { email } });
+        if (!user) {
+            // Auto-generate a unique username from the Google display name
+            let baseUsername = (name || 'user').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 16) || 'user';
+            let username = baseUsername;
+            let suffix = 1;
+            while (await prisma.user.findUnique({ where: { username } })) {
+                username = baseUsername + suffix++;
+            }
+            user = await prisma.user.create({
+                data: {
+                    id:             crypto.randomUUID(),
+                    username,
+                    email,
+                    password:       googleId, // non-usable placeholder; Google users log in via token only
+                    fullName:       name || username,
+                    profilePicture: picture || null,
+                },
+            });
+        }
+
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });
+        res.json({
+            message: 'Google login successful',
+            token,
+            userId:   user.id,
+            username: user.username,
+            fullName: user.fullName,
+            email:    user.email,
+        });
+    } catch (err) {
+        console.error('Google auth error:', err);
+        res.status(401).json({ error: 'Google authentication failed', details: err.message });
+    }
+});
+
 // Get profile
 app.get('/profile/:userId', async (req, res) => {
     try {
@@ -517,7 +571,7 @@ app.delete('/profile/:userId', async (req, res) => {
 });
 
 // Start server — always bind to the PORT provided by the environment (required by Render)
-const numericPort = Number(PORT) || 3000;
+const numericPort = Number(PORT) || 5000;
 const server = app.listen(numericPort, '0.0.0.0', () => {
     console.log(`\n✅ Server running on port ${numericPort}`);
     console.log(`✅ API available at /test`);
