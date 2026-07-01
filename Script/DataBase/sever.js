@@ -576,6 +576,17 @@ const server = app.listen(numericPort, '0.0.0.0', () => {
     console.log(`\n✅ Server running on port ${numericPort}`);
     console.log(`✅ API available at /test`);
     console.log(`✅ Swagger UI available at /docs\n`);
+
+    // Run seed asynchronously after server is already listening — never blocks
+    if (process.env.DATABASE_URL) {
+        const { spawn } = require('child_process');
+        const seed = spawn('node', ['seed.js'], { cwd: __dirname, stdio: 'inherit' });
+        seed.on('close', (code) => {
+            if (code === 0) console.log('✅ Seed completed');
+            else console.warn('⚠️  Seed exited with code', code, '(server still running)');
+        });
+        seed.on('error', (err) => console.warn('⚠️  Seed error:', err.message));
+    }
 });
 
 server.on('error', (err) => {
