@@ -5,7 +5,7 @@ services:
     runtime: node
     nodeVersion: 20.11.1
     buildCommand: cd Script/DataBase && npm ci && npx prisma generate --schema=./prisma/schema.prisma
-    startCommand: cd Script/DataBase && npx prisma migrate deploy --schema=./prisma/schema.prisma && node sever.js
+    startCommand: cd Script/DataBase && (npx prisma migrate deploy --schema=./prisma/schema.prisma || echo "Migration skipped - check DATABASE_URL") && node sever.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -14,6 +14,6 @@ services:
       - key: JWT_SECRET
         sync: false
       - key: ALLOWED_ORIGIN
-        value: https://ceitmetaverse-9.onrender.com
+        value: https://ceitmetaverse-5.onrender.com
       - key: GOOGLE_CLIENT_ID
         value: 749193197042-2ocl4nnvcgji9q2a1b0o3qeva1c4l7ao.apps.googleusercontent.com
