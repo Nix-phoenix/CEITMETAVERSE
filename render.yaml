@@ -5,7 +5,7 @@ services:
     runtime: node
     nodeVersion: 20.11.1
     buildCommand: cd Script/DataBase && npm ci && npx prisma generate --schema=./prisma/schema.prisma
-    startCommand: cd Script/DataBase && (npx prisma migrate deploy --schema=./prisma/schema.prisma || echo "Migration skipped - check DATABASE_URL") && node sever.js
+    startCommand: cd Script/DataBase && node sever.js
     envVars:
       - key: NODE_ENV
         value: production
