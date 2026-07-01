@@ -3,7 +3,8 @@ services:
     name: ceitmetaverse-9
     branch: vresion-2.1
     runtime: node
-    buildCommand: cd Script/DataBase && npm install && npx prisma generate --schema=./prisma/schema.prisma
+    nodeVersion: 20.11.1
+    buildCommand: cd Script/DataBase && npm ci && npx prisma generate --schema=./prisma/schema.prisma
     startCommand: cd Script/DataBase && npx prisma migrate deploy --schema=./prisma/schema.prisma && node sever.js
     envVars:
       - key: NODE_ENV
