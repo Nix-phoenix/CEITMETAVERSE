@@ -572,23 +572,10 @@ app.delete('/profile/:userId', async (req, res) => {
 
 // Start server — always bind to the PORT provided by the environment (required by Render)
 const numericPort = Number(PORT) || 5000;
-const server = app.listen(numericPort, '0.0.0.0', async () => {
+const server = app.listen(numericPort, '0.0.0.0', () => {
     console.log(`\n✅ Server running on port ${numericPort}`);
     console.log(`✅ API available at /test`);
     console.log(`✅ Swagger UI available at /docs\n`);
-
-    // Run DB migration after server is already listening (non-blocking)
-    if (process.env.DATABASE_URL) {
-        try {
-            const { execSync } = require('child_process');
-            execSync('npx prisma migrate deploy --schema=./prisma/schema.prisma', { stdio: 'inherit' });
-            console.log('✅ Prisma migrations applied');
-        } catch (e) {
-            console.warn('⚠️  Migration warning (server still running):', e.message);
-        }
-    } else {
-        console.warn('⚠️  DATABASE_URL not set — skipping migration. Set it in Render dashboard.');
-    }
 });
 
 server.on('error', (err) => {
