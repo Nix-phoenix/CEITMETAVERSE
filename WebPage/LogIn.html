@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="api-base" content="https://designing-interstate-screening-barrel.trycloudflare.com">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>Sign In — CEIT METAVERSE AND GAME</title>
+    <title>Sign In â€” CEIT METAVERSE AND GAME</title>
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
         * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
@@ -39,7 +40,7 @@
             <img src="../Image/logo.png" alt="CEIT" class="h-7 w-auto hidden sm:block" />
             <span class="text-sm font-semibold sm:hidden">CMG</span>
         </a>
-        <a href="HomePage.html" class="text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors">← Back to Home</a>
+        <a href="HomePage.html" class="text-sm text-[#86868b] hover:text-[#f5f5f7] transition-colors">â† Back to Home</a>
     </nav>
 
     <div class="flex-1 flex min-h-0">
@@ -107,7 +108,7 @@
                         <div>
                             <label for="password" class="block text-xs font-medium text-[#86868b] mb-1.5">Password</label>
                             <div class="relative">
-                                <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required
+                                <input id="password" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password" required
                                     class="w-full bg-[#2c2c2e] border border-white/[0.08] rounded-xl px-4 py-2.5 pr-12 text-sm text-[#f5f5f7] outline-none
                                            focus:ring-1 focus:ring-[#0071e3] focus:border-[#0071e3] transition placeholder-[#86868b]" />
                                 <button type="button" id="togglePwd"
@@ -175,11 +176,11 @@
         });
 
         async function handleGoogleCredential(response) {
-            showAlert('Signing in with Google…', 'info');
+            showAlert('Signing in with Googleâ€¦', 'info');
             try {
                 const data = await apiCall(API_ENDPOINTS.googleAuth, { method: 'POST', body: { credential: response.credential } });
                 saveAuthSession(data, document.getElementById('rememberMe').checked);
-                showAlert('Sign-in successful! Redirecting…', 'success');
+                showAlert('Sign-in successful! Redirectingâ€¦', 'success');
                 setTimeout(() => { window.location.href = 'HomePage.html'; }, 900);
             } catch (err) {
                 showAlert(err.data?.error || err.message || 'Google sign-in failed', 'error');
@@ -223,14 +224,14 @@
             if (!pwdVal)   { setHint('pwdHint',   'Password is required'); ok = false; }
             if (!ok) return;
 
-            btn.disabled = true; spinner.classList.remove('hidden'); btnText.textContent = 'Signing in…';
+            btn.disabled = true; spinner.classList.remove('hidden'); btnText.textContent = 'Signing inâ€¦';
             try {
                 const data = await apiCall(API_ENDPOINTS.login, { method: 'POST', body: { email: emailVal, password: pwdVal } });
                 const remember = document.getElementById('rememberMe').checked;
                 saveAuthSession(data, remember);
                 if (remember) localStorage.setItem('rememberedEmail', emailVal);
                 else localStorage.removeItem('rememberedEmail');
-                showAlert('Login successful! Redirecting…', 'success');
+                showAlert('Login successful! Redirectingâ€¦', 'success');
                 setTimeout(() => { window.location.href = 'HomePage.html'; }, 900);
             } catch (err) {
                 const msg = err.data?.error || err.message || 'Invalid credentials';
