@@ -13,8 +13,9 @@ router.post(
     GameController.addGame
 );
 
-router.get('/game',          GameController.getAllGames);
-router.get('/games/:gameId', GameController.getGamesById);
-router.get('/play/:gameId',  GameController.playGame);
+router.get('/game',              GameController.getAllGames);
+router.get('/games/:gameId',     GameController.getGamesById);
+router.get('/play/:gameId',      GameController.playGame);
+router.get('/download/:gameId',  GameController.downloadGame);
 
 export default router;

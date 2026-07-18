@@ -5,7 +5,7 @@ import { Request } from 'express';
 // Configuration constants
 const UPLOAD_DIR = 'uploads/';
 const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || '524288000'); // 500MB default
-const ALLOWED_FILE_TYPES = ['.zip', '.rar', '.7z'];
+const ALLOWED_FILE_TYPES = ['.zip', '.rar', '.7z', '.exe'];
 
 // Custom storage configuration
 const storage: StorageEngine = multer.diskStorage({

@@ -113,15 +113,49 @@
                         <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Tags (comma separated)</label>
                         <input id="tags" type="text" placeholder="e.g. 2D, multiplayer, indie, fun" class="apple-input" />
                     </div>
+                    <!-- Platform Selector -->
                     <div>
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-2">Platform *</label>
+                        <div class="flex gap-3">
+                            <button type="button" id="btnWebGL" onclick="selectPlatform('webgl')"
+                                class="flex-1 flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border-2 border-[#0071e3] bg-[#0071e3]/10 transition-all">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                                <span class="text-sm font-semibold text-[#0071e3]">WebGL</span>
+                                <span class="text-xs text-[#86868b] text-center leading-tight">Play in browser<br>.zip file</span>
+                            </button>
+                            <button type="button" id="btnEXE" onclick="selectPlatform('exe')"
+                                class="flex-1 flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border-2 border-white/[0.08] bg-transparent hover:border-white/20 transition-all">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 9h6M9 12h4M8 19l2-2-2-2"/></svg>
+                                <span class="text-sm font-semibold text-[#86868b]">Windows EXE</span>
+                                <span class="text-xs text-[#86868b] text-center leading-tight">Desktop download<br>.exe file</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- WebGL Upload -->
+                    <div id="sectionWebGL">
                         <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Game File (.ZIP) *</label>
-                        <input id="gameFile" type="file" name="gameFile" accept=".zip" required class="hidden" />
-                        <button type="button" onclick="document.getElementById('gameFile').click()" class="w-full bg-[#2c2c2e] border-2 border-dashed border-white/[0.08] hover:border-[#0071e3]/50 rounded-2xl px-6 py-5 transition-colors text-center">
+                        <input id="gameFile" type="file" accept=".zip" class="hidden" />
+                        <button type="button" onclick="document.getElementById('gameFile').click()"
+                            class="w-full bg-[#2c2c2e] border-2 border-dashed border-white/[0.08] hover:border-[#0071e3]/50 rounded-2xl px-6 py-5 transition-colors text-center">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" class="mx-auto mb-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                             <span id="gameFileName" class="text-[#86868b] text-sm">Click to select .zip file</span>
                         </button>
-                        <p class="text-xs text-[#86868b] mt-1.5">Only .ZIP files</p>
+                        <p class="text-xs text-[#86868b] mt-1.5">Only .ZIP files — must contain index.html</p>
                         <div id="zipCheckMessage" class="mt-3 text-sm"></div>
+                    </div>
+
+                    <!-- EXE Upload -->
+                    <div id="sectionEXE" class="hidden">
+                        <label class="block text-xs font-medium text-[#86868b] uppercase tracking-wider mb-1.5">Game File (.EXE) *</label>
+                        <input id="gameFileExe" type="file" accept=".exe" class="hidden" />
+                        <button type="button" onclick="document.getElementById('gameFileExe').click()"
+                            class="w-full bg-[#2c2c2e] border-2 border-dashed border-white/[0.08] hover:border-[#0071e3]/50 rounded-2xl px-6 py-5 transition-colors text-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" class="mx-auto mb-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span id="exeFileName" class="text-[#86868b] text-sm">Click to select .exe file</span>
+                        </button>
+                        <p class="text-xs text-[#86868b] mt-1.5">Windows executable — players will download &amp; run it</p>
+                        <div id="exeCheckMessage" class="mt-3 text-sm"></div>
                     </div>
                     <button type="submit" class="w-full btn-primary text-white font-semibold py-3 px-6 rounded-full transition">
                         <span id="submitText">Upload Game</span>
@@ -136,6 +170,35 @@
         // Configuration - Using centralized API configuration
         // ============================================
         const MAX_FILE_SIZE = Infinity; // No limit
+
+        // ============================================
+        // Platform Selector (WebGL / EXE)
+        // ============================================
+        let selectedPlatform = 'webgl';
+
+        function selectPlatform(platform) {
+            selectedPlatform = platform;
+            const isWebGL = platform === 'webgl';
+
+            const btnWebGL = document.getElementById('btnWebGL');
+            const btnEXE   = document.getElementById('btnEXE');
+
+            // Active button styles
+            const activeClass   = 'flex-1 flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border-2 border-[#0071e3] bg-[#0071e3]/10 transition-all';
+            const inactiveClass = 'flex-1 flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border-2 border-white/[0.08] bg-transparent hover:border-white/20 transition-all';
+
+            btnWebGL.className = isWebGL ? activeClass : inactiveClass;
+            btnEXE.className   = isWebGL ? inactiveClass : activeClass;
+
+            // Icon + label colours
+            btnWebGL.querySelector('svg').setAttribute('stroke', isWebGL ? '#0071e3' : '#86868b');
+            btnEXE.querySelector('svg').setAttribute('stroke',   isWebGL ? '#86868b' : '#0071e3');
+            btnWebGL.querySelector('span').className = isWebGL ? 'text-sm font-semibold text-[#0071e3]' : 'text-sm font-semibold text-[#86868b]';
+            btnEXE.querySelector('span').className   = isWebGL ? 'text-sm font-semibold text-[#86868b]' : 'text-sm font-semibold text-[#0071e3]';
+
+            document.getElementById('sectionWebGL').classList.toggle('hidden', !isWebGL);
+            document.getElementById('sectionEXE').classList.toggle('hidden',   isWebGL);
+        }
 
         // ============================================
         // Authentication
@@ -198,28 +261,23 @@
         }
 
         // ============================================
-        // Game File Selection
+        // Game File Selection — WebGL (.zip)
         // ============================================
         document.getElementById("gameFile").addEventListener("change", async (e) => {
             const gameFile = e.target.files[0];
             const zipCheckMessage = document.getElementById("zipCheckMessage");
-            const gameFileName = document.getElementById("gameFileName");
+            const gameFileName    = document.getElementById("gameFileName");
 
             if (!gameFile) {
                 zipCheckMessage.innerHTML = '';
-                gameFileName.textContent = 'Click to select .zip file';
+                gameFileName.textContent  = 'Click to select .zip file';
                 return;
             }
 
             gameFileName.textContent = `📦 ${gameFile.name}`;
 
-            if (!gameFile.name.endsWith('.zip')) {
+            if (!gameFile.name.toLowerCase().endsWith('.zip')) {
                 zipCheckMessage.innerHTML = '<div class="bg-[#ff453a]/10 text-[#ff453a] p-3 rounded-xl text-xs">Only .zip files are allowed</div>';
-                return;
-            }
-
-            if (gameFile.size > MAX_FILE_SIZE) {
-                zipCheckMessage.innerHTML = `<div class="bg-[#ff453a]/10 text-[#ff453a] p-3 rounded-xl text-xs">File size exceeds limit (${(gameFile.size / 1024 / 1024).toFixed(2)}MB)</div>`;
                 return;
             }
 
@@ -242,6 +300,31 @@
         });
 
         // ============================================
+        // Game File Selection — EXE
+        // ============================================
+        document.getElementById("gameFileExe").addEventListener("change", (e) => {
+            const file         = e.target.files[0];
+            const exeFileName  = document.getElementById("exeFileName");
+            const exeCheckMsg  = document.getElementById("exeCheckMessage");
+
+            if (!file) {
+                exeFileName.textContent = 'Click to select .exe file';
+                exeCheckMsg.innerHTML   = '';
+                return;
+            }
+
+            exeFileName.textContent = `💻 ${file.name}`;
+
+            if (!file.name.toLowerCase().endsWith('.exe')) {
+                exeCheckMsg.innerHTML = '<div class="bg-[#ff453a]/10 text-[#ff453a] p-3 rounded-xl text-xs">Only .exe files are allowed</div>';
+                return;
+            }
+
+            const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+            exeCheckMsg.innerHTML = `<div class="bg-[#32d74b]/10 text-[#32d74b] p-3 rounded-xl text-xs">✅ ${file.name} — ${sizeMB} MB</div>`;
+        });
+
+        // ============================================
         // Form Submission
         // ============================================
         document.getElementById("gameForm").addEventListener("submit", async (e) => {
@@ -249,8 +332,7 @@
 
             if (!checkAuth()) return;
 
-            const titleInput = document.getElementById("title");
-            const gameFileInput = document.getElementById("gameFile");
+            const titleInput      = document.getElementById("title");
             const coverImageInput = document.getElementById("UpLoadImage");
 
             // Validation
@@ -259,8 +341,14 @@
                 return;
             }
 
-            if (!gameFileInput.files[0]) {
-                alert("❌ Please select a game file (.zip)");
+            // Pick file based on selected platform
+            const isWebGL  = selectedPlatform === 'webgl';
+            const gameFile = isWebGL
+                ? document.getElementById("gameFile").files[0]
+                : document.getElementById("gameFileExe").files[0];
+
+            if (!gameFile) {
+                alert(isWebGL ? "❌ Please select a game file (.zip)" : "❌ Please select a game file (.exe)");
                 return;
             }
 
@@ -269,33 +357,33 @@
                 return;
             }
 
-            const gameFile = gameFileInput.files[0];
-
-            if (!gameFile.name.endsWith('.zip')) {
-                alert("❌ Only .zip files are allowed!");
+            if (isWebGL && !gameFile.name.toLowerCase().endsWith('.zip')) {
+                alert("❌ Only .zip files are allowed for WebGL!");
                 return;
             }
 
-            if (gameFile.size > MAX_FILE_SIZE) {
-                alert(`❌ File size exceeds 2000MB (${(gameFile.size / 1024 / 1024).toFixed(2)}MB)`);
+            if (!isWebGL && !gameFile.name.toLowerCase().endsWith('.exe')) {
+                alert("❌ Only .exe files are allowed for Windows EXE!");
                 return;
             }
 
             // Loading state
-            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitBtn  = e.target.querySelector('button[type="submit"]');
             const submitText = document.getElementById('submitText');
-            submitBtn.disabled = true;
-            submitText.textContent = 'Uploading...';
+            submitBtn.disabled       = true;
+            submitText.textContent   = 'Uploading...';
 
             // Build FormData
             const formData = new FormData();
-            formData.append("title", titleInput.value.trim());
+            formData.append("title",     titleInput.value.trim());
             formData.append("shortDesc", document.getElementById("shortDesc").value.trim());
-            formData.append("fullDesc", document.getElementById("fullDesc").value.trim());
-            formData.append("gameType", document.getElementById("gameType").value.trim() || "Other");
-            formData.append("tags", document.getElementById("tags").value.trim());
+            formData.append("fullDesc",  document.getElementById("fullDesc").value.trim());
+            formData.append("gametype",  isWebGL
+                ? (document.getElementById("gameType").value.trim() || "webgl")
+                : "exe");
+            formData.append("tags",      document.getElementById("tags").value.trim());
             formData.append("coverImage", coverImageInput.files[0]);
-            formData.append("gameFile", gameFile);
+            formData.append("gameFile",   gameFile);
 
             const userId = sessionStorage.getItem('userId');
             if (userId) formData.append("creatorId", userId);

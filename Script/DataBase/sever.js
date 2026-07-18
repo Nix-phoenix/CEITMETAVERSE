@@ -30,7 +30,14 @@ const allowedOrigins = [
     /\.netlify\.app$/,
 ];
 if (process.env.ALLOWED_ORIGIN) {
-    allowedOrigins.push(new RegExp('^' + process.env.ALLOWED_ORIGIN.replace(/[.+?^${}()|[\]\\]/g, '\\$&') + '$'));
+    // Supports one or more comma-separated origins, e.g.
+    // ALLOWED_ORIGIN="https://myapp.com,https://www.myapp.com"
+    process.env.ALLOWED_ORIGIN.split(',')
+        .map(o => o.trim())
+        .filter(Boolean)
+        .forEach(origin => {
+            allowedOrigins.push(new RegExp('^' + origin.replace(/[.+?^${}()|[\]\\]/g, '\\$&') + '$'));
+        });
 }
 
 app.use(cors({

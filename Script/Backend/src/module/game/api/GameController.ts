@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import prisma from '../../../Config/Prisma';
-import { unzipGameFile } from '../../../Utils/fileUtils';
+import { unzipGameFile, storeExeFile } from '../../../Utils/fileUtils';
 import fs from 'fs';
 import path from 'path';
+
+const ARCHIVE_EXTENSIONS = ['.zip', '.rar', '.7z'];
 
 export class GameController {
 
@@ -27,14 +29,28 @@ export class GameController {
                 return;
             }
 
-            const zipFile = files.gameFile[0];
+            const uploadedFile = files.gameFile[0];
+            const fileExt      = path.extname(uploadedFile.originalname).toLowerCase();
             let gameFilePath: string | null = null;
+            let resolvedGameType = gametype?.trim() || 'other';
 
             try {
-                gameFilePath = await unzipGameFile(zipFile.path, title);
-                fs.unlinkSync(zipFile.path);
-            } catch (unzipErr: any) {
-                res.status(500).json({ error: 'Failed to extract game file', details: unzipErr.message });
+                if (ARCHIVE_EXTENSIONS.includes(fileExt)) {
+                    // WebGL game — extract the archive
+                    gameFilePath     = await unzipGameFile(uploadedFile.path, title);
+                    resolvedGameType = resolvedGameType === 'other' ? 'webgl' : resolvedGameType;
+                    fs.unlinkSync(uploadedFile.path);
+                } else if (fileExt === '.exe') {
+                    // Desktop/EXE game — store directly
+                    gameFilePath     = await storeExeFile(uploadedFile.path, title);
+                    resolvedGameType = 'exe';
+                } else {
+                    fs.unlinkSync(uploadedFile.path);
+                    res.status(400).json({ error: 'Unsupported game file type' });
+                    return;
+                }
+            } catch (fileErr: any) {
+                res.status(500).json({ error: 'Failed to process game file', details: fileErr.message });
                 return;
             }
 
@@ -44,7 +60,7 @@ export class GameController {
                     title:      title.trim(),
                     shortDesc:  shortDesc?.trim() || '',
                     fulldesc:   fullDesc?.trim()   || '',
-                    gametype:   gametype?.trim()   || 'other',
+                    gametype:   resolvedGameType,
                     tags:       tags ? tags.split(',').map((t: string) => t.trim()).filter(Boolean) : [],
                     coverImage: files.coverImage[0].path.replace(/\\/g, '/'),
                     gameFile:   gameFilePath,
@@ -127,6 +143,37 @@ export class GameController {
         } catch (err: any) {
             console.error('Error playing game:', err);
             res.status(500).json({ error: 'Failed to play game' });
+        }
+    }
+
+    static async downloadGame(req: Request, res: Response) {
+        try {
+            const { gameId } = req.params;
+
+            const game = await prisma.game.findUnique({ where: { id: gameId } });
+
+            if (!game) {
+                res.status(404).json({ error: 'Game not found' });
+                return;
+            }
+
+            if (!game.gameFile) {
+                res.status(404).json({ error: 'Game file not found' });
+                return;
+            }
+
+            const exePath = path.join(__dirname, '../../../uploads', game.gameFile);
+
+            if (!fs.existsSync(exePath)) {
+                res.status(404).json({ error: 'EXE file not found on server' });
+                return;
+            }
+
+            const fileName = `${game.title.replace(/[^a-z0-9_\- ]/gi, '_')}.exe`;
+            res.download(exePath, fileName);
+        } catch (err: any) {
+            console.error('Error downloading game:', err);
+            res.status(500).json({ error: 'Failed to download game' });
         }
     }
 }

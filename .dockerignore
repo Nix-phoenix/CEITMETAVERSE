@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+.git
+.gitignore
+*.log
+npm-debug.log*
+**/.env
+Script/Backend
+Script/DataBase/PRISMA_POSTGRES.md
+Script/DataBase/PRISMA_SETUP.md

@@ -35,6 +35,31 @@ export const unzipGameFile = (zipFilePath: string, gameTitle: string): Promise<s
     });
 };
 
+export const storeExeFile = (exeFilePath: string, gameTitle: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        try {
+            const sanitizedTitle = gameTitle.replace(/[^a-z0-9_\-]/gi, '_').toLowerCase();
+            const exeDir         = path.join(__dirname, '../../uploads/games/exe');
+
+            if (!fs.existsSync(exeDir)) {
+                fs.mkdirSync(exeDir, { recursive: true });
+            }
+
+            const destPath = path.join(exeDir, `${sanitizedTitle}.exe`);
+
+            fs.rename(exeFilePath, destPath, (err) => {
+                if (err) {
+                    reject(new Error(`Failed to store EXE file: ${err.message}`));
+                } else {
+                    resolve(`game/exe/${sanitizedTitle}.exe`);
+                }
+            });
+        } catch (err: any) {
+            reject(err);
+        }
+    });
+};
+
 export function ensureUploadsDirectory(): void {
     const uploadDir = path.join(__dirname, '../../uploads');
     const gameDir   = path.join(uploadDir, 'games');

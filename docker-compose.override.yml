@@ -1,0 +1,16 @@
+services:
+  app:
+    # Dev override: mount source directly so edits on the host are
+    # picked up immediately (no rebuild / no manual rsync needed).
+    # node_modules stays in its own volume so Linux-built binaries
+    # (e.g. Prisma engine) are never overwritten by Windows-built ones.
+    command: sh -c "npm install && npx prisma generate --schema=./prisma/schema.prisma && (npx prisma migrate deploy --schema=./prisma/schema.prisma || true) && npx nodemon --legacy-watch sever.js"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - .:/app
+      - app_node_modules:/app/Script/DataBase/node_modules
+
+volumes:
+  app_node_modules:
