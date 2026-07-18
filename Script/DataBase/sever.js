@@ -25,7 +25,7 @@ const app = express();
 // Allow localhost, file://, and production origins (set ALLOWED_ORIGIN env var)
 const allowedOrigins = [
     /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
-    /\.onrender\.com$/,
+    /\.pages\.dev$/,
     /\.vercel\.app$/,
     /\.netlify\.app$/,
 ];
@@ -52,7 +52,7 @@ app.use(express.json({ limit: '50mb' }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../../')));
-// Serve the frontend WebPage folder at root so Render serves the UI
+// Serve the frontend WebPage folder at root so the UI is served here too
 app.use('/', express.static(path.join(__dirname, '../../WebPage')));
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 app.use('/game-files', express.static(path.join(__dirname, '../../uploads/games')));
@@ -79,7 +79,7 @@ app.use('/uploads/games', express.static(path.join(__dirname, '../../uploads/gam
 }));
 
 // If a client requests the root path, send the HomePage HTML so the
-// frontend appears at the service root (Render will route to '/').
+// frontend appears at the service root.
 app.get('/', (req, res) => {
     const front = path.join(__dirname, '../../WebPage/HomePage.html');
     if (fs.existsSync(front)) return res.sendFile(front);
@@ -577,7 +577,7 @@ app.delete('/profile/:userId', async (req, res) => {
     }
 });
 
-// Start server — always bind to the PORT provided by the environment (required by Render)
+// Start server — always bind to the PORT provided by the environment
 const numericPort = Number(PORT) || 5000;
 const server = app.listen(numericPort, '0.0.0.0', () => {
     console.log(`\n✅ Server running on port ${numericPort}`);

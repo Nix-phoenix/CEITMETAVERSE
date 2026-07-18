@@ -6,7 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>Game Catalog — CEIT METAVERSE AND GAME</title>
+    <title>Game Catalog â€” CEIT METAVERSE AND GAME</title>
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
         * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
@@ -27,7 +27,7 @@
         <div class="flex items-center gap-8">
             <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
                 <div class="hidden sm:block">
-                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                    <img src="../Image/logo.png" alt="CEIT" class="h-7 w-auto" />
                 </div>
                 <span class="text-sm font-semibold sm:hidden">CMG</span>
             </a>
@@ -122,7 +122,7 @@
         let filteredGames = [];
         let searchTimeout = null;
 
-        // ── Load Games ────────────────────────────────────────────────────────
+        // â”€â”€ Load Games â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         async function loadGames() {
             const container = document.getElementById('gameContainer');
             try {
@@ -135,20 +135,20 @@
                 console.error('loadGames error:', err);
                 container.innerHTML = `
                     <div class="col-span-full text-center py-16">
-                        <p class="text-red-400 text-2xl mb-2">⚠️ Cannot connect to server</p>
+                        <p class="text-red-400 text-2xl mb-2">âš ï¸ Cannot connect to server</p>
                         <p class="text-gray-400 text-sm mb-4">Make sure the backend is running at <code class="bg-gray-800 px-2 py-1 rounded">${API_CONFIG.baseURL}</code></p>
-                        <button onclick="loadGames()" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold transition">🔄 Retry</button>
+                        <button onclick="loadGames()" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold transition">ðŸ”„ Retry</button>
                     </div>`;
             }
         }
 
-        // ── Display Games (DocumentFragment for performance) ──────────────────
+        // â”€â”€ Display Games (DocumentFragment for performance) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function displayGames(games) {
             const container = document.getElementById('gameContainer');
             if (games.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full text-center py-16">
-                        <p class="text-gray-400 text-2xl">🎮 No games found</p>
+                        <p class="text-gray-400 text-2xl">ðŸŽ® No games found</p>
                     </div>`;
                 return;
             }
@@ -158,8 +158,8 @@
             container.appendChild(frag);
         }
 
-        // ── Build Card ────────────────────────────────────────────────────────
-        const PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%23374151' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' fill='%236b7280' font-size='40' text-anchor='middle' dominant-baseline='middle'%3E🎮%3C/text%3E%3C/svg%3E";
+        // â”€â”€ Build Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        const PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%23374151' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' fill='%236b7280' font-size='40' text-anchor='middle' dominant-baseline='middle'%3EðŸŽ®%3C/text%3E%3C/svg%3E";
 
         function createGameCard(game) {
             const card = document.createElement('div');
@@ -191,7 +191,7 @@
             return card;
         }
 
-        // ── Play Game ─────────────────────────────────────────────────────────
+        // â”€â”€ Play Game â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function playGame(gameId) {
             const game = allGames.find(g => g.id === gameId);
             if (game) sessionStorage.setItem('selectedGame', JSON.stringify(game));
@@ -199,12 +199,12 @@
             window.location.href = 'GamePage.html';
         }
 
-        // ── Filters ───────────────────────────────────────────────────────────
+        // â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function toggleGenres() {
             const list  = document.getElementById('genresList');
             const arrow = document.getElementById('genreArrow');
             list.classList.toggle('hidden');
-            arrow.textContent = list.classList.contains('hidden') ? '▼' : '▲';
+            arrow.textContent = list.classList.contains('hidden') ? 'â–¼' : 'â–²';
         }
 
         function filterByGenre(genre) {
@@ -220,7 +220,7 @@
             displayGames(filteredGames);
         }
 
-        // ── Search (debounced) ────────────────────────────────────────────────
+        // â”€â”€ Search (debounced) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         document.getElementById('searchInput').addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
@@ -236,7 +236,7 @@
             }, 200);
         });
 
-        // ── User Menu ─────────────────────────────────────────────────────────
+        // â”€â”€ User Menu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function toggleUserMenu() {
             document.getElementById('userMenu').classList.toggle('hidden');
         }
@@ -249,7 +249,7 @@
             }
         });
 
-        // ── Init ──────────────────────────────────────────────────────────────
+        // â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         window.addEventListener('load', () => {
             const token = sessionStorage.getItem('authToken');
             const loginLink = document.getElementById('loginLink');

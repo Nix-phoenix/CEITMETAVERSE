@@ -8,7 +8,7 @@
     <script src="ui-utils.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>Profile — CEIT METAVERSE AND GAME</title>
+    <title>Profile â€” CEIT METAVERSE AND GAME</title>
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
         * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
@@ -31,7 +31,7 @@
         <div class="flex items-center gap-8">
             <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
                 <div class="hidden sm:block">
-                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                    <img src="../Image/logo.png" alt="CEIT" class="h-7 w-auto" />
                 </div>
                 <span class="text-sm font-semibold sm:hidden">CMG</span>
             </a>
@@ -136,7 +136,7 @@
                 <div id="uploadedGames" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     <div class="col-span-full text-center py-10">
                         <p class="text-[#86868b] text-sm">No games uploaded yet</p>
-                        <a href="AddPage.html" class="text-[#0071e3] hover:opacity-80 text-sm mt-2 inline-block">Upload your first game →</a>
+                        <a href="AddPage.html" class="text-[#0071e3] hover:opacity-80 text-sm mt-2 inline-block">Upload your first game â†’</a>
                     </div>
                 </div>
             </div>
@@ -145,12 +145,12 @@
             <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-2xl p-6">
                 <div class="flex items-center justify-between mb-5">
                     <h2 class="text-base font-semibold text-[#f5f5f7]">Favorite Games</h2>
-                    <a href="Catagory.html" class="text-[#0071e3] hover:opacity-80 transition text-sm font-medium">Browse all →</a>
+                    <a href="Catagory.html" class="text-[#0071e3] hover:opacity-80 transition text-sm font-medium">Browse all â†’</a>
                 </div>
                 <div id="favoriteGames" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     <div class="col-span-full text-center py-10">
                         <p class="text-[#86868b] text-sm">No favorite games yet</p>
-                        <a href="Catagory.html" class="text-[#0071e3] hover:opacity-80 text-sm mt-2 inline-block">Explore games →</a>
+                        <a href="Catagory.html" class="text-[#0071e3] hover:opacity-80 text-sm mt-2 inline-block">Explore games â†’</a>
                     </div>
                 </div>
             </div>
@@ -204,7 +204,7 @@
                     hideLoading(); // Hide after image loads
                 };
                 img.onerror = () => {
-                    document.getElementById('profilePicture').textContent = '👤';
+                    document.getElementById('profilePicture').textContent = 'ðŸ‘¤';
                     hideLoading(); // Hide even if image fails
                 };
             } else {

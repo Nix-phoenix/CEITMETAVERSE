@@ -9,7 +9,7 @@
     <script src="ui-utils.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>Upload Game — CEIT METAVERSE AND GAME</title>
+    <title>Upload Game â€” CEIT METAVERSE AND GAME</title>
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
         * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
@@ -49,7 +49,7 @@
         <div class="flex items-center gap-8">
             <a href="HomePage.html" class="hover:opacity-75 transition-opacity duration-200">
                 <div class="hidden sm:block">
-                    <img src="../Image/Metaverse&Game_Logo(Final).png" alt="CEIT" class="h-7 w-auto" />
+                    <img src="../Image/logo.png" alt="CEIT" class="h-7 w-auto" />
                 </div>
                 <span class="text-sm font-semibold sm:hidden">CMG</span>
             </a>
@@ -141,7 +141,7 @@
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" class="mx-auto mb-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                             <span id="gameFileName" class="text-[#86868b] text-sm">Click to select .zip file</span>
                         </button>
-                        <p class="text-xs text-[#86868b] mt-1.5">Only .ZIP files — must contain index.html</p>
+                        <p class="text-xs text-[#86868b] mt-1.5">Only .ZIP files â€” must contain index.html</p>
                         <div id="zipCheckMessage" class="mt-3 text-sm"></div>
                     </div>
 
@@ -154,7 +154,7 @@
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" class="mx-auto mb-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                             <span id="exeFileName" class="text-[#86868b] text-sm">Click to select .exe file</span>
                         </button>
-                        <p class="text-xs text-[#86868b] mt-1.5">Windows executable — players will download &amp; run it</p>
+                        <p class="text-xs text-[#86868b] mt-1.5">Windows executable â€” players will download &amp; run it</p>
                         <div id="exeCheckMessage" class="mt-3 text-sm"></div>
                     </div>
                     <button type="submit" class="w-full btn-primary text-white font-semibold py-3 px-6 rounded-full transition">
@@ -206,7 +206,7 @@
         function checkAuth() {
             const authToken = sessionStorage.getItem('authToken');
             if (!authToken) {
-                alert('❌ You must be logged in to upload a game');
+                alert('âŒ You must be logged in to upload a game');
                 window.location.href = 'LogIn.html';
                 return false;
             }
@@ -261,7 +261,7 @@
         }
 
         // ============================================
-        // Game File Selection — WebGL (.zip)
+        // Game File Selection â€” WebGL (.zip)
         // ============================================
         document.getElementById("gameFile").addEventListener("change", async (e) => {
             const gameFile = e.target.files[0];
@@ -274,7 +274,7 @@
                 return;
             }
 
-            gameFileName.textContent = `📦 ${gameFile.name}`;
+            gameFileName.textContent = `ðŸ“¦ ${gameFile.name}`;
 
             if (!gameFile.name.toLowerCase().endsWith('.zip')) {
                 zipCheckMessage.innerHTML = '<div class="bg-[#ff453a]/10 text-[#ff453a] p-3 rounded-xl text-xs">Only .zip files are allowed</div>';
@@ -287,20 +287,20 @@
             if (validation.isValid) {
                 zipCheckMessage.innerHTML = `
                     <div class="bg-[#32d74b]/10 text-[#32d74b] p-3 rounded-xl text-xs">
-                        Valid ZIP file — ${validation.fileCount} files | index.html ${validation.hasIndexHtml ? 'found' : 'not found'}
+                        Valid ZIP file â€” ${validation.fileCount} files | index.html ${validation.hasIndexHtml ? 'found' : 'not found'}
                     </div>
                 `;
             } else {
                 zipCheckMessage.innerHTML = `
                     <div class="bg-[#ffd60a]/10 text-[#ffd60a] p-3 rounded-xl text-xs">
-                        ZIP may not be valid — Make sure it contains index.html (${validation.fileCount} files found)
+                        ZIP may not be valid â€” Make sure it contains index.html (${validation.fileCount} files found)
                     </div>
                 `;
             }
         });
 
         // ============================================
-        // Game File Selection — EXE
+        // Game File Selection â€” EXE
         // ============================================
         document.getElementById("gameFileExe").addEventListener("change", (e) => {
             const file         = e.target.files[0];
@@ -313,7 +313,7 @@
                 return;
             }
 
-            exeFileName.textContent = `💻 ${file.name}`;
+            exeFileName.textContent = `ðŸ’» ${file.name}`;
 
             if (!file.name.toLowerCase().endsWith('.exe')) {
                 exeCheckMsg.innerHTML = '<div class="bg-[#ff453a]/10 text-[#ff453a] p-3 rounded-xl text-xs">Only .exe files are allowed</div>';
@@ -321,7 +321,7 @@
             }
 
             const sizeMB = (file.size / 1024 / 1024).toFixed(1);
-            exeCheckMsg.innerHTML = `<div class="bg-[#32d74b]/10 text-[#32d74b] p-3 rounded-xl text-xs">✅ ${file.name} — ${sizeMB} MB</div>`;
+            exeCheckMsg.innerHTML = `<div class="bg-[#32d74b]/10 text-[#32d74b] p-3 rounded-xl text-xs">âœ… ${file.name} â€” ${sizeMB} MB</div>`;
         });
 
         // ============================================
@@ -337,7 +337,7 @@
 
             // Validation
             if (!titleInput.value.trim()) {
-                alert("❌ Please enter a game title");
+                alert("âŒ Please enter a game title");
                 return;
             }
 
@@ -348,22 +348,22 @@
                 : document.getElementById("gameFileExe").files[0];
 
             if (!gameFile) {
-                alert(isWebGL ? "❌ Please select a game file (.zip)" : "❌ Please select a game file (.exe)");
+                alert(isWebGL ? "âŒ Please select a game file (.zip)" : "âŒ Please select a game file (.exe)");
                 return;
             }
 
             if (!coverImageInput.files[0]) {
-                alert("❌ Please upload a game cover image");
+                alert("âŒ Please upload a game cover image");
                 return;
             }
 
             if (isWebGL && !gameFile.name.toLowerCase().endsWith('.zip')) {
-                alert("❌ Only .zip files are allowed for WebGL!");
+                alert("âŒ Only .zip files are allowed for WebGL!");
                 return;
             }
 
             if (!isWebGL && !gameFile.name.toLowerCase().endsWith('.exe')) {
-                alert("❌ Only .exe files are allowed for Windows EXE!");
+                alert("âŒ Only .exe files are allowed for Windows EXE!");
                 return;
             }
 
@@ -432,12 +432,12 @@
                             if (result.game || result.id || result.message) {
                                 bar.style.width = '100%';
                                 pct.textContent = '100%';
-                                statusEl.textContent = '✅ Upload complete!';
+                                statusEl.textContent = 'âœ… Upload complete!';
                                 statusEl.className = 'text-green-400 text-sm font-semibold';
                                 setTimeout(() => {
                                     overlay.classList.add('hidden');
                                     document.getElementById('gameForm').reset();
-                                    document.getElementById('imagePreview').innerHTML = '<div id="CoverImage" class="text-center"><span class="text-6xl mb-4 block">🖼️</span><span class="text-gray-300 text-sm">Click to upload</span></div>';
+                                    document.getElementById('imagePreview').innerHTML = '<div id="CoverImage" class="text-center"><span class="text-6xl mb-4 block">ðŸ–¼ï¸</span><span class="text-gray-300 text-sm">Click to upload</span></div>';
                                     window.location.href = 'HomePage.html';
                                 }, 1200);
                                 resolve(result);
@@ -460,7 +460,7 @@
             } catch (err) {
                 console.error('Upload error:', err);
                 overlay.classList.add('hidden');
-                alert(`❌ Upload failed: ${err.message || 'Unknown error'}`);
+                alert(`âŒ Upload failed: ${err.message || 'Unknown error'}`);
             } finally {
                 submitBtn.disabled = false;
                 submitText.textContent = 'Upload Game';
