@@ -7,3 +7,4 @@ Script/Backend/.env
 Script/DataBase/node_modules/
 Script/DataBase/node_modules/
 .env
+Script/DataBase/uploads/
