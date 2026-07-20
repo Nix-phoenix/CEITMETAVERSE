@@ -32,15 +32,12 @@
                 <span class="text-sm font-semibold sm:hidden">CMG</span>
             </a>
             <div class="hidden md:flex items-center gap-6">
-                <a href="HomePage.html" class="text-sm font-medium text-[#f5f5f7]">Home</a>
+                <a href="HomePage.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">Home</a>
                 <a href="Catagory.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">Catalog</a>
-                <a href="About.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">About</a>
+                <a href="About.html" class="text-sm font-medium text-[#f5f5f7] hover:text-[#f5f5f7] transition-colors duration-150">About</a>
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <input type="text" id="searchInput" placeholder="Search"
-                class="w-36 md:w-52 bg-[#1c1c1e] border border-white/[0.08] px-3 py-1.5 rounded-lg text-sm outline-none focus:ring-1 focus:ring-[#0071e3] transition placeholder-[#86868b]" />
-            <div class="relative">
                 <button id="userMenuBtn" onclick="toggleUserMenu()"
                     class="w-8 h-8 rounded-full bg-[#1c1c1e] border border-white/[0.1] hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -59,30 +56,38 @@
         </div>
     </nav>
 
-    <!-- Hero -->
-    <main class="flex-1">
-        <section class="relative pt-32 pb-24 px-6 text-center overflow-hidden">
-            <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-[#0071e3]/[0.07] rounded-full blur-[120px]"></div>
-            </div>
-            <div class="relative z-10 max-w-3xl mx-auto">
-                <p class="text-[#0071e3] text-xs font-semibold tracking-[0.15em] uppercase mb-5">CEIT METAVERSE AND GAME</p>
-                <h1 class="text-5xl md:text-[64px] font-bold tracking-tight leading-[1.05] text-[#f5f5f7] mb-6">
-                    Play amazing games.<br class="hidden md:block" />Right in your browser.
-                </h1>
-                <p class="text-[17px] text-[#86868b] mb-10 max-w-xl mx-auto leading-relaxed">
-                    No installation, no hassle. Discover and play incredible games created by the community.
-                </p>
-                <div class="flex gap-3 justify-center flex-wrap">
-                    <button onclick="navigateToCatalog()" class="btn-primary text-white px-7 py-2.5 rounded-full font-medium text-sm">
-                        Browse Games
-                    </button>
-                    <button onclick="toggleAbout()" class="bg-[#1c1c1e] border border-white/[0.1] hover:bg-[#2c2c2e] text-[#f5f5f7] px-7 py-2.5 rounded-full font-medium text-sm transition-colors">
-                        Learn More
-                    </button>
+<!-- Hero -->
+        <main class="flex-1">
+            <section class="relative pt-32 pb-24 px-6 overflow-hidden">
+                <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+                    <!-- ขยับตำแหน่ง Glow background ให้เข้ากับดีไซน์ชิดซ้าย -->
+                    <div class="absolute top-0 left-1/4 w-[700px] h-[500px] bg-[#0071e3]/[0.07] rounded-full blur-[120px]"></div>
                 </div>
-            </div>
-        </section>
+                <div class="relative z-10 max-w-5xl mx-auto">
+                    <!-- ป้ายกำกับหมวดหมู่ด้านบน (ชิดซ้าย) -->
+                    <p class="text-[#0071e3] text-xs font-semibold tracking-[0.15em] uppercase mb-4 text-left">About Our Community</p>
+                    
+                    <!-- ชื่อหัวข้อ (ชิดซ้าย และยืดหยุ่นตามหน้าจอ) -->
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[64px] font-bold tracking-tight leading-[1.1] text-[#f5f5f7] mb-8 text-left break-words">
+                        CEIT Metaverse and Game
+                    </h1>
+                    
+                    <!-- ข้อความรายละเอียด (ชิดซ้าย เรียงตัวยาวพอดีตามแบบที่คุณต้องการ) -->
+                    <div class="text-[16px] md:text-[19px] text-[#f5f5f7] mb-10 max-w-4xl text-left leading-relaxed space-y-5 opacity-90 tracking-wide font-normal">
+                        <p>
+                            It is an official creative community within the Computer Engineering and Information Technology program. 
+                            Our group serves as a dynamic hub that connects talented individuals who enjoy and are deeply passionate about 
+                            building next-generation games—whether they are immersive 2D side-scrollers, complex 3D worlds, or cutting-edge 
+                            Virtual Reality (VR) experiences—as well as creating high-quality 3D models and digital art.
+                        </p>
+                        <p>
+                            We aim to foster collaboration, share technical knowledge, and transform imaginative ideas into playable realities. 
+                            From coding and gameplay mechanics to world-building and optimization, our members push the boundaries of 
+                            interactive technology together, forming the ultimate launchpad for future game developers and innovators.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
         <!-- About Modal -->
         <div id="aboutSection" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-xl">
