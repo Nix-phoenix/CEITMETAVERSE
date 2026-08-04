@@ -36,7 +36,13 @@
         </div>
     </div>
     <div class="flex items-center gap-3">
-        <div class="relative">
+        <!-- Shown when logged out -->
+        <div id="guestActions" class="flex items-center gap-2">
+            <a href="LogIn.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors px-3 py-1.5">Sign In</a>
+            <a href="SignInPage.html" class="btn-primary text-white text-sm font-medium px-4 py-1.5 rounded-full transition-colors">Sign Up</a>
+        </div>
+        <!-- Shown when logged in -->
+        <div id="authActions" class="relative hidden">
             <button id="userMenuBtn" onclick="toggleUserMenu()"
                 class="w-8 h-8 rounded-full bg-[#1c1c1e] border border-white/[0.1] hover:bg-[#2c2c2e] flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-[#0071e3]">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -48,8 +54,7 @@
                 <a href="AddPage.html" class="block px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#f5f5f7]">Upload Game</a>
                 <a href="SettingProfilePage.html" class="block px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#f5f5f7]">Settings</a>
                 <div class="border-t border-white/[0.06] my-1"></div>
-                <a href="LogIn.html" id="loginLink" class="block px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#0071e3]">Sign In</a>
-                <button onclick="logout()" id="logoutBtn" style="display:none" class="w-full text-left px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#ff453a]">Sign Out</button>
+                <button onclick="logout()" id="logoutBtn" class="w-full text-left px-4 py-2.5 hover:bg-[#2c2c2e] transition-colors text-sm text-[#ff453a]">Sign Out</button>
             </div>
         </div>
     </div>
@@ -140,7 +145,7 @@
                                
                             </span>
                             <h3 class="text-lg font-bold text-white leading-snug drop-shadow-sm">
-                                Smart Fertilizer & Irrigation Control
+                                CEIT Metaverse Collaborates with Khonkhean University for developing KKU Metaverse
                             </h3>
                         </div>
                     </div>
@@ -301,17 +306,12 @@
 
     function checkAuth() {
         const authToken = sessionStorage.getItem('authToken');
-        const loginLink = document.getElementById('loginLink');
-        const logoutBtn = document.getElementById('logoutBtn');
-        
-        if (loginLink && logoutBtn) {
-            if (!authToken) {
-                loginLink.style.display = 'block';
-                logoutBtn.style.display = 'none';
-            } else {
-                loginLink.style.display = 'none';
-                logoutBtn.style.display = 'block';
-            }
+        const guestActions = document.getElementById('guestActions');
+        const authActions = document.getElementById('authActions');
+
+        if (guestActions && authActions) {
+            guestActions.classList.toggle('hidden', !!authToken);
+            authActions.classList.toggle('hidden', !authToken);
         }
     }
 

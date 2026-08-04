@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="api-base" content="https://everyday-lead-precisely-buf.trycloudflare.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Smart Farm Data Acquisition & Analysis | CEIT METAVERSE AND GAME</title>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+        .nav-blur { backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+    </style>
+</head>
+<body class="bg-black text-[#f5f5f7] flex flex-col min-h-screen">
+
+<!-- Navigation -->
+<nav class="w-full nav-blur bg-black/80 border-b border-white/[0.06] px-6 h-14 flex items-center justify-between sticky top-0 z-40">
+    <div class="flex items-center gap-8">
+        <a href="../HomePage.html" class="hover:opacity-75 transition-opacity duration-200 flex items-center gap-2">
+            <img src="../Image/logo.png" alt="CEIT" class="h-7 w-auto hidden sm:block" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x30/1c1c1e/ffffff?text=CEIT+META';" />
+            <span class="text-sm font-semibold sm:hidden tracking-wider text-[#0071e3]">CMG</span>
+        </a>
+        <div class="hidden md:flex items-center gap-6">
+            <a href="../HomePage.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">Home</a>
+            <a href="../Catagory.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">Catalog</a>
+            <a href="../About.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors duration-150">About</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="flex-1">
+    <section class="relative pt-16 pb-20 px-6 overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div class="absolute top-0 left-1/4 w-[600px] h-[500px] bg-[#0071e3]/[0.12] rounded-full blur-[140px]"></div>
+        </div>
+
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <a href="../About.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors mb-8">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                Back to News
+            </a>
+
+            <p class="text-xs font-semibold tracking-widest text-[#0071e3] uppercase mb-3">Research Project</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight text-[#f5f5f7] mb-6">
+                Smart Farm Data Acquisition &amp; Analysis
+            </h1>
+
+            <div class="rounded-3xl overflow-hidden border border-white/[0.08] mb-8 shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80" alt="Data Acquisition" class="w-full h-64 sm:h-80 object-cover" />
+            </div>
+
+            <div class="text-[16px] text-[#a1a1a6] leading-relaxed space-y-5">
+                <p>
+                    NAFRI's large-scale experimental plots needed wireless, battery-powered sensors capable of monitoring soil and crop conditions continuously without frequent maintenance visits across their expansive field sites.
+                </p>
+                <p>
+                    Our team designed and deployed a low-power sensor network paired with a real-time data acquisition pipeline, enabling researchers to collect soil moisture, temperature, and crop health metrics remotely and analyze trends through a centralized dashboard.
+                </p>
+                <p>
+                    The resulting system reduced manual data collection time significantly and gave researchers access to consistent, high-frequency data for more accurate crop modeling and decision-making.
+                </p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="border-t border-white/[0.06] py-8 text-center">
+    <p class="text-[#86868b] text-xs">&copy; 2026 CEIT Metaverse and Game. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
