@@ -1,8 +1,8 @@
 // ── API Configuration ─────────────────────────────────────────────────────────
 // Central place to manage the backend base URL and all endpoints.
 // Resolution order for base URL:
-// 1. window.__API_BASE__ (explicit runtime override)
-// 2. <meta name="api-base" content="..."> on the page (optional)
+// 1. window.__API_BASE__ (set in env.js — the single place to update the URL)
+// 2. <meta name="api-base" content="..."> on the page (legacy fallback)
 // 3. current origin when page is served over http(s)
 // 4. localhost fallback when opened from file:// during local dev
 
