@@ -6,8 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <title>CEIT METAVERSE AND GAME</title>
+    
+    <!-- Import Map to resolve Three.js ES Modules properly -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
         * { scrollbar-width: thin; scrollbar-color: #2c2c2e #111; }
@@ -36,12 +47,10 @@
         </div>
     </div>
     <div class="flex items-center gap-3">
-        <!-- Shown when logged out -->
         <div id="guestActions" class="flex items-center gap-2">
             <a href="LogIn.html" class="text-sm font-medium text-[#86868b] hover:text-[#f5f5f7] transition-colors px-3 py-1.5">Sign In</a>
             <a href="SignInPage.html" class="btn-primary text-white text-sm font-medium px-4 py-1.5 rounded-full transition-colors">Sign Up</a>
         </div>
-        <!-- Shown when logged in -->
         <div id="authActions" class="relative hidden">
             <button id="userMenuBtn" onclick="toggleUserMenu()"
                 class="w-8 h-8 rounded-full bg-[#1c1c1e] border border-white/[0.1] hover:bg-[#2c2c2e] flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-[#0071e3]">
@@ -62,17 +71,16 @@
 
 <!-- Main Content -->
 <main class="flex-1">
-    <!-- Hero Section with 3D Canvas -->
+    <!-- Hero Section with Interactive VR 3D Canvas -->
     <section class="relative pt-16 pb-20 md:pt-24 md:pb-28 px-6 overflow-hidden">
-        <!-- Background Glow FX -->
         <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-            <div class="absolute top-0 left-1/4 w-[600px] h-[500px] bg-[#0071e3]/[0.12] rounded-full blur-[140px]"></div>
-            <div class="absolute bottom-0 right-10 w-[400px] h-[400px] bg-[#00ffcc]/[0.05] rounded-full blur-[120px]"></div>
+            <div class="absolute top-0 left-1/4 w-[600px] h-[500px] bg-[#0071e3]/[0.15] rounded-full blur-[140px]"></div>
+            <div class="absolute bottom-0 right-10 w-[400px] h-[400px] bg-[#00ffcc]/[0.08] rounded-full blur-[120px]"></div>
         </div>
 
         <div class="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            <!-- Text Content (Left Column) -->
+            <!-- Exact Text Content from Image -->
             <div class="lg:col-span-7 text-left">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0071e3]/10 border border-[#0071e3]/30 text-[#0071e3] text-xs font-semibold tracking-wider uppercase mb-6">
                     <span class="w-2 h-2 rounded-full bg-[#0071e3] animate-pulse"></span>
@@ -80,13 +88,13 @@
                 </div>
                 
                 <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.08] text-[#f5f5f7] mb-8">
-                    CEIT Metaverse <br class="hidden sm:inline" />
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0071e3] via-[#3399ff] to-[#00ffcc]">
+                    CEIT Metaverse <br />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0071e3] to-[#00ffcc]">
                         and Game
                     </span>
                 </h1>
                 
-                <div class="text-[16px] md:text-[18px] text-[#a1a1a6] mb-8 leading-relaxed space-y-4 font-normal">
+                <div class="text-[16px] md:text-[18px] text-[#86868b] mb-8 leading-relaxed space-y-4 font-normal">
                     <p>
                         It is an official creative community within the <strong class="text-[#f5f5f7] font-semibold">Computer Engineering and Information Technology</strong> program. Our group serves as a dynamic hub that connects talented individuals who enjoy and are deeply passionate about building next-generation games.
                     </p>
@@ -94,20 +102,16 @@
                         Whether creating immersive 2D side-scrollers, complex 3D worlds, or cutting-edge Virtual Reality (VR) experiences—as well as high-quality 3D models and digital art—our members push the boundaries of interactive technology together.
                     </p>
                 </div>
-
-               
             </div>
 
-            <!-- 3D Interactive Canvas Container (Right Column) -->
+            <!-- 3D Interactive VR Canvas Container -->
             <div class="lg:col-span-5 relative w-full h-[360px] sm:h-[450px] lg:h-[500px] flex items-center justify-center">
-                <div class="w-full h-full rounded-3xl overflow-hidden border border-white/[0.08] bg-gradient-to-b from-white/[0.03] to-transparent relative shadow-2xl group">
-                    <!-- Three.js Canvas Element -->
+                <div class="w-full h-full rounded-3xl overflow-hidden border border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-transparent relative shadow-2xl group">
                     <canvas id="webgl-canvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
                     
-                    <!-- Helper overlay tip -->
-                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-[#86868b] pointer-events-none flex items-center gap-2 shadow-lg">
-                        <svg class="w-3.5 h-3.5 text-[#0071e3] animate-spin" style="animation-duration: 6s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
-                        Interact with 3D Core
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 px-3.5 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[11px] text-[#86868b] pointer-events-none flex items-center gap-2 shadow-lg">
+                        <svg class="w-3.5 h-3.5 text-[#00ffcc] animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                        Interact with VR Headset
                     </div>
                 </div>
             </div>
@@ -115,193 +119,79 @@
         </div>
     </section>
 
-<!-- News Metaverse / Projects Section -->
+    <!-- News Metaverse / Projects Section -->
     <section class="py-16 border-y border-white/[0.06] bg-black relative">
         <div class="max-w-6xl mx-auto px-6">
-            
-            <!-- Section Header (Optional) -->
             <div class="mb-10 text-left">
                 <p class="text-xs font-semibold tracking-widest text-[#0071e3] uppercase mb-2">Highlights of CEIT Metaverse and Gaming</p>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[#f5f5f7] tracking-tight">CEIT Metaverse and Gaming NEWS</h2>
             </div>
 
-            <!-- 3-Column Card Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/[0.08] shadow-xl flex flex-col group hover:border-[#0071e3]/40 transition-all duration-300">
+                    <div class="relative h-48 w-full overflow-hidden bg-[#111]">
+                        <img src="../Image/PagenewPhoto/kku.jpg" alt="KKU Metaverse Collaboration" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?auto=format&fit=crop&w=800&q=80';" />
+                        <span class="absolute top-4 left-4 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[#0071e3] text-[11px] font-semibold tracking-wide">
+                            Partnership
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between gap-4">
+                        <div class="space-y-2">
+                            <p class="text-xs text-[#86868b] font-medium">5–7 June 2026</p>
+                            <h3 class="text-base font-semibold text-[#f5f5f7] leading-snug group-hover:text-[#0071e3] transition-colors line-clamp-2">
+                                CEIT Metaverse Collaborates with Khon Kaen University for Developing KKU Metaverse
+                            </h3>
+                            <p class="text-[#86868b] text-sm leading-relaxed line-clamp-2">
+                                Professors and students from CEIT collaborated to build the KKU Metaverse virtual environment to welcome new university students.
+                            </p>
+                        </div>
+                        <a href="./New-Pages/PageCard1.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-[#0071e3] hover:text-[#3399ff] transition-colors pt-2">
+                            <span>Read More</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </a>
+                    </div>
+                </div>
 
-<!-- Card 1 -->
-<div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/[0.08] shadow-xl flex flex-col group hover:border-[#0071e3]/40 transition-all duration-300">
-    <!-- Top Image Area -->
-    <div class="relative h-48 w-full overflow-hidden bg-[#111]">
-        <img src="../Image/PagenewPhoto/kku.jpg" 
-             alt="KKU Metaverse Collaboration" 
-             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
-        
-        <!-- Category Badge -->
-        <span class="absolute top-4 left-4 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[#0071e3] text-[11px] font-semibold tracking-wide">
-            Partnership
-        </span>
-    </div>
-
-    <!-- Content Area (Clean Typography) -->
-    <div class="p-5 flex-1 flex flex-col justify-between gap-4">
-        <div class="space-y-2">
-            <!-- Date -->
-            <p class="text-xs text-[#86868b] font-medium">5–7 June 2026</p>
-            
-            <!-- Title -->
-            <h3 class="text-base font-semibold text-[#f5f5f7] leading-snug group-hover:text-[#0071e3] transition-colors line-clamp-2">
-                CEIT Metaverse Collaborates with Khon Kaen University for Developing KKU Metaverse
-            </h3>
-            
-            <!-- Description -->
-            <p class="text-[#86868b]    text-sm leading-relaxed line-clamp-2">
-                Professors and students from CEIT collaborated to build the KKU Metaverse virtual environment to welcome new university students.
-            </p>
-        </div>
-
-        <!-- Read More Link -->
-        <a href="./New-Pages/PageCard1.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-[#0071e3] hover:text-[#3399ff] transition-colors pt-2">
-            <span>Read More</span>
-            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-        </a>
-    </div>
-</div>
                 <!-- Card 2 -->
                 <div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/[0.08] shadow-xl flex flex-col group hover:border-[#0071e3]/50 transition-all duration-300">
-                    <!-- Top Image Area with Badge & Title Overlay -->
-                    <div class="relative h-52 sm:h-56 w-full overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80" 
-                             alt="Data Acquisition" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        
-                        <!-- Gradient Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-
-                        <!-- Card Header Overlay Content -->
-                        <div class="absolute bottom-4 left-4 right-4 flex flex-col gap-2 items-start">
-                            <span class="inline-block px-3 py-1 rounded-full bg-[#0071e3] text-white text-[11px] font-medium tracking-wide">
-                                
-                            </span>
-                            <h3 class="text-lg font-bold text-white leading-snug drop-shadow-sm">
-                                Smart Farm Data Acquisition & Analysis
-                            </h3>
-                        </div>
+                    <div class="relative h-48 w-full overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80" alt="Data Acquisition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
-
-                    <!-- Bottom Body Area -->
                     <div class="p-5 flex-1 flex flex-col justify-between">
                         <p class="text-[#86868b] text-sm leading-relaxed mb-6 line-clamp-3">
-                            NAFRI's large-scale experimental plots needed wireless, battery-powered sensors capable of monitoring soil and crop...
+                            NAFRI's large-scale experimental plots needed wireless sensors for monitoring soil and crop status in real-time...
                         </p>
-                        <a href="./New-Pages/PageCard2.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0071e3] hover:text-[#3399ff] transition-colors group/link">
-                            Read More 
-                            <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
+                        <a href="./New-Pages/PageCard2.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0071e3] hover:text-[#3399ff] transition-colors">Read More &rarr;</a>
                     </div>
                 </div>
 
                 <!-- Card 3 -->
                 <div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/[0.08] shadow-xl flex flex-col group hover:border-[#0071e3]/50 transition-all duration-300">
-                    <!-- Top Image Area with Badge & Title Overlay -->
-                    <div class="relative h-52 sm:h-56 w-full overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" 
-                             alt="Network Survey" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        
-                        <!-- Gradient Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-
-                        <!-- Card Header Overlay Content -->
-                        <div class="absolute bottom-4 left-4 right-4 flex flex-col gap-2 items-start">
-                            <span class="inline-block px-3 py-1 rounded-full bg-[#0071e3] text-white text-[11px] font-medium tracking-wide">
-                                
-                            </span>
-                            <h3 class="text-lg font-bold text-white leading-snug drop-shadow-sm">
-                                Smart Network Coverage Survey
-                            </h3>
-                        </div>
+                    <div class="relative h-48 w-full overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Network Survey" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
-
-                    <!-- Bottom Body Area -->
                     <div class="p-5 flex-1 flex flex-col justify-between">
                         <p class="text-[#86868b] text-sm leading-relaxed mb-6 line-clamp-3">
-                            Mitr Lao Sugar needed to verify LoRaWAN connectivity across thousands of hectares in Savannakhet Province before committing to...
+                            Mitr Lao Sugar verified LoRaWAN connectivity across thousands of hectares in Savannakhet Province...
                         </p>
-                        <a href="./New-Pages/PageCard3.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0071e3] hover:text-[#3399ff] transition-colors group/link">
-                            Read More 
-                            <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
+                        <a href="./New-Pages/PageCard3.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0071e3] hover:text-[#3399ff] transition-colors">Read More &rarr;</a>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
-
-    
-
-    <!-- About Modal -->
-    <div id="aboutSection" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-xl transition-all duration-300">
-        <div class="bg-[#1c1c1e] border border-white/[0.08] rounded-3xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-8 shadow-2xl shadow-black">
-            <p class="text-[#86868b] text-xs font-semibold tracking-[0.15em] uppercase mb-2">About Platform</p>
-            <h2 class="text-2xl font-bold tracking-tight text-[#f5f5f7] mb-4">CEIT METAVERSE AND GAME</h2>
-            <p class="text-[#86868b] text-sm leading-relaxed mb-3">
-                A platform dedicated to bringing you the best browser gaming experience. Play instantly—no installation required.
-            </p>
-            <p class="text-[#86868b] text-sm leading-relaxed mb-6">
-                Our mission is to make gaming accessible to everyone, everywhere. Casual or hardcore, you'll find something you love.
-            </p>
-            <p class="text-xs font-semibold text-[#f5f5f7] mb-3">Why choose us</p>
-            <ul class="space-y-2.5 text-sm text-[#86868b] mb-8">
-                <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>No installation — play instantly</li>
-                <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wide variety across all genres</li>
-                <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Safe and secure environment</li>
-                <li class="flex items-center gap-2.5"><span class="w-4 h-4 rounded-full bg-[#32d74b]/20 flex items-center justify-center flex-shrink-0"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#32d74b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Community-driven platform</li>
-            </ul>
-            <button onclick="toggleAbout()" class="w-full btn-primary text-white py-3 rounded-full font-medium text-sm">Close</button>
-        </div>
-    </div>
 </main>
 
 <!-- Footer -->
 <footer class="border-t border-white/[0.06] py-12 bg-black">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="flex flex-col md:flex-row md:justify-between gap-8 mb-8">
-            <div>
-                <div class="inline-block mb-3">
-                    <img src="../Image/logo.png" alt="CEIT" class="h-6 w-auto" onerror="this.onerror=null; this.src='https://via.placeholder.com/80x24/1c1c1e/ffffff?text=CEIT';" />
-                </div>
-                <p class="text-[#86868b] text-xs">Your ultimate metaverse & gaming destination</p>
-            </div>
-            <div class="flex gap-12">
-                <div>
-                    <p class="text-xs font-semibold text-[#f5f5f7] mb-3">Links</p>
-                    <a href="#" class="text-[#86868b] hover:text-[#f5f5f7] transition-colors text-xs block mb-2">Privacy Policy</a>
-                    <a href="#" class="text-[#86868b] hover:text-[#f5f5f7] transition-colors text-xs block">Terms of Service</a>
-                </div>
-                <div>
-                    <p class="text-xs font-semibold text-[#f5f5f7] mb-3">Contact</p>
-                    <a href="mailto:ceit.meta@nuol.edu.la" class="text-[#86868b] hover:text-[#f5f5f7] transition-colors text-xs">ceit.meta@nuol.edu.la</a>
-                </div>
-            </div>
-        </div>
-        <div class="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p class="text-[#86868b] text-xs">Copyright &copy; 2026 CEIT METAVERSE AND GAME. All rights reserved.</p>
-        </div>
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#86868b]">
+        <p>Copyright &copy; 2026 CEIT METAVERSE AND GAME. All rights reserved.</p>
+        <a href="mailto:ceit.meta@nuol.edu.la" class="hover:text-[#f5f5f7]">ceit.meta@nuol.edu.la</a>
     </div>
 </footer>
 
-<!-- External Utilities Scripts with Fallbacks -->
-<script src="api-config.js" onerror="console.warn('api-config.js not found, running fallback');"></script>
-<script src="ui-utils.js" onerror="console.warn('ui-utils.js not found, running fallback');"></script>
-
-<!-- UI & Auth Logic -->
+<!-- UI Scripts -->
 <script>
     function toggleUserMenu() {
         const userMenu = document.getElementById('userMenu');
@@ -312,7 +202,6 @@
         const authToken = sessionStorage.getItem('authToken');
         const guestActions = document.getElementById('guestActions');
         const authActions = document.getElementById('authActions');
-
         if (guestActions && authActions) {
             guestActions.classList.toggle('hidden', !!authToken);
             authActions.classList.toggle('hidden', !authToken);
@@ -320,158 +209,137 @@
     }
 
     function logout() {
-        if (typeof handleLogout === 'function') {
-            handleLogout();
-        } else {
-            sessionStorage.clear();
-            window.location.reload();
-        }
+        sessionStorage.clear();
+        window.location.reload();
     }
 
-    function toggleAbout() {
-        const aboutSection = document.getElementById('aboutSection');
-        if (aboutSection) aboutSection.classList.toggle('hidden');
-    }
-
-    window.addEventListener('load', () => {
-        checkAuth();
-        const justLoggedIn = sessionStorage.getItem('justLoggedIn');
-        if (justLoggedIn && typeof showToast === 'function') {
-            const username = sessionStorage.getItem('username') || 'User';
-            showToast(`Welcome back, ${username}!`, 'success');
-            sessionStorage.removeItem('justLoggedIn');
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        const userMenu = document.getElementById('userMenu');
-        const userMenuBtn = document.getElementById('userMenuBtn');
-        if (userMenuBtn && userMenu && !userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
-            userMenu.classList.add('hidden');
-        }
-    });
+    window.addEventListener('load', checkAuth);
 </script>
 
-<!-- Three.js 3D Interactive Scene Initialization -->
+<!-- Three.js Interactive 3D VR Script -->
 <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    const canvas = document.getElementById('webgl-canvas');
-    if (canvas) {
+    function initVR3D() {
+        const canvas = document.getElementById('webgl-canvas');
+        if (!canvas) return;
+
         const container = canvas.parentElement;
 
-        // 1. Scene Setup
         const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 1.2, 5.5);
 
-        // 2. Camera Setup
-        const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(0, 0, 7);
-
-        // 3. Renderer Setup
-        const renderer = new THREE.WebGLRenderer({
-            canvas: canvas,
-            antialias: true,
-            alpha: true
-        });
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // 4. Orbit Controls
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.enableZoom = false;
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 1.2;
+        controls.autoRotateSpeed = 1.0;
 
-        // 5. Core 3D Mesh Group
-        const coreGroup = new THREE.Group();
-        scene.add(coreGroup);
+        const vrGroup = new THREE.Group();
+        scene.add(vrGroup);
 
-        // Inner Metallic Icosahedron Core
-        const coreGeo = new THREE.IcosahedronGeometry(1.6, 1);
-        const coreMat = new THREE.MeshStandardMaterial({
-            color: 0x0071e3,
-            wireframe: true,
-            roughness: 0.2,
-            metalness: 0.9,
-            emissive: 0x0033aa,
-            emissiveIntensity: 0.4
-        });
-        const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-        coreGroup.add(coreMesh);
+        // Headset
+        const headsetGroup = new THREE.Group();
+        vrGroup.add(headsetGroup);
 
-        // Outer Cyan Ring Wireframe (Torus)
-        const ringGeo = new THREE.TorusGeometry(2.3, 0.03, 16, 100);
-        const ringMat = new THREE.MeshStandardMaterial({
-            color: 0x00ffcc,
-            wireframe: true,
-            roughness: 0.1,
-            emissive: 0x00ffcc,
-            emissiveIntensity: 0.5
-        });
-        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-        ringMesh.rotation.x = Math.PI / 3;
-        coreGroup.add(ringMesh);
+        const visorGeo = new THREE.BoxGeometry(2.0, 1.1, 1.1);
+        const visorMat = new THREE.MeshStandardMaterial({ color: 0x121214, roughness: 0.3, metalness: 0.8 });
+        const visorMesh = new THREE.Mesh(visorGeo, visorMat);
+        headsetGroup.add(visorMesh);
 
-        // Particle Starfield Dust
-        const particleCount = 200;
-        const particleGeo = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
+        const glassGeo = new THREE.BoxGeometry(1.9, 0.95, 0.1);
+        const glassMat = new THREE.MeshStandardMaterial({ color: 0x0071e3, roughness: 0.1, metalness: 0.9, emissive: 0x0033aa, emissiveIntensity: 0.5 });
+        const glassMesh = new THREE.Mesh(glassGeo, glassMat);
+        glassMesh.position.z = 0.53;
+        headsetGroup.add(glassMesh);
 
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            positions[i] = (Math.random() - 0.5) * 12;
-            positions[i + 1] = (Math.random() - 0.5) * 12;
-            positions[i + 2] = (Math.random() - 0.5) * 12;
+        const lensGeo = new THREE.SphereGeometry(0.32, 32, 32);
+        const lensMat = new THREE.MeshStandardMaterial({ color: 0x00ffcc, emissive: 0x00ffcc, emissiveIntensity: 0.8, roughness: 0.1 });
+        const leftLens = new THREE.Mesh(lensGeo, lensMat);
+        leftLens.position.set(-0.45, 0, 0.56);
+        leftLens.scale.set(1, 0.8, 0.2);
+        headsetGroup.add(leftLens);
+
+        const rightLens = leftLens.clone();
+        rightLens.position.set(0.45, 0, 0.56);
+        headsetGroup.add(rightLens);
+
+        const strapGeo = new THREE.TorusGeometry(1.05, 0.08, 16, 60);
+        const strapMat = new THREE.MeshStandardMaterial({ color: 0x2c2c2e, roughness: 0.8 });
+        const strapMesh = new THREE.Mesh(strapGeo, strapMat);
+        strapMesh.rotation.x = Math.PI / 2;
+        strapMesh.position.z = -0.3;
+        headsetGroup.add(strapMesh);
+
+        // Controllers
+        function createController(isLeft) {
+            const ctrlGroup = new THREE.Group();
+            const posX = isLeft ? -1.6 : 1.6;
+
+            const handleGeo = new THREE.CylinderGeometry(0.08, 0.06, 0.6, 16);
+            const handleMat = new THREE.MeshStandardMaterial({ color: 0x1c1c1e, roughness: 0.4 });
+            const handle = new THREE.Mesh(handleGeo, handleMat);
+            handle.rotation.x = 0.3;
+            ctrlGroup.add(handle);
+
+            const ringGeo = new THREE.TorusGeometry(0.28, 0.03, 16, 32);
+            const ringMat = new THREE.MeshStandardMaterial({ color: 0x00ffcc, emissive: 0x00ffcc, emissiveIntensity: 0.6 });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.position.set(0, 0.25, 0.15);
+            ring.rotation.x = -0.4;
+            ctrlGroup.add(ring);
+
+            ctrlGroup.position.set(posX, -0.6, 0.3);
+            return ctrlGroup;
         }
 
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const particleMat = new THREE.PointsMaterial({
-            size: 0.035,
-            color: 0x0071e3,
-            transparent: true,
-            opacity: 0.7
-        });
-        const particleSystem = new THREE.Points(particleGeo, particleMat);
-        scene.add(particleSystem);
+        const leftController = createController(true);
+        const rightController = createController(false);
+        vrGroup.add(leftController);
+        vrGroup.add(rightController);
 
-        // 6. Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        // Ground Grid
+        const gridHelper = new THREE.GridHelper(10, 20, 0x0071e3, 0x2c2c2e);
+        gridHelper.position.y = -1.6;
+        scene.add(gridHelper);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambientLight);
 
-        const pointLight1 = new THREE.PointLight(0x0071e3, 3, 10);
-        pointLight1.position.set(3, 3, 3);
-        scene.add(pointLight1);
+        const cyanLight = new THREE.PointLight(0x00ffcc, 2.5, 10);
+        cyanLight.position.set(2, 3, 3);
+        scene.add(cyanLight);
 
-        const pointLight2 = new THREE.PointLight(0x00ffcc, 2, 10);
-        pointLight2.position.set(-3, -3, 2);
-        scene.add(pointLight2);
+        const blueLight = new THREE.PointLight(0x0071e3, 2.5, 10);
+        blueLight.position.set(-2, -2, 2);
+        scene.add(blueLight);
 
-        // Mouse parallax effect
-        let mouseX = 0;
-        let mouseY = 0;
-
+        let mouseX = 0, mouseY = 0;
         window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
         });
 
-        // 7. Animation Loop
+        let clock = new THREE.Clock();
+
         function animate() {
             requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
 
-            // Rotations
-            coreMesh.rotation.x += 0.003;
-            coreMesh.rotation.y += 0.005;
+            vrGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.12;
+            leftController.position.y = -0.6 + Math.sin(elapsedTime * 2.0) * 0.08;
+            rightController.position.y = -0.6 + Math.cos(elapsedTime * 2.0) * 0.08;
 
-            ringMesh.rotation.z += 0.004;
-
-            particleSystem.rotation.y += 0.0008;
-
-            // Mouse inertia
-            coreGroup.rotation.y += (mouseX - coreGroup.rotation.y) * 0.05;
-            coreGroup.rotation.x += (mouseY - coreGroup.rotation.x) * 0.05;
+            vrGroup.rotation.y += (mouseX - vrGroup.rotation.y) * 0.05;
+            vrGroup.rotation.x += (mouseY - vrGroup.rotation.x) * 0.05;
 
             controls.update();
             renderer.render(scene, camera);
@@ -479,7 +347,6 @@
 
         animate();
 
-        // Responsive Resize Handling
         window.addEventListener('resize', () => {
             const width = container.clientWidth;
             const height = container.clientHeight;
@@ -488,8 +355,13 @@
             renderer.setSize(width, height);
         });
     }
-</script>
 
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initVR3D);
+    } else {
+        initVR3D();
+    }
+</script>
 
 </body>
 </html>
