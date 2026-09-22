@@ -3,3 +3,4 @@
 // Change the URL below (e.g. when the Cloudflare tunnel URL rotates) and
 // every page picks it up automatically — no need to edit each HTML file.
 window.__API_BASE__ = 'https://lime-department-extended-message.trycloudflare.com';
+    

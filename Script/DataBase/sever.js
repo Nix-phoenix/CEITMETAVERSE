@@ -18,7 +18,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'a3f8d9c2e1b4f6a9c8d7e3f1a9b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0';
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '749193197042-rblbl2mnvrrsn2eegq2nc5j3slk1sl3j.apps.googleusercontent.com';
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const app = express();
@@ -28,6 +28,7 @@ const allowedOrigins = [
     /\.pages\.dev$/,
     /\.vercel\.app$/,
     /\.netlify\.app$/,
+    /\.trycloudflare\.com$/,
 ];
 if (process.env.ALLOWED_ORIGIN) {
     // Supports one or more comma-separated origins, e.g.
