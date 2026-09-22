@@ -140,10 +140,11 @@
                 displayGames(filteredGames);
             } catch (err) {
                 console.error('loadGames error:', err);
+                const reason = err.data?.error || (err.status ? `Server returned HTTP ${err.status}` : 'Network request failed');
                 container.innerHTML = `
                     <div class="col-span-full text-center py-16">
-                        <p class="text-red-400 text-2xl mb-2">Ã¢Å¡Â Ã¯Â¸Â Cannot connect to server</p>
-                        <p class="text-gray-400 text-sm mb-4">Make sure the backend is running at <code class="bg-gray-800 px-2 py-1 rounded">${API_CONFIG.baseURL}</code></p>
+                        <p class="text-red-400 text-2xl mb-2">Ã¢Å¡Â Ã¯Â¸Â Server request failed</p>
+                        <p class="text-gray-400 text-sm mb-4">${reason}<br><code class="bg-gray-800 px-2 py-1 rounded">${API_CONFIG.baseURL}</code></p>
                         <button onclick="loadGames()" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-bold transition">Ã°Å¸â€â€ž Retry</button>
                     </div>`;
             }

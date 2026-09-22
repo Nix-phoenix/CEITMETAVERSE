@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 // Replace mongoose (MongoDB) with Prisma (Postgres)
 const { PrismaClient } = require('@prisma/client');
@@ -9,12 +12,9 @@ const fs = require('fs');
 const unzipper = require('unzipper');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 const { OAuth2Client } = require('google-auth-library');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-
-dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'a3f8d9c2e1b4f6a9c8d7e3f1a9b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0';
@@ -200,15 +200,17 @@ const crypto = require('crypto');
 // Test route
 app.get('/test', async (req, res) => {
     let dbStatus = 'unknown';
+    let statusCode = 200;
     try {
         // lightweight check
         await prisma.$queryRaw`SELECT 1`;
         dbStatus = 'Connected (Postgres via Prisma)';
     } catch (e) {
         dbStatus = `Disconnected (${e.message || 'error'})`;
+        statusCode = 503;
     }
 
-    res.json({
+    res.status(statusCode).json({
         message: 'Server is running',
         port: PORT,
         database: dbStatus
