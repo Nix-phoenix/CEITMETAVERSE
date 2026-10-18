@@ -6,6 +6,15 @@ import path from 'path';
 
 const ARCHIVE_EXTENSIONS = ['.zip', '.rar', '.7z'];
 
+type UploadedGameFile = {
+    originalname: string;
+    path: string;
+};
+
+type GameUploadRequest = Request & {
+    files?: { [fieldname: string]: UploadedGameFile[] };
+};
+
 export class GameController {
 
     static async addGame(req: Request, res: Response) {
@@ -17,7 +26,7 @@ export class GameController {
                 return;
             }
 
-            const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+            const files = (req as GameUploadRequest).files;
 
             if (!files?.gameFile?.length) {
                 res.status(400).json({ error: 'Game file is required' });
@@ -177,4 +186,3 @@ export class GameController {
         }
     }
 }
-
