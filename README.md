@@ -429,7 +429,7 @@ In another terminal, check that the tunnel URL responds:
 
 ```bash
 curl -sS -o /dev/null -w 'HTTP %{http_code}\n' \
-  'https://lime-department-extended-message.trycloudflare.com'
+  'https://rendering-odds-consistent-bring.trycloudflare.com'
 ```
 
 The `trycloudflare.com` quick-tunnel URL may change when the tunnel is restarted. If it changes, update the backend API URL in `WebPage/env.js` to match the new URL and redeploy the frontend.
